@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Assignment Details · Nebula</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: radial-gradient(circle at 10% 20%, #0c0a2a, #190f40, #200f4a);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1.5rem;
+            color: #ffffff;
+        }
+
+        .premium-container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .glass-card {
+            background: rgba(15, 18, 48, 0.6);
+            backdrop-filter: blur(18px) saturate(200%);
+            -webkit-backdrop-filter: blur(18px) saturate(200%);
+            border-radius: 3rem;
+            padding: 2.5rem 2.8rem;
+            box-shadow: 0 40px 70px -20px #030014, 0 0 0 1px rgba(160, 130, 255, 0.2) inset;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .header-section {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .back-btn {
+            background: rgba(25, 22, 60, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1.5px solid rgba(200, 170, 255, 0.25);
+            color: #eeeaff;
+            font-weight: 500;
+            font-size: 1rem;
+            padding: 0.7rem 1.8rem;
+            border-radius: 3rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .back-btn:hover {
+            background: rgba(45, 35, 95, 0.8);
+            border-color: #bba6ff;
+            transform: translateX(-2px);
+        }
+
+        #assignmentTitle {
+            font-weight: 700;
+            font-size: 2.4rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(130deg, #ffffff, #e1d5ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            flex: 1;
+            margin-bottom: 1rem;
+        }
+
+        .assignment-card {
+            background: rgba(25, 23, 60, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(200, 170, 255, 0.2);
+            border-radius: 2.5rem;
+            padding: 2.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .status-badge {
+            padding: 0.6rem 1.8rem;
+            border-radius: 3rem;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+            margin: 1rem 0 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .not-viewed { background: #ffb347; }
+        .viewed { background: #5bc0de; }
+        .submitted { background: #5cb85c; }
+
+        .detail-row {
+            margin: 1.2rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            border-bottom: 1px solid rgba(200, 170, 255, 0.1);
+            padding-bottom: 0.8rem;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #cbc3ff;
+            min-width: 120px;
+        }
+
+        .detail-value {
+            color: white;
+            flex: 1;
+        }
+
+        #marksSection {
+            background: rgba(40, 180, 90, 0.15);
+            border: 1px solid #5cb85c;
+            border-radius: 2rem;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        #marksObtained {
+            font-weight: 700;
+            color: #8affb8;
+        }
+
+        .submit-btn {
+            border: none;
+            border-radius: 3rem;
+            padding: 0.9rem 2.2rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-right: 1rem;
+            background: #5cb85c;
+            color: white;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+
+        .note-text {
+            font-size: 0.85rem;
+            color: #b0b0d0;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 2rem;
+        }
+
+        #loading {
+            background: rgba(30, 28, 65, 0.6);
+            border-radius: 2rem;
+            padding: 2rem;
+            text-align: center;
+            color: #cfc7ff;
+        }
+
+        @media (max-width: 650px) {
+            .glass-card { padding: 1.8rem; }
+            #assignmentTitle { font-size: 2rem; }
+            .detail-row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="premium-container">
+        <div class="glass-card">
+            <div class="header-section">
+                <button class="back-btn" onclick="window.history.back()">← Back to Assignments</button>
+            </div>
+            
+            <div id="loading">Loading assignment details...</div>
+            
+            <div id="assignmentDetails" style="display: none;">
+                <h2 id="assignmentTitle"></h2>
+                
+                <div class="assignment-card">
+                    <div id="statusBadge" class="status-badge"></div>
+                    
+                    <div class="detail-row">
+                        <span class="detail-label">Subject:</span>
+                        <span class="detail-value" id="subject"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Description:</span>
+                        <span class="detail-value" id="description"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Due Date:</span>
+                        <span class="detail-value" id="dueDate"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Maximum Marks:</span>
+                        <span class="detail-value" id="maxMarks"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Posted On:</span>
+                        <span class="detail-value" id="createdAt"></span>
+                    </div>
+                    
+                    <div id="marksSection" style="display: none;">
+                        <p style="font-weight: bold;">
+                            ✓ Marks Obtained: <span id="marksObtained"></span>
+                        </p>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <button class="submit-btn" onclick="markAsSubmitted()">✅ Mark as Submitted</button>
+                        <p class="note-text">
+                            Note: Submit your assignment physically to your teacher. 
+                            Click this button only after you have submitted.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript - EXACT original -->
+    <script>
+        let studentProfile = JSON.parse(localStorage.getItem("studentProfile") || '{}');
+
+        // If no profile, create test one
+        if (!studentProfile.id) {
+            studentProfile = {
+                id: 1,
+                branch: "CSE",
+                semester: 2,
+                fullName: "Test Student"
+            };
+            localStorage.setItem("studentProfile", JSON.stringify(studentProfile));
+        }
+        
+        const API = "http://localhost:8080";
+        let token = localStorage.getItem("token");
+        let assignmentId = localStorage.getItem("currentAssignmentId");
+        let assignmentDetails = null;
+
+        window.onload = async function() {
+            if (!token || !assignmentId) {
+                alert("Invalid access");
+                window.history.back();
+                return;
+            }
+            
+            await loadAssignmentDetails();
+        };
+
+        async function loadAssignmentDetails() {
+            try {
+                // Get assignment details
+                const response = await fetch(`${API}/student/assignment/${assignmentId}`, {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                
+                if (!response.ok) throw new Error('Failed to load assignment');
+                
+                assignmentDetails = await response.json();
+                displayAssignment();
+                
+            } catch (err) {
+                document.getElementById("loading").innerHTML = 
+                    `<div style="color:red">Error: ${err.message}</div>`;
+            }
+        }
+
+        function displayAssignment() {
+            document.getElementById("loading").style.display = "none";
+            document.getElementById("assignmentDetails").style.display = "block";
+            
+            // Basic info
+            document.getElementById("assignmentTitle").textContent = assignmentDetails.title;
+            document.getElementById("subject").textContent = assignmentDetails.subject;
+            document.getElementById("description").textContent = assignmentDetails.description;
+            document.getElementById("maxMarks").textContent = assignmentDetails.maxMarks;
+            
+            // Format dates
+            const dueDate = new Date(assignmentDetails.dueDate);
+            const createdAt = new Date(assignmentDetails.createdAt);
+            
+            document.getElementById("dueDate").textContent = 
+                `${dueDate.toLocaleDateString()} ${dueDate.toLocaleTimeString()}`;
+            document.getElementById("createdAt").textContent = 
+                `${createdAt.toLocaleDateString()} ${createdAt.toLocaleTimeString()}`;
+            
+            // Get student's status for this assignment
+            checkAssignmentStatus();
+        }
+
+        async function checkAssignmentStatus() {
+            const studentId = studentProfile.id;
+            try {
+                const response = await fetch(
+                    `${API}/student/assignment/list?studentId=${studentId}&branch=${studentProfile.branch}&semester=${studentProfile.semester}`,
+                    { headers: { 'Authorization': 'Bearer ' + token } }
+                );
+                
+                if (response.ok) {
+                    const assignments = await response.json();
+                    const current = assignments.find(a => a.assignment.id === assignmentDetails.id);
+                    
+                    if (current) {
+                        updateStatusBadge(current.status);
+                        
+                        // Show marks if available
+                        if (current.marksObtained) {
+                            document.getElementById("marksSection").style.display = "block";
+                            document.getElementById("marksObtained").textContent = 
+                                `${current.marksObtained}/${assignmentDetails.maxMarks}`;
+                        }
+                    }
+                }
+            } catch (err) {
+                console.error("Error checking status:", err);
+            }
+        }
+
+        function updateStatusBadge(status) {
+            const badge = document.getElementById("statusBadge");
+            badge.textContent = status.replace('_', ' ');
+            badge.className = `status-badge ${status.toLowerCase().replace('_', '-')}`;
+        }
+
+        async function markAsSubmitted() {
+            if (!confirm("Have you physically submitted this assignment to your teacher?")) {
+                return;
+            }
+            
+            const studentId = studentProfile.id;
+            try {
+                const response = await fetch(
+                    `${API}/student/assignment/submit/${assignmentId}?studentId=${studentId}`,
+                    {
+                        method: 'POST',
+                        headers: { 'Authorization': 'Bearer ' + token }
+                    }
+                );
+                
+                if (response.ok) {
+                    alert("✅ Assignment marked as submitted!");
+                    updateStatusBadge("SUBMITTED");
+                } else {
+                    throw new Error('Submission failed');
+                }
+            } catch (err) {
+                alert("Error: " + err.message);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Edit Project · Nebula</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Font: Inter (modern academic) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(145deg, #5f79ff 0%, #7a5cff 50%, #a16cff 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 1.5rem;
+            display: flex;
+            gap: 1.5rem;
+            color: #1e1e2f;
+            line-height: 1.5;
+        }
+
+        /* ---------- LEFT SIDE MENU (vertical sidebar) ---------- */
+        .sidebar {
+            flex: 0 0 260px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
+            border: 1px solid #e3e3e3;
+            padding: 2rem 1rem 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            height: fit-content;
+            max-height: calc(100vh - 3rem);
+            position: sticky;
+            top: 1.5rem;
+        }
+
+        .sidebar-header {
+            padding: 0 0.8rem 1rem 0.8rem;
+            border-bottom: 1px solid #e3e3e3;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.3px;
+        }
+
+        .sidebar-header p {
+            color: #777;
+            font-size: 0.85rem;
+            margin-top: 0.2rem;
+            font-weight: 500;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            padding: 0.85rem 1rem;
+            border-radius: 16px;
+            color: #4a4a6a;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            background: transparent;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            border: none;
+            width: 100%;
+            text-align: left;
+            cursor: default;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #4c74ff0c, #8a52ff0c);
+            color: #4c74ff;
+            font-weight: 600;
+            border-left: 4px solid #8a52ff;
+            border-radius: 16px 12px 12px 16px;
+        }
+
+        .nav-item:hover {
+            background: #f3f6fb;
+            color: #4c74ff;
+            transform: translateX(4px);
+        }
+
+        .nav-item i {
+            font-style: normal;
+            width: 24px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e3e3e3;
+        }
+
+        /* ---------- MAIN CONTENT AREA ---------- */
+        .main-content {
+            flex: 1;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid #e3e3e3;
+            padding: 2rem 2rem;
+            overflow-y: auto;
+            max-height: calc(100vh - 3rem);
+        }
+
+        /* TOP AREA – minimal header */
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #e3e3e3;
+        }
+
+        .top-header h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e1e2f, #4c74ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Buttons – primary gradient, soft rounded */
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 8px 16px -8px rgba(0,0,0,0.1);
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #4c74ff;
+            border: 1px solid #e3e3e3;
+        }
+        .btn-primary:hover {
+            background: #f3f6fb;
+            transform: translateY(-2px);
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            color: white;
+            border: none;
+        }
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, #5f83ff, #9b66ff);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px -10px #4c74ff;
+        }
+
+        /* style original buttons to match gradient theme */
+        button[onclick="window.history.back()"],
+        button[onclick="loadProject()"],
+        #saveBtn {
+            padding: 0.7rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid #e3e3e3;
+            background: white;
+            color: #4c74ff;
+        }
+        button[onclick="window.history.back()"]:hover,
+        button[onclick="loadProject()"]:hover {
+            background: #f3f6fb;
+            transform: translateY(-2px);
+        }
+
+        #saveBtn {
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            color: white;
+            border: none;
+            box-shadow: 0 8px 16px -8px #4c74ff;
+        }
+        #saveBtn:hover {
+            background: linear-gradient(135deg, #5f83ff, #9b66ff);
+            transform: translateY(-2px);
+        }
+
+        /* Form cards */
+        .form-card {
+            background: white;
+            border: 1px solid #e3e3e3;
+            border-radius: 18px;
+            padding: 1.8rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 10px 25px -12px rgba(0,0,0,0.1);
+        }
+
+        .form-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e1e2f;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #4a4a6a;
+            margin-bottom: 0.3rem;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="url"],
+        .form-group input[type="date"],
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: #f3f6fb;
+            border: 1px solid #e3e3e3;
+            border-radius: 14px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: border 0.2s;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4c74ff;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        /* progress slider */
+        .progress-range {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .progress-range input[type="range"] {
+            flex: 1;
+            height: 6px;
+            border-radius: 10px;
+            background: #e3e3e3;
+        }
+        .progress-value {
+            font-weight: 700;
+            color: #4c74ff;
+            min-width: 3rem;
+        }
+
+        /* tech stack items */
+        .tech-item {
+            background: #f3f6fb;
+            border: 1px solid #e3e3e3;
+            border-radius: 16px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .tech-item > div {
+            flex: 1 1 200px;
+        }
+        .tech-item button {
+            background: #ffebee;
+            color: #d14545;
+            border: 1px solid #ffcdcd;
+            border-radius: 40px;
+            padding: 0.5rem 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tech-item button:hover {
+            background: #ffd6d6;
+        }
+
+        .btn-add {
+            background: #f3f6fb;
+            border: 1px solid #e3e3e3;
+            border-radius: 40px;
+            padding: 0.7rem 1.8rem;
+            font-weight: 600;
+            color: #4c74ff;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+        .btn-add:hover {
+            background: #e8edff;
+            border-color: #4c74ff;
+        }
+
+        .helper-text {
+            color: #777;
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+        }
+
+        /* loading / error */
+        .loading-message {
+            background: #f3f6fb;
+            border: 1px solid #e3e3e3;
+            border-radius: 16px;
+            padding: 1.2rem;
+            margin: 1.5rem 0;
+            color: #777;
+        }
+
+        .error-box {
+            background: #ffe8e8;
+            border: 1px solid #ffc9c9;
+            border-radius: 18px;
+            padding: 1.5rem;
+            color: #b00020;
+            font-weight: 500;
+            margin: 1.5rem 0;
+        }
+
+        details {
+            background: #f3f6fb;
+            border: 1px solid #e3e3e3;
+            border-radius: 18px;
+            padding: 1.2rem;
+            margin-top: 2rem;
+        }
+        details summary {
+            font-weight: 600;
+            color: #4c74ff;
+            cursor: pointer;
+        }
+        pre {
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid #e3e3e3;
+            overflow-x: auto;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        /* preserve original IDs */
+        #loadingMessage, #editFormContainer, #errorContainer {
+            /* already styled */
+        }
+
+        /* scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f3f6fb;
+            border-radius: 20px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 20px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* responsive */
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            .sidebar {
+                flex: auto;
+                position: static;
+                max-height: none;
+            }
+            .main-content {
+                max-height: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- LEFT SIDE MENU (vertical sidebar) -->
+    
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="main-content">
+        <!-- TOP AREA minimal header -->
+        <div class="top-header">
+            <h3>✏️ EDIT PROJECT</h3>
+            <div class="header-actions">
+                <button onclick="window.history.back()">← BACK TO PROJECT</button>
+                <button id="saveBtn" onclick="saveProject()">💾 SAVE CHANGES</button>
+                <button onclick="loadProject()">⟳ REFRESH</button>
+            </div>
+        </div>
+
+        <!-- Loading message -->
+        <div id="loadingMessage" class="loading-message">
+            ⏳ Loading project data...
+        </div>
+
+        <!-- Edit form container (hidden until loaded) -->
+        <div id="editFormContainer" style="display:none;">
+            <!-- PROJECT ID (hidden) -->
+            <input type="hidden" id="projectId">
+
+            <!-- BASIC INFORMATION -->
+            <div class="form-card">
+                <h3>📋 BASIC INFORMATION</h3>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="title" placeholder="Project title">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="description" rows="4" placeholder="Project description"></textarea>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="category">
+                            <option value="MINI">MINI</option>
+                            <option value="MAJOR">MAJOR</option>
+                            <option value="SIDE">SIDE</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="currentStatus">
+                            <option value="IDEA">IDEA</option>
+                            <option value="IN_PROGRESS">IN PROGRESS</option>
+                            <option value="PAUSED">PAUSED</option>
+                            <option value="COMPLETED">COMPLETED</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROGRESS -->
+            <div class="form-card">
+                <h3>📊 PROGRESS</h3>
+                <div class="form-group">
+                    <label>Progress Percentage: <span id="progressValue">0</span>%</label>
+                    <div class="progress-range">
+                        <input type="range" id="progressPercentage" min="0" max="100" value="0" oninput="document.getElementById('progressValue').innerText = this.value">
+                        <span class="progress-value" id="progressValueDisplay">0%</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-top:0.5rem;">
+                        <span class="helper-text">0%</span>
+                        <span class="helper-text">50%</span>
+                        <span class="helper-text">100%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LINKS -->
+            <div class="form-card">
+                <h3>🔗 LINKS</h3>
+                <div class="form-group">
+                    <label>GitHub Repository</label>
+                    <input type="url" id="githubRepo" placeholder="https://github.com/username/repo">
+                </div>
+                <div class="form-group">
+                    <label>Live Demo URL</label>
+                    <input type="url" id="liveDemoUrl" placeholder="https://your-demo.com">
+                </div>
+            </div>
+
+            <!-- DATES -->
+            <div class="form-card">
+                <h3>📅 DATES</h3>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="date" id="startDate">
+                        <div class="helper-text">Original start date (read-only)</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Expected End Date</label>
+                        <input type="date" id="expectedEndDate">
+                    </div>
+                </div>
+            </div>
+
+            <!-- TECH STACK SECTION -->
+            <div class="form-card">
+                <h3>🔧 TECHNOLOGY STACK</h3>
+                <div id="techStackContainer">
+                    <!-- Tech stack items will be added here dynamically -->
+                </div>
+                <div style="margin-top:1.5rem;">
+                    <button onclick="addTechStackItem()" class="btn-add">➕ ADD TECHNOLOGY</button>
+                </div>
+                <div class="helper-text" style="margin-top:0.8rem;">
+                    Each technology needs a name and type (BACKEND/FRONTEND/DB/OTHER)
+                </div>
+            </div>
+
+            <!-- SAVE BUTTON (BOTTOM) -->
+            <div style="margin: 2rem 0; text-align: center;">
+                <button onclick="saveProject()" style="background: linear-gradient(135deg, #4c74ff, #8a52ff); color: white; border: none; padding: 0.9rem 3rem; border-radius: 40px; font-weight: 700; font-size: 1.1rem; cursor: pointer; box-shadow: 0 12px 24px -12px #4c74ff; transition: all 0.2s;">
+                    💾 SAVE ALL CHANGES
+                </button>
+            </div>
+
+            <!-- DEBUG SECTION -->
+            <details>
+                <summary>🔍 DEBUG RAW DATA</summary>
+                <div id="debugRawData" style="font-family:monospace; font-size:12px; white-space:pre-wrap;"></div>
+            </details>
+        </div>
+
+        <!-- Error container -->
+        <div id="errorContainer" style="display:none;"></div>
+    </main>
+
+    <!-- JavaScript – EXACT original, untouched -->
+    <script>
+        // ==================== CONFIG ====================
+        console.log('✏️ Edit Project page initializing...');
+        
+        const API = "http://localhost:8080";
+        
+        // Get project ID from URL or localStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        const projectId = urlParams.get('id') || localStorage.getItem("currentProjectId");
+        
+        console.log('📌 Project ID:', projectId);
+        
+        // Tech stack items array
+        let techStackItems = [];
+        
+        // ==================== TOKEN ====================
+        function getToken() {
+            const token = localStorage.getItem("token");
+            console.log('🔑 Token exists:', !!token);
+            return token;
+        }
+        
+        // ==================== CHECK AUTH ====================
+        function checkAuth() {
+            const token = getToken();
+            if (!token) {
+                alert("Please login first");
+                window.location.href = "../login.html";
+                return false;
+            }
+            return true;
+        }
+        
+        // ==================== LOAD PROJECT ====================
+        async function loadProject() {
+            console.log('📥 Loading project data...');
+            
+            const loadingMsg = document.getElementById('loadingMessage');
+            const formContainer = document.getElementById('editFormContainer');
+            const errorContainer = document.getElementById('errorContainer');
+            
+            if (!checkAuth()) return;
+            
+            if (!projectId) {
+                showError('No project ID specified');
+                return;
+            }
+            
+            try {
+                loadingMsg.style.display = 'block';
+                loadingMsg.innerHTML = '⏳ Fetching project data...';
+                formContainer.style.display = 'none';
+                errorContainer.style.display = 'none';
+                
+                const token = getToken();
+                
+                // FETCH PROJECT DATA
+                console.log('📡 Fetching from:', `${API}/student/project/${projectId}`);
+                const response = await fetch(`${API}/student/project/${projectId}`, {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+                }
+                
+                const data = await response.json();
+                console.log('✅ Project data loaded:', data);
+                
+                // POPULATE FORM
+                populateForm(data);
+                
+                // Show form
+                loadingMsg.style.display = 'none';
+                formContainer.style.display = 'block';
+                
+                // Update debug
+                document.getElementById('debugRawData').innerText = JSON.stringify(data, null, 2);
+                
+            } catch (error) {
+                console.error('❌ Error loading project:', error);
+                showError(error.message);
+            }
+        }
+        
+        // ==================== POPULATE FORM ====================
+        function populateForm(data) {
+            console.log('📝 Populating form with data:', data);
+            
+            // Basic fields
+            document.getElementById('projectId').value = data.id || '';
+            document.getElementById('title').value = data.title || '';
+            document.getElementById('description').value = data.description || '';
+            document.getElementById('category').value = data.category || 'MINI';
+            document.getElementById('currentStatus').value = data.currentStatus || 'IDEA';
+            
+            // Progress
+            const progress = data.progressPercentage || 0;
+            document.getElementById('progressPercentage').value = progress;
+            document.getElementById('progressValue').innerText = progress;
+            
+            // Links
+            document.getElementById('githubRepo').value = data.githubRepo || '';
+            document.getElementById('liveDemoUrl').value = data.liveDemoUrl || '';
+            
+            // Dates
+            if (data.startDate) {
+                document.getElementById('startDate').value = data.startDate;
+            }
+            if (data.expectedEndDate) {
+                document.getElementById('expectedEndDate').value = data.expectedEndDate;
+            }
+            
+            // Tech stack
+            if (data.techStack && Array.isArray(data.techStack)) {
+                console.log('🔧 Loading tech stack:', data.techStack);
+                techStackItems = [...data.techStack];
+            } else {
+                console.log('⚠️ No tech stack found');
+                techStackItems = [];
+            }
+            
+            // Render tech stack
+            renderTechStack();
+        }
+        
+        // ==================== TECH STACK RENDER ====================
+        function renderTechStack() {
+            const container = document.getElementById('techStackContainer');
+            
+            if (techStackItems.length === 0) {
+                container.innerHTML = '<p style="color:#777; font-style:italic;">No technologies added yet. Click "ADD TECHNOLOGY" to add.</p>';
+                return;
+            }
+            
+            let html = '';
+            techStackItems.forEach((tech, index) => {
+                html += `
+                    <div class="tech-item">
+                        <div style="flex:2;">
+                            <input type="text" value="${tech.technology || ''}" placeholder="Technology name" 
+                                   style="width:100%; padding:0.7rem; background:white; border:1px solid #e3e3e3; border-radius:12px;" 
+                                   onchange="updateTechStackItem(${index}, 'technology', this.value)">
+                        </div>
+                        <div style="flex:1;">
+                            <select style="width:100%; padding:0.7rem; background:white; border:1px solid #e3e3e3; border-radius:12px;" onchange="updateTechStackItem(${index}, 'type', this.value)">
+                                <option value="BACKEND" ${tech.type === 'BACKEND' ? 'selected' : ''}>BACKEND</option>
+                                <option value="FRONTEND" ${tech.type === 'FRONTEND' ? 'selected' : ''}>FRONTEND</option>
+                                <option value="DB" ${tech.type === 'DB' ? 'selected' : ''}>DATABASE</option>
+                                <option value="OTHER" ${tech.type === 'OTHER' ? 'selected' : ''}>OTHER</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button onclick="removeTechStackItem(${index})">✖</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        // ==================== TECH STACK FUNCTIONS ====================
+        function addTechStackItem() {
+            console.log('➕ Adding new tech stack item');
+            techStackItems.push({
+                technology: '',
+                type: 'OTHER'
+            });
+            renderTechStack();
+        }
+        
+        function updateTechStackItem(index, field, value) {
+            console.log(`✏️ Updating tech[${index}].${field} =`, value);
+            techStackItems[index][field] = value;
+        }
+        
+        function removeTechStackItem(index) {
+            console.log(`🗑️ Removing tech stack item at index ${index}`);
+            techStackItems.splice(index, 1);
+            renderTechStack();
+        }
+        
+        // ==================== SAVE PROJECT ====================
+        async function saveProject() {
+            console.log('💾 Saving project...');
+            
+            if (!checkAuth()) return;
+            
+            const saveBtn = document.getElementById('saveBtn');
+            const originalText = saveBtn.innerText;
+            saveBtn.innerText = '⏳ SAVING...';
+            saveBtn.disabled = true;
+            
+            try {
+                // Validate required fields
+                const title = document.getElementById('title').value.trim();
+                if (!title) {
+                    alert('Project title is required');
+                    saveBtn.innerText = originalText;
+                    saveBtn.disabled = false;
+                    return;
+                }
+                
+                // Build project data
+                const projectData = {
+                    title: title,
+                    description: document.getElementById('description').value.trim(),
+                    category: document.getElementById('category').value,
+                    currentStatus: document.getElementById('currentStatus').value,
+                    progressPercentage: parseInt(document.getElementById('progressPercentage').value),
+                    githubRepo: document.getElementById('githubRepo').value.trim() || null,
+                    liveDemoUrl: document.getElementById('liveDemoUrl').value.trim() || null,
+                    expectedEndDate: document.getElementById('expectedEndDate').value || null,
+                    techStack: techStackItems.filter(item => item.technology.trim() !== '') // Only save non-empty tech
+                };
+                
+                console.log('📦 Project data to save:', projectData);
+                
+                const token = getToken();
+                const url = `${API}/student/project/${projectId}`;
+                
+                console.log('📡 PUT to:', url);
+                
+                const response = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(projectData)
+                });
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+                
+                const result = await response.json();
+                console.log('✅ Save successful:', result);
+                
+                alert('✅ Project updated successfully!');
+                
+                // Redirect back to details page
+                window.location.href = `project-details.html?id=${projectId}`;
+                
+            } catch (error) {
+                console.error('❌ Error saving project:', error);
+                alert('❌ Error saving project: ' + error.message);
+            } finally {
+                saveBtn.innerText = originalText;
+                saveBtn.disabled = false;
+            }
+        }
+        
+        // ==================== ERROR HANDLER ====================
+        function showError(message) {
+            const loadingMsg = document.getElementById('loadingMessage');
+            const formContainer = document.getElementById('editFormContainer');
+            const errorContainer = document.getElementById('errorContainer');
+            
+            loadingMsg.style.display = 'none';
+            formContainer.style.display = 'none';
+            errorContainer.style.display = 'block';
+            errorContainer.innerHTML = `
+                <div class="error-box">
+                    <h3 style="color:#b00020;">❌ ERROR</h3>
+                    <p>${message}</p>
+                    <div style="margin-top:1rem;">
+                        <button onclick="window.history.back()" class="btn btn-primary">← GO BACK</button>
+                        <button onclick="location.reload()" class="btn btn-primary">⟳ RETRY</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // ==================== INIT ====================
+        window.onload = function() {
+            console.log('🟢 Edit page loaded');
+            
+            if (!checkAuth()) return;
+            
+            if (!projectId) {
+                showError('No project ID specified. Please select a project to edit.');
+                return;
+            }
+            
+            loadProject();
+        };
+    </script>
+</body>
+</html>

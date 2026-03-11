@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Student Quiz Dashboard · Nebula</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Font: Inter (clean, modern) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <!-- No external icons - pure CSS for safety -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at 10% 20%, #0c0a2a, #190f40, #200f4a);
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1.5rem;
+      color: #ffffff;
+      line-height: 1.5;
+    }
+
+    .premium-container {
+      max-width: 1000px;
+      width: 100%;
+    }
+
+    .glass-card {
+      background: rgba(15, 18, 48, 0.6);
+      backdrop-filter: blur(18px) saturate(200%);
+      -webkit-backdrop-filter: blur(18px) saturate(200%);
+      border-radius: 3rem;
+      padding: 2.5rem 2.8rem;
+      box-shadow: 0 40px 70px -20px #030014, 0 0 0 1px rgba(160, 130, 255, 0.2) inset;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      transition: box-shadow 0.3s ease;
+    }
+
+    /* Header */
+    .dashboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      font-weight: 700;
+      font-size: 2.4rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(130deg, #ffffff, #e1d5ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Student info card */
+    #studentInfo {
+      background: rgba(25, 23, 60, 0.7);
+      backdrop-filter: blur(8px);
+      border-radius: 2rem;
+      padding: 1.8rem 2rem;
+      margin: 1.5rem 0;
+      border: 1px solid rgba(200, 170, 255, 0.2);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem 2.5rem;
+    }
+
+    #studentInfo h3 {
+      width: 100%;
+      color: #cbc3ff;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    #studentInfo p {
+      background: rgba(40, 35, 85, 0.5);
+      padding: 0.6rem 1.5rem;
+      border-radius: 3rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: #e0d9ff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    #studentInfo p strong {
+      color: #b7abff;
+      margin-right: 0.3rem;
+    }
+
+    /* Quiz list section */
+    #quizList {
+      background: rgba(18, 16, 45, 0.4);
+      backdrop-filter: blur(4px);
+      border-radius: 2.5rem;
+      padding: 2rem;
+      margin: 2rem 0;
+    }
+
+    #quizList h3 {
+      color: #e1d6ff;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Quiz buttons - styled via selectors */
+    #quizList button {
+      margin: 0.8rem 0 !important;
+      padding: 1.2rem 1.8rem !important;
+      font-size: 0.95rem !important;
+      border: none !important;
+      border-radius: 2rem !important;
+      text-align: left !important;
+      width: 100% !important;
+      max-width: 500px !important;
+      background: rgba(30, 28, 65, 0.8) !important;
+      backdrop-filter: blur(8px) !important;
+      box-shadow: 0 15px 30px -12px #0d0825 !important;
+      border: 1px solid rgba(200, 170, 255, 0.15) !important;
+      transition: all 0.2s ease !important;
+      color: #f0ecff !important;
+      cursor: pointer !important;
+    }
+
+    #quizList button:hover {
+      transform: translateY(-2px) scale(1.01);
+      background: rgba(48, 40, 100, 0.9) !important;
+      border-color: rgba(220, 190, 255, 0.4) !important;
+      box-shadow: 0 22px 35px -10px #3f28a0 !important;
+    }
+
+    /* Quiz title */
+    #quizList button div strong {
+      color: white;
+      font-size: 1.1rem;
+    }
+
+    /* Subject/duration line */
+    #quizList button div[style*="font-size: 12px"] {
+      color: #b0b0d0 !important;
+      margin: 0.5rem 0 !important;
+    }
+
+    /* Status badge inside button */
+    #quizList button div span {
+      font-size: 0.75rem !important;
+      font-weight: 600 !important;
+      padding: 0.3rem 1.2rem !important;
+      border-radius: 3rem !important;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: inline-block;
+      box-shadow: 0 0 12px currentColor !important;
+    }
+
+    /* Override inline status colors */
+    #quizList button div span[style*="background:#28a745"] {
+      background: #2ecc71 !important;
+      box-shadow: 0 0 12px #2ecc71 !important;
+    }
+    #quizList button div span[style*="background:#ffc107"] {
+      background: #f39c12 !important;
+      box-shadow: 0 0 12px #f39c12 !important;
+    }
+    #quizList button div span[style*="background:#007bff"] {
+      background: #3498db !important;
+      box-shadow: 0 0 12px #3498db !important;
+    }
+
+    /* Quiz area (questions) */
+    #quizArea, #resultArea {
+      background: rgba(20, 18, 50, 0.6);
+      backdrop-filter: blur(8px);
+      border-radius: 2.5rem;
+      padding: 2rem;
+      margin: 1.5rem 0;
+      border: 1px solid rgba(200, 170, 255, 0.15);
+    }
+
+    #quizArea h3 {
+      color: #e1d6ff;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Question cards */
+    #quizArea > div[style*="border:1px solid #ddd"] {
+      background: rgba(30, 27, 70, 0.7) !important;
+      border: 1px solid rgba(200, 170, 255, 0.2) !important;
+      border-radius: 2rem !important;
+      padding: 1.8rem !important;
+      margin: 1.5rem 0 !important;
+      box-shadow: 0 15px 30px -12px #0d0825;
+    }
+
+    #quizArea p {
+      color: #e0d9ff;
+      margin: 0.5rem 0;
+    }
+
+    #quizArea p b {
+      color: white;
+    }
+
+    #quizArea label {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.7rem 1.2rem;
+      margin: 0.5rem 0;
+      border-radius: 3rem;
+      background: rgba(40, 35, 85, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.02);
+      cursor: pointer;
+      transition: 0.1s;
+      color: #d0c8ff;
+    }
+
+    #quizArea label:hover {
+      background: rgba(60, 50, 120, 0.6);
+      border-color: rgba(200, 170, 255, 0.3);
+    }
+
+    #quizArea input[type="radio"] {
+      accent-color: #9f7aff;
+      width: 1.1rem;
+      height: 1.1rem;
+    }
+
+    /* Quiz buttons (Submit/Cancel) */
+    #quizArea button {
+      border: none;
+      border-radius: 3rem;
+      padding: 0.9rem 2.2rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin: 0.8rem 0.5rem 0.8rem 0;
+    }
+
+    #quizArea button:first-of-type {
+      background: linear-gradient(115deg, #2f55e0, #9f4eff);
+      color: white;
+      box-shadow: 0 16px 28px -12px #3f20a0;
+    }
+
+    #quizArea button:last-of-type {
+      background: #dc3545;
+      color: white;
+    }
+
+    #quizArea button:hover {
+      transform: scale(1.02);
+      filter: brightness(1.1);
+    }
+
+    /* Result area */
+    #resultArea h3 {
+      color: #8affb8;
+      margin-bottom: 1rem;
+    }
+
+    #resultArea > div {
+      background: rgba(40, 180, 90, 0.15) !important;
+      border: 1px solid #5cb85c !important;
+      border-radius: 2rem !important;
+      padding: 2rem !important;
+      color: white !important;
+    }
+
+    /* Back button */
+    button[onclick="goBack()"] {
+      background: rgba(30, 27, 70, 0.8);
+      backdrop-filter: blur(8px);
+      border: 1.5px solid rgba(200, 170, 255, 0.25);
+      color: #eeeaff;
+      font-weight: 500;
+      font-size: 1rem;
+      padding: 0.9rem 2.2rem;
+      border-radius: 3rem;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 12px 28px -10px #0b0820;
+      margin-top: 1.5rem;
+      width: auto;
+      display: inline-block;
+    }
+
+    button[onclick="goBack()"]:hover {
+      background: rgba(50, 42, 110, 0.9);
+      border-color: #bba6ff;
+      transform: translateX(-2px);
+    }
+
+    /* Responsive */
+    @media (max-width: 650px) {
+      .glass-card {
+        padding: 1.8rem 1.2rem;
+      }
+      h2 {
+        font-size: 2rem;
+      }
+      #quizList button {
+        max-width: 100% !important;
+      }
+    }
+
+    /* Hide original <hr> */
+    hr {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="premium-container">
+    <div class="glass-card">
+      <!-- Header with title only (no icons to avoid JS conflicts) -->
+      <div class="dashboard-header">
+        <h2>Student Quiz Dashboard</h2>
+      </div>
+
+      <!-- Student info (ID unchanged) -->
+      <div id="studentInfo"></div>
+
+      <!-- Quiz list (ID unchanged) -->
+      <div id="quizList">
+        <h3>Available Quizzes</h3>
+        <p>Loading quizzes...</p>
+      </div>
+
+      <!-- Quiz area (ID unchanged) -->
+      <div id="quizArea"></div>
+
+      <!-- Result area (ID unchanged) -->
+      <div id="resultArea"></div>
+
+      <!-- Back button (original onclick preserved) -->
+      <button onclick="goBack()">Back to Dashboard</button>
+    </div>
+  </div>
+
+  <!-- JavaScript - EXACT original, untouched -->
+  <script>
+const API = "http://localhost:8080";
+let token = localStorage.getItem("token");
+let studentProfile = null;
+let attemptId = null;
+let questions = [];
+let currentQuizId = null;
+
+// ==========================
+// INITIAL LOAD
+// ==========================
+window.onload = function() {
+  if (!token) {
+    alert("Login required");
+    window.location.href = "../login.html";
+    return;
+  }
+  
+  loadStudentProfile();
+};
+
+// ==========================
+// LOAD STUDENT PROFILE
+// ==========================
+function loadStudentProfile() {
+  fetch(`${API}/student/profile`, {
+    headers: { Authorization: "Bearer " + token }
+  })
+  .then(res => {
+    if (!res.ok) throw new Error("Failed to load profile");
+    return res.json();
+  })
+  .then(profile => {
+    studentProfile = profile;
+    displayStudentInfo();
+    loadQuizzes(); // Auto-load quizzes
+  })
+  .catch(err => {
+    console.error("Profile error:", err);
+    document.getElementById("studentInfo").innerHTML = 
+      "<p style='color:red'>Error loading profile. Please login again.</p>";
+  });
+}
+
+// ==========================
+// DISPLAY STUDENT INFO
+// ==========================
+function displayStudentInfo() {
+  const div = document.getElementById("studentInfo");
+  div.innerHTML = `
+    <h3>Student Information</h3>
+    <p><strong>Name:</strong> ${studentProfile.fullName || 'N/A'}</p>
+    <p><strong>Branch:</strong> ${studentProfile.branch || 'N/A'}</p>
+    <p><strong>Semester:</strong> ${studentProfile.semester || 'N/A'}</p>
+    <p><strong>Section:</strong> ${studentProfile.section || 'N/A'}</p>
+    <p><strong>Roll No:</strong> ${studentProfile.rollNumber || 'N/A'}</p>
+    <hr>
+  `;
+}
+
+// ==========================
+// LOAD QUIZZES WITH STATUS
+// ==========================
+function loadQuizzes() {
+  if (!studentProfile) return;
+  
+  const branch = studentProfile.branch;
+  const semester = studentProfile.semester;
+  const section = studentProfile.section;
+  
+  if (!branch || !semester) {
+    document.getElementById("quizList").innerHTML = 
+      "<p style='color:red'>Student branch/semester not found</p>";
+    return;
+  }
+  
+  let url = `${API}/student/quiz?branch=${encodeURIComponent(branch)}&semester=${semester}`;
+  if (section) url += `&section=${encodeURIComponent(section)}`;
+  
+  fetch(url, {
+    headers: { Authorization: "Bearer " + token }
+  })
+  .then(res => {
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+  })
+  .then(quizzes => {
+    displayQuizzes(quizzes);
+  })
+  .catch(err => {
+    console.error("Error loading quizzes:", err);
+    document.getElementById("quizList").innerHTML = 
+      `<p style='color:red'>Error loading quizzes: ${err.message}</p>`;
+  });
+}
+
+// ==========================
+// DISPLAY QUIZZES WITH STATUS CHECK
+// ==========================
+function displayQuizzes(quizzes) {
+  const div = document.getElementById("quizList");
+  div.innerHTML = "<h3>Available Quizzes</h3>";
+  
+  if (!quizzes || quizzes.length === 0) {
+    div.innerHTML += "<p>No quizzes available at the moment.</p>";
+    return;
+  }
+  
+  // Check status for each quiz
+  quizzes.forEach(quiz => {
+    checkQuizStatus(quiz).then(status => {
+      createQuizButton(quiz, status);
+    });
+  });
+}
+
+// ==========================
+// CHECK QUIZ STATUS
+// ==========================
+async function checkQuizStatus(quiz) {
+  if (!studentProfile || !studentProfile.id) return { status: "NEW", message: "Start quiz" };
+  
+  try {
+    const res = await fetch(
+      `${API}/student/quiz/status/${quiz.id}?studentId=${studentProfile.id}`,
+      {
+        method: "GET",
+        headers: { Authorization: "Bearer " + token }
+      }
+    );
+    
+    if (!res.ok) {
+      console.log("Status check failed:", res.status);
+      return { status: "NEW", message: "Start quiz" };
+    }
+    
+    const data = await res.json();
+    
+    if (data.hasAttempted) {
+      if (data.status === "SUBMITTED") {
+        return { status: "COMPLETED", score: data.score || 0 };
+      } else if (data.status === "IN_PROGRESS") {
+        return { status: "IN_PROGRESS", score: data.score || 0 };
+      }
+    }
+    
+    return { status: "NEW" };
+    
+  } catch (err) {
+    console.error("Error:", err);
+    return { status: "NEW" };
+  }
+}
+
+// ==========================
+// CREATE QUIZ BUTTON WITH STATUS
+// ==========================
+function createQuizButton(quiz, status) {
+  const div = document.getElementById("quizList");
+  
+  const button = document.createElement("button");
+  button.style.margin = "5px";
+  button.style.padding = "10px";
+  button.style.fontSize = "14px";
+  button.style.border = "1px solid #ccc";
+  button.style.borderRadius = "4px";
+  button.style.textAlign = "left";
+  button.style.width = "400px";
+  
+  // Status display
+  let statusText, statusColor, bgColor, cursorType;
+  
+  if (status.status === "COMPLETED") {
+    statusText = `✅ Completed (Score: ${status.score || 0})`;
+    statusColor = "#28a745";
+    bgColor = "#d4edda";
+    cursorType = "not-allowed";
+  } 
+  else if (status.status === "IN_PROGRESS") {
+    statusText = "🔄 In Progress";
+    statusColor = "#ffc107";
+    bgColor = "#fff3cd";
+    cursorType = "pointer";
+    button.onclick = () => startQuiz(quiz.id);
+  }
+  else {
+    statusText = "▶ Start Quiz";
+    statusColor = "#007bff";
+    bgColor = "#e7f1ff";
+    cursorType = "pointer";
+    button.onclick = () => startQuiz(quiz.id);
+  }
+  
+  button.style.backgroundColor = bgColor;
+  button.style.cursor = cursorType;
+  
+  button.innerHTML = `
+    <div><strong>${quiz.title || 'Untitled Quiz'}</strong></div>
+    <div style="font-size: 12px; color: #666; margin: 2px 0;">
+      Subject: ${quiz.subject || 'N/A'} | 
+      Marks: ${quiz.totalMarks || 0} | 
+      Duration: ${quiz.durationMinutes || 0} min
+    </div>
+    <div style="font-size: 12px; margin-top: 5px;">
+      <span style="background:${statusColor}; color:white; padding:2px 8px; border-radius:3px;">
+        ${statusText}
+      </span>
+    </div>
+  `;
+  
+  div.appendChild(button);
+  div.appendChild(document.createElement("br"));
+}
+
+// ==========================
+// START QUIZ
+// ==========================
+function startQuiz(qid) {
+  if (!studentProfile || !studentProfile.id) {
+    alert("Student ID not found. Please reload page.");
+    return;
+  }
+  
+  currentQuizId = qid;
+  attemptId = null;
+  questions = [];
+  
+  // Clear previous sections
+  document.getElementById("quizArea").innerHTML = "";
+  document.getElementById("resultArea").innerHTML = "";
+  
+  fetch(`${API}/student/quiz/${qid}/start?studentId=${studentProfile.id}`, {
+    method: "POST",
+    headers: { 
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json"
+    }
+  })
+  .then(res => {
+    if (!res.ok) {
+      return res.text().then(text => {
+        // If already submitted, show message
+        if (text.includes("already submitted")) {
+          alert("This quiz is already submitted. You cannot restart it.");
+          loadQuizzes(); // Refresh list
+          throw new Error("Quiz already submitted");
+        }
+        throw new Error(`Error ${res.status}: ${text}`);
+      });
+    }
+    return res.json();
+  })
+  .then(attempt => {
+    attemptId = attempt.id;
+    loadQuestions(qid);
+  })
+  .catch(err => {
+    if (!err.message.includes("already submitted")) {
+      alert("Failed to start quiz: " + err.message);
+    }
+  });
+}
+// ==========================
+// LOAD QUIZZES WITH STATUS
+// ==========================
+function loadQuizzes() {
+  if (!studentProfile) {
+    console.log("⏳ Waiting for student profile...");
+    return;
+  }
+  
+  const branch = studentProfile.branch;
+  const semester = studentProfile.semester;
+  const section = studentProfile.section;
+  
+  console.log("📚 Loading quizzes for:", { branch, semester, section });
+  
+  if (!branch || !semester) {
+    console.error("❌ Missing branch or semester");
+    return;
+  }
+  
+  // Build URL with filters
+  let url = `${API}/student/quiz?branch=${encodeURIComponent(branch)}&semester=${semester}`;
+  if (section) url += `&section=${encodeURIComponent(section)}`;
+  
+  console.log("📡 Fetching quizzes from:", url);
+  
+  fetch(url, {
+    headers: { Authorization: "Bearer " + token }
+  })
+  .then(res => {
+    console.log("📡 Response status:", res.status);
+    if (!res.ok) {
+      return res.text().then(text => {
+        throw new Error(`HTTP ${res.status}: ${text}`);
+      });
+    }
+    return res.json();
+  })
+  .then(quizzes => {
+    console.log("✅ Quizzes received:", quizzes);
+    console.log("Number of quizzes:", quizzes.length);
+    
+    if (quizzes.length === 0) {
+      document.getElementById("quizList").innerHTML = `
+        <h3>Available Quizzes</h3>
+        <div style="background: #fff3cd; color: #856404; padding: 20px; border-radius: 5px;">
+          <strong>📭 No quizzes found</strong>
+          <p>No quizzes available for:</p>
+          <ul style="margin-top: 10px;">
+            <li><strong>Branch:</strong> ${branch}</li>
+            <li><strong>Semester:</strong> ${semester}</li>
+            <li><strong>Section:</strong> ${section || 'Any'}</li>
+          </ul>
+          <p style="margin-top: 15px;">Possible reasons:</p>
+          <ul>
+            <li>Teachers haven't created any quizzes for your branch/semester</li>
+            <li>The quiz dates might not be active yet</li>
+            <li>Check with your teacher</li>
+          </ul>
+        </div>
+      `;
+    } else {
+      displayQuizzes(quizzes);
+    }
+  })
+  .catch(err => {
+    console.error("❌ Error loading quizzes:", err);
+    document.getElementById("quizList").innerHTML = 
+      `<p style='color:red'>Error loading quizzes: ${err.message}</p>`;
+  });
+}
+// ==========================
+// LOAD QUESTIONS
+// ==========================
+function loadStudentProfile() {
+  console.log("🔍 Loading student profile...");
+  
+  fetch(`${API}/student/profile`, {
+    headers: { Authorization: "Bearer " + token }
+  })
+  .then(res => {
+    if (!res.ok) throw new Error("Failed to load profile");
+    return res.json();
+  })
+  .then(profile => {
+    studentProfile = profile;
+    console.log("✅ Student profile loaded:", studentProfile);
+    
+    // Check if profile has required fields
+    console.log("Branch:", profile.branch);
+    console.log("Semester:", profile.semester);
+    console.log("Section:", profile.section);
+    
+    displayStudentInfo();
+    
+    // Check if we have branch and semester
+    if (!profile.branch || !profile.semester) {
+      document.getElementById("quizList").innerHTML = `
+        <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px;">
+          <strong>⚠️ Incomplete Profile:</strong> Your profile is missing branch or semester information.
+          <br>Please contact your teacher or admin to update your profile.
+          <br><br>
+          <strong>Branch:</strong> ${profile.branch || 'Not set'}<br>
+          <strong>Semester:</strong> ${profile.semester || 'Not set'}
+        </div>
+      `;
+      return;
+    }
+    
+    loadQuizzes(); // Auto-load quizzes
+  })
+  .catch(err => {
+    console.error("❌ Profile error:", err);
+    document.getElementById("studentInfo").innerHTML = 
+      "<p style='color:red'>Error loading profile. Please login again.</p>";
+  });
+}
+// ==========================
+// RENDER QUESTIONS
+// ==========================
+// ==========================
+// RENDER QUESTIONS
+// ==========================
+function renderQuestions() {
+  const div = document.getElementById("quizArea");
+  div.innerHTML = "<h3>Quiz Questions</h3>";
+  
+  if (!questions || questions.length === 0) {
+    div.innerHTML += "<p>No questions available.</p>";
+    return;
+  }
+  
+  questions.forEach((q, index) => {
+    // Debug: Log the question object to see field names
+    console.log(`Question ${index + 1}:`, q);
+    
+    // Handle different possible field names for options
+    const optionA = q.optionA || q.optiona || 'Option A';
+    const optionB = q.optionB || q.optionb || 'Option B';
+    const optionC = q.optionC || q.optionc || 'Option C';
+    const optionD = q.optionD || q.optiond || 'Option D';
+    
+    div.innerHTML += `
+      <div style="border:1px solid #ddd; padding:15px; margin:15px 0; border-radius:8px; background:rgba(255,255,255,0.05);">
+        <p><b>Q${index + 1}:</b> ${q.questionText || 'No question'}</p>
+        <p><b>Marks:</b> ${q.marks || 0}</p>
+        <div style="margin-top:10px;">
+          <label style="display:block; margin:8px 0; padding:8px; background:rgba(255,255,255,0.05); border-radius:5px;">
+            <input type="radio" name="q${q.id}" value="A" style="margin-right:10px;"> A: ${optionA}
+          </label>
+          <label style="display:block; margin:8px 0; padding:8px; background:rgba(255,255,255,0.05); border-radius:5px;">
+            <input type="radio" name="q${q.id}" value="B" style="margin-right:10px;"> B: ${optionB}
+          </label>
+          <label style="display:block; margin:8px 0; padding:8px; background:rgba(255,255,255,0.05); border-radius:5px;">
+            <input type="radio" name="q${q.id}" value="C" style="margin-right:10px;"> C: ${optionC}
+          </label>
+          <label style="display:block; margin:8px 0; padding:8px; background:rgba(255,255,255,0.05); border-radius:5px;">
+            <input type="radio" name="q${q.id}" value="D" style="margin-right:10px;"> D: ${optionD}
+          </label>
+        </div>
+      </div>
+    `;
+  });
+
+  // Submit button
+  const submitBtn = document.createElement("button");
+  submitBtn.textContent = "Submit Quiz";
+  submitBtn.onclick = submitQuiz;
+  submitBtn.style.padding = "12px 30px";
+  submitBtn.style.margin = "15px 10px 15px 0";
+  submitBtn.style.background = "linear-gradient(115deg, #2f55e0, #9f4eff)";
+  submitBtn.style.color = "white";
+  submitBtn.style.border = "none";
+  submitBtn.style.borderRadius = "30px";
+  submitBtn.style.fontWeight = "600";
+  submitBtn.style.cursor = "pointer";
+  
+  // Cancel button
+  const cancelBtn = document.createElement("button");
+  cancelBtn.textContent = "Cancel";
+  cancelBtn.onclick = () => {
+    document.getElementById("quizArea").innerHTML = "";
+    loadQuizzes();
+  };
+  cancelBtn.style.padding = "12px 30px";
+  cancelBtn.style.margin = "15px 5px";
+  cancelBtn.style.background = "#dc3545";
+  cancelBtn.style.color = "white";
+  cancelBtn.style.border = "none";
+  cancelBtn.style.borderRadius = "30px";
+  cancelBtn.style.fontWeight = "600";
+  cancelBtn.style.cursor = "pointer";
+  
+  div.appendChild(submitBtn);
+  div.appendChild(cancelBtn);
+}
+// ==========================
+// SUBMIT QUIZ
+// ==========================
+// ==========================
+// SUBMIT QUIZ
+// ==========================
+function submitQuiz() {
+  if (!attemptId) {
+    alert("No active quiz attempt");
+    return;
+  }
+  
+  const answers = [];
+  let answeredCount = 0;
+  
+  questions.forEach(q => {
+    const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+    if (selected) {
+      answers.push({
+        questionId: q.id,
+        selectedOption: selected.value
+      });
+      answeredCount++;
+    }
+  });
+  
+  console.log(`Answered ${answeredCount} out of ${questions.length} questions`);
+  
+  if (answeredCount === 0) {
+    if (!confirm("No answers selected. Submit anyway?")) return;
+  } else {
+    if (!confirm(`You've answered ${answeredCount} out of ${questions.length} questions. Submit quiz?`)) return;
+  }
+  
+  // Show loading state
+  const submitBtn = document.querySelector('#quizArea button:first-of-type');
+  if (submitBtn) {
+    submitBtn.textContent = "Submitting...";
+    submitBtn.disabled = true;
+  }
+  
+  fetch(`${API}/student/quiz/submit/${attemptId}`, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(answers)
+  })
+  .then(res => {
+    if (!res.ok) {
+      return res.text().then(text => {
+        throw new Error(`Server error: ${res.status} - ${text}`);
+      });
+    }
+    return res.json();
+  })
+  .then(result => {
+    console.log("Submission result:", result);
+    showResult(result);
+    // Reload quizzes to update status
+    setTimeout(() => loadQuizzes(), 1000);
+  })
+  .catch(err => {
+    console.error("Submit error:", err);
+    alert("Submit failed: " + err.message);
+    
+    // Reset button
+    if (submitBtn) {
+      submitBtn.textContent = "Submit Quiz";
+      submitBtn.disabled = false;
+    }
+  });
+}
+function goBack() {
+  window.location.href = "dashboard.html";
+}
+
+// In your student quiz page, update startQuiz function:
+function startQuiz(quizId) {
+    window.location.href = `quiz-attend.html?quizId=${quizId}&studentId=${studentProfile.id}`;
+}
+// ==========================
+// SHOW RESULT
+// ==========================
+function showResult(result) {
+  document.getElementById("quizArea").innerHTML = "";
+  document.getElementById("resultArea").innerHTML = `
+    <h3>✅ Quiz Submitted Successfully!</h3>
+    <div style="background:#d4edda; padding:15px; border-radius:5px; border:1px solid #c3e6cb;">
+      <p><strong>Status:</strong> ${result.status || 'SUBMITTED'}</p>
+      <p><strong>Score:</strong> ${result.score || 0}</p>
+      <p><strong>Submitted At:</strong> ${new Date().toLocaleString()}</p>
+    </div>
+    
+  `;
+}
+</script>
+</body>
+</html>

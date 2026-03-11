@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Fonts: Inter for modern academic feel -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Inter", sans-serif;
+      background: linear-gradient(135deg, #5f79ff 0%, #7a5cff 50%, #a16cff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    /* subtle pattern overlay for academic texture */
+    body::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+      background-size: 30px 30px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* main card – clean white with subtle shadow */
+    .login-card {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 460px;
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      padding: 2.5rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .login-card:hover {
+      box-shadow: 0 30px 60px -12px rgba(79, 70, 229, 0.3);
+    }
+
+    /* elegant header */
+    .card-header {
+      margin-bottom: 2rem;
+    }
+
+    .card-header .brand-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #4c74ff, #8a52ff);
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      font-size: 1.75rem;
+      color: white;
+      box-shadow: 0 10px 20px -5px rgba(74, 87, 255, 0.4);
+      margin-bottom: 1.5rem;
+    }
+
+    .card-header h2 {
+      font-size: 1.875rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #1a1a1a;
+      margin: 0 0 0.5rem 0;
+      line-height: 1.2;
+    }
+
+    .card-header p {
+      color: #777;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    /* input groups */
+    .input-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #777;
+      font-size: 1rem;
+      transition: color 0.2s;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    #username, #password {
+      width: 100%;
+      padding: 1rem 1rem 1rem 3rem;
+      background: #f3f6fb;
+      border: 1.5px solid #e3e3e3;
+      border-radius: 16px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #1a1a1a;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    #username:focus, #password:focus {
+      border-color: #4c74ff;
+      background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(76, 116, 255, 0.1);
+    }
+
+    #username:hover, #password:hover {
+      border-color: #8a52ff;
+    }
+
+    /* placeholder style */
+    #username::placeholder, #password::placeholder {
+      color: #999;
+      font-weight: 400;
+      font-size: 0.95rem;
+    }
+
+    /* password hint - more subtle */
+    .hint-pw {
+      text-align: right;
+      margin-top: -0.5rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.8rem;
+      color: #777;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      justify-content: flex-end;
+    }
+
+    .hint-pw i {
+      font-size: 0.7rem;
+      color: #8a52ff;
+    }
+
+    /* button with primary gradient */
+    #loginBtn {
+      width: 100%;
+      background: linear-gradient(135deg, #4c74ff, #8a52ff);
+      border: none;
+      border-radius: 16px;
+      padding: 1rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      color: white;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      box-shadow: 0 10px 20px -8px rgba(74, 87, 255, 0.4);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    #loginBtn i {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.9);
+      transition: transform 0.2s;
+    }
+
+    #loginBtn:hover {
+      background: linear-gradient(135deg, #5f7fff, #9b63ff);
+      box-shadow: 0 15px 25px -8px rgba(74, 87, 255, 0.5);
+      transform: translateY(-1px);
+    }
+
+    #loginBtn:hover i {
+      transform: translateX(4px);
+    }
+
+    #loginBtn:active {
+      transform: translateY(1px);
+      box-shadow: 0 5px 15px -5px rgba(74, 87, 255, 0.5);
+    }
+
+    /* footer links */
+    .card-footer {
+      margin-top: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      color: #777;
+      font-size: 0.9rem;
+      border-top: 1px solid #e3e3e3;
+      padding-top: 1.5rem;
+    }
+
+    .card-footer a {
+      color: #4c74ff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-footer a:hover {
+      color: #8a52ff;
+    }
+
+    .card-footer a i {
+      font-size: 0.85rem;
+    }
+
+    /* focus state for accessibility */
+    .input-group:focus-within .input-icon {
+      color: #4c74ff;
+    }
+
+    /* responsive adjustments */
+    @media (max-width: 480px) {
+      body {
+        padding: 1rem;
+      }
+      
+      .login-card {
+        padding: 2rem 1.5rem;
+        border-radius: 20px;
+      }
+      
+      .card-header h2 {
+        font-size: 1.75rem;
+      }
+      
+      #username, #password {
+        padding: 0.875rem 1rem 0.875rem 2.75rem;
+        font-size: 0.9rem;
+      }
+      
+      .input-icon {
+        left: 14px;
+        font-size: 0.95rem;
+      }
+      
+      #loginBtn {
+        padding: 0.875rem 1.5rem;
+        font-size: 0.95rem;
+      }
+    }
+
+    /* small screen height adjustment */
+    @media (max-height: 700px) {
+      .login-card {
+        padding: 2rem;
+      }
+      
+      .card-header {
+        margin-bottom: 1.5rem;
+      }
+      
+      .card-header .brand-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+      }
+    }
+
+    /* preserve all original functionality */
+    /* no JavaScript modified, no elements removed/renamed */
+  </style>
+</head>
+<body>
+  <!-- floating card – all original IDs and elements intact -->
+  <div class="login-card">
+
+    <!-- header with icon (pure visual enhancement) -->
+    <div class="card-header">
+      <div class="brand-icon">
+        <i class="fas fa-graduation-cap"></i>
+      </div>
+      <h2>Welcome back</h2>
+      <p>Sign in to your academic dashboard</p>
+    </div>
+
+    <!-- username field with icon -->
+    <div class="input-group">
+      <i class="fas fa-user input-icon"></i>
+      <input id="username" placeholder="Username">
+    </div>
+
+    <!-- password field with icon -->
+    <div class="input-group">
+      <i class="fas fa-lock input-icon"></i>
+      <input id="password" type="password" placeholder="Password">
+    </div>
+
+    <!-- subtle hint (purely visual) -->
+    <div class="hint-pw">
+      <i class="fas fa-info-circle"></i> <span>minimum 6 characters</span>
+    </div>
+
+    <!-- original login button (ID preserved) -->
+    <button id="loginBtn">
+      <span>Sign in</span> <i class="fas fa-arrow-right"></i>
+    </button>
+
+    <!-- footer links – no functionality attached -->
+    <div class="card-footer">
+      <a href="#"><i class="far fa-circle-question"></i> Need help signing in?</a>
+    </div>
+
+  </div>
+
+  <!-- original script (preserved path, same functionality) -->
+  <script src="js/auth.js"></script>
+</body>
+</html>

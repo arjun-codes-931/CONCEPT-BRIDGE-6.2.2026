@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard · Academia</title>
+    <!-- Google Fonts: Inter for modern academic feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #5f79ff 0%, #7a5cff 50%, #a16cff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* main dashboard container - white card with shadow */
+        .dashboard {
+            width: 100%;
+            max-width: 1280px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* header area - minimal with subtle border */
+        .dashboard-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #e3e3e3;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-left i {
+            font-size: 1.75rem;
+            color: #4c74ff;
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-left h1 {
+            font-weight: 600;
+            font-size: 1.5rem;
+            letter-spacing: -0.02em;
+            color: #1a1a1a;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #e3e3e3;
+            border-radius: 12px;
+            padding: 0.6rem 1.25rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #555;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-outline i {
+            color: #777;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .btn-outline:hover {
+            background: #f3f6fb;
+            border-color: #4c74ff;
+            color: #1a1a1a;
+        }
+
+        .btn-outline:hover i {
+            color: #4c74ff;
+        }
+
+        /* main content area with sidebar layout */
+        .dashboard-main {
+            display: flex;
+            min-height: 600px;
+        }
+
+        /* LEFT SIDEBAR - vertical menu */
+        .sidebar {
+            width: 260px;
+            background: #f8fafd;
+            border-right: 1px solid #e3e3e3;
+            padding: 2rem 1rem;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.875rem 1.25rem;
+            border-radius: 14px;
+            color: #555;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .menu-item i {
+            width: 24px;
+            font-size: 1.1rem;
+            color: #777;
+            transition: all 0.2s ease;
+        }
+
+        .menu-item:hover {
+            background: #f3f6fb;
+            color: #1a1a1a;
+        }
+
+        .menu-item:hover i {
+            color: #4c74ff;
+        }
+
+        .menu-item.active {
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            color: white;
+            box-shadow: 0 10px 20px -8px rgba(76, 116, 255, 0.4);
+        }
+
+        .menu-item.active i {
+            color: white;
+        }
+
+        /* RIGHT CONTENT AREA */
+        .content-area {
+            flex: 1;
+            padding: 2rem;
+            background: white;
+            overflow-y: auto;
+        }
+
+        /* modules section - cards style */
+        .modules-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header i {
+            font-size: 1.25rem;
+            color: #4c74ff;
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-header h3 {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+        }
+
+        .module-item {
+            background: white;
+            border: 1px solid #e3e3e3;
+            border-radius: 18px;
+            padding: 1.5rem 1rem;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+            font-family: 'Inter', sans-serif;
+            border: none;
+            background: #f3f6fb;
+        }
+
+        .module-item i {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: transform 0.2s;
+        }
+
+        .module-item:hover {
+            background: white;
+            border-color: #4c74ff;
+            box-shadow: 0 10px 25px -8px rgba(76, 116, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .module-item:hover i {
+            transform: scale(1.1);
+        }
+
+        /* teacher info card */
+        .info-container {
+            background: white;
+            border: 1px solid #e3e3e3;
+            border-radius: 18px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+        }
+
+        .info-container:hover {
+            border-color: #4c74ff;
+            box-shadow: 0 8px 20px -8px rgba(76, 116, 255, 0.15);
+        }
+
+        .avatar-circle {
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 10px 20px -8px rgba(76, 116, 255, 0.4);
+        }
+
+        #teacherInfo {
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+
+        #teacherInfo p {
+            background: #f3f6fb;
+            padding: 0.5rem 1.25rem;
+            border-radius: 30px;
+            border: 1px solid #e3e3e3;
+            font-family: 'Inter', monospace;
+            color: #1a1a1a;
+            font-weight: 500;
+        }
+
+        /* gradient button style (if needed for any future buttons) */
+        .btn-gradient {
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            border: none;
+            border-radius: 12px;
+            padding: 0.6rem 1.5rem;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 8px 16px -8px rgba(76, 116, 255, 0.4);
+        }
+
+        .btn-gradient:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 24px -8px rgba(76, 116, 255, 0.5);
+        }
+
+        /* responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .dashboard-main {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #e3e3e3;
+                padding: 1rem;
+            }
+
+            .sidebar-menu {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .menu-item {
+                width: auto;
+                flex: 1 0 auto;
+                justify-content: center;
+            }
+
+            .menu-item span {
+                display: none;
+            }
+
+            .menu-item i {
+                margin: 0;
+            }
+
+            .dashboard-header {
+                padding: 1rem;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .content-area {
+                padding: 1.5rem;
+            }
+
+            .module-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-left h1 {
+                font-size: 1.25rem;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .btn-outline {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .info-container {
+                flex-direction: column;
+                align-items: flex-start;
+                text-align: left;
+            }
+
+            #teacherInfo {
+                width: 100%;
+            }
+
+            #teacherInfo p {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* preserve all functionality - no JS changes */
+        button:focus-visible {
+            outline: 2px solid #4c74ff;
+            outline-offset: 2px;
+        }
+
+        /* remove any brand text */
+        [class*="brand"] {
+            /* ensures no extra text */
+        }
+
+        /* Dropdown menu styles */
+.menu-item-with-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.dropdown-trigger {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem 1.25rem;
+    border-radius: 14px;
+    color: #555;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
+}
+
+.dropdown-trigger i:first-child {
+    width: 24px;
+    font-size: 1.1rem;
+    color: #777;
+    transition: all 0.2s ease;
+}
+
+.dropdown-trigger .fa-chevron-down {
+    width: auto;
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: #999;
+    transition: transform 0.2s ease;
+}
+
+.dropdown-trigger:hover {
+    background: #f3f6fb;
+    color: #1a1a1a;
+}
+
+.dropdown-trigger:hover i {
+    color: #4c74ff;
+}
+
+.dropdown-trigger.active {
+    background: linear-gradient(135deg, #4c74ff, #8a52ff);
+    color: white;
+    box-shadow: 0 10px 20px -8px rgba(76, 116, 255, 0.4);
+}
+
+.dropdown-trigger.active i {
+    color: white;
+}
+
+.dropdown-trigger.active .fa-chevron-down {
+    color: white;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #e3e3e3;
+    border-radius: 14px;
+    margin-top: 4px;
+    padding: 0.5rem;
+    box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    display: none;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    color: #555;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
+}
+
+.dropdown-item i {
+    width: 20px;
+    font-size: 0.95rem;
+    color: #777;
+}
+
+.dropdown-item:hover {
+    background: #f3f6fb;
+    color: #1a1a1a;
+}
+
+.dropdown-item:hover i {
+    color: #4c74ff;
+}
+
+.dropdown-item:active {
+    background: linear-gradient(135deg, #4c74ff, #8a52ff);
+    color: white;
+}
+
+.dropdown-item:active i {
+    color: white;
+}
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- TOP AREA: minimal header -->
+        <div class="dashboard-header">
+            <div class="header-left">
+                <i class="fas fa-graduation-cap"></i>
+                <h1>Teacher Dashboard</h1>
+            </div>
+            <div class="header-actions">
+                <button class="btn-outline" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                <button class="btn-outline" onclick="goToProfile()"><i class="fas fa-user-circle"></i> Profile</button>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT: sidebar + content area -->
+        <div class="dashboard-main">
+            <!-- LEFT SIDEBAR MENU -->
+            <div class="sidebar">
+                <div class="sidebar-menu">
+                     <div class="menu-item-with-dropdown">
+    <button class="dropdown-trigger" onclick="toggleQuizDropdown(event)">
+        <i class="fas fa-question-circle"></i>
+        <span>Quizzes</span>
+        <i class="fas fa-chevron-down"></i>
+    </button>
+    <div class="dropdown-menu" id="quizDropdown">
+        <button class="dropdown-item" onclick="window.location.href='teacher-quiz.html'">
+            <i class="fas fa-plus-circle"></i>
+            <span>Create Quiz</span>
+        </button>
+        <button class="dropdown-item" onclick="window.location.href='quiz-manage.html'">
+            <i class="fas fa-edit"></i>
+            <span>Manage Quizzes</span>
+        </button>
+    </div>
+</div>
+                    <button class="menu-item" onclick="goToAssignment()">
+                        <i class="fas fa-pencil-alt"></i>
+                        <span>Assignments</span>
+                    </button>
+                    <button class="menu-item" onclick="goToPDF()">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>PDF Materials</span>
+                    </button>
+                    <button class="menu-item" onclick="goToProject()">
+                        <i class="fas fa-project-diagram"></i>
+                        <span>Projects</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- RIGHT CONTENT AREA -->
+            <div class="content-area">
+                <!-- modules section as cards -->
+                <div class="modules-section">
+                    <div class="section-header">
+                        <i class="fas fa-cube"></i>
+                        <h3>Quick Access</h3>
+                    </div>
+                    <div class="module-grid">
+                        <button class="module-item" onclick="goToQuiz()">
+                            <i class="fas fa-question-circle"></i>
+                            Quiz Management
+                        </button>
+                        <button class="module-item" onclick="goToAssignment()">
+                            <i class="fas fa-pencil-alt"></i>
+                            Assignments
+                        </button>
+                        <button class="module-item" onclick="goToPDF()">
+                            <i class="fas fa-file-pdf"></i>
+                            PDF Materials
+                        </button>
+                        <button class="module-item" onclick="goToProject()">
+                            <i class="fas fa-project-diagram"></i>
+                            Projects
+                        </button>
+                    </div>
+                </div>
+
+                <!-- teacher info card (ID preserved) -->
+                <div class="info-container">
+                    <div class="avatar-circle">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <div id="teacherInfo">
+                        <!-- populated by original js -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ORIGINAL JAVASCRIPT – COMPLETELY UNMODIFIED -->
+    <script>
+        // Dropdown toggle function
+function toggleQuizDropdown(event) {
+    event.stopPropagation();
+    const dropdown = document.getElementById('quizDropdown');
+    dropdown.classList.toggle('show');
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function closeDropdown(e) {
+        if (!e.target.closest('.menu-item-with-dropdown')) {
+            dropdown.classList.remove('show');
+            document.removeEventListener('click', closeDropdown);
+        }
+    });
+}
+
+// Prevent dropdown from closing when clicking inside
+document.addEventListener('click', function(e) {
+    if (e.target.closest('.dropdown-menu')) {
+        e.stopPropagation();
+    }
+});
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '../login.html';
+                return;
+            }
+            
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                const teacherId = payload.userId || payload.id;
+                
+                if (teacherId) {
+                    document.getElementById('teacherInfo').innerHTML = `
+                        <p>Teacher ID: ${teacherId}</p>
+                    `;
+                }
+            } catch (error) {
+                console.error('Token decode error:', error);
+                window.location.href = '../login.html';
+            }
+        });
+        
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = '../login.html';
+        }
+        
+        function goToProfile() {
+            window.location.href = 'teacher-profile.html';
+        }
+        
+        function goToQuiz() {
+            window.location.href = 'teacher-quiz.html';
+        }
+        
+        function goToAssignment() {
+            window.location.href = 'teacher-assignment.html';
+        }
+        
+        function goToPDF() {
+            window.location.href = 'teacher-pdf-upload.html';
+        }
+        
+        function goToProject() {
+            window.location.href = 'teacher-projects.html';
+        }
+        
+        function viewStudentProjects(studentId) {
+            window.open(`student-projects.html?studentId=${studentId}`, '_blank');
+        }
+    </script>
+</body>
+</html>

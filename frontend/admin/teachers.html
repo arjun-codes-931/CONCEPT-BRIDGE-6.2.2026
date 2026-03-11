@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin · Teacher Management | Premium</title>
+    <!-- Google Fonts: Inter for clean, modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome 5 (free) for elegant icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: radial-gradient(circle at 80% 20%, #0f1b42, #0b0f2a 60%, #1e103b 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1.5rem;
+            line-height: 1.5;
+            color: #eef3ff;
+        }
+
+        /* Main floating card — glassmorphism with deep blur */
+        .premium-container {
+            max-width: 1400px;
+            width: 100%;
+            background: rgba(8, 14, 33, 0.45);
+            backdrop-filter: blur(20px) saturate(200%);
+            -webkit-backdrop-filter: blur(20px) saturate(200%);
+            border-radius: 2.8rem;
+            padding: 2.5rem 2.5rem;
+            box-shadow: 0 40px 70px -20px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Top bar — keeps original class */
+        .topbar {
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* Back button (preserve inline onclick) */
+        .topbar button {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 0.8rem 2rem 0.8rem 1.8rem;
+            border-radius: 3rem;
+            font-size: 1rem;
+            font-weight: 500;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.01em;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .topbar button i {
+            font-size: 0.9rem;
+            color: #b2cbff;
+        }
+
+        .topbar button:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 16px 28px rgba(0, 10, 40, 0.6);
+        }
+
+        .topbar button:active {
+            transform: translateY(2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        /* heading with gradient */
+        .topbar h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            background: linear-gradient(145deg, #ffffff, #c5d3ff, #d2bbff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0;
+        }
+
+        /* Table wrapper — floating card with rounded corners */
+        .table-wrapper {
+            background: rgba(18, 24, 55, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 2.2rem;
+            padding: 0.2rem 0;   /* allow inner scroll */
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 30px 50px -20px #01000e, 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 0.5rem;
+            min-width: 900px;
+            padding: 0.2rem 1.2rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 1.2rem 0.8rem 0.8rem 0.8rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #bacfff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: transparent;
+        }
+
+        td {
+            padding: 1rem 0.8rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+            backdrop-filter: blur(4px);
+        }
+
+        /* make first column slightly softer */
+        td:first-child {
+            font-weight: 500;
+            color: #dbe4ff;
+        }
+
+        /* action buttons with premium gradients */
+        .viewBtn, .deleteBtn {
+            border: none;
+            padding: 0.5rem 1.4rem;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            margin-right: 0.4rem;
+        }
+
+        .viewBtn {
+            background: linear-gradient(145deg, #1f3a9e, #5f4bcb);
+            color: white;
+        }
+
+        .viewBtn:hover {
+            background: linear-gradient(145deg, #2a48c5, #735de0);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 22px -6px #1e2580;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .deleteBtn {
+            background: linear-gradient(145deg, #aa2745, #c24b6b);
+            color: white;
+        }
+
+        .deleteBtn:hover {
+            background: linear-gradient(145deg, #c22f52, #d85f7e);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 22px -6px #7f1e32;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .viewBtn:active, .deleteBtn:active {
+            transform: translateY(2px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* empty / loading / error row */
+        td[colspan] {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+            background: rgba(255,255,255,0.02);
+            border-radius: 2rem;
+        }
+
+        /* subtle row hover */
+        tr:hover td {
+            background: rgba(70, 80, 140, 0.25);
+            transition: background 0.2s;
+        }
+
+        /* additional polish for icons */
+        .fa-chevron-circle-right, .fa-trash-alt {
+            filter: drop-shadow(0 2px 4px #00000050);
+        }
+
+        /* responsive adjustments */
+        @media (max-width: 700px) {
+            .premium-container { padding: 1.8rem 1.2rem; }
+            .topbar { flex-direction: column; align-items: start; }
+        }
+    </style>
+</head>
+<body>
+    <div class="premium-container">
+        <!-- original class "topbar" unchanged, back button preserved -->
+        <div class="topbar">
+            <button onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i> Dashboard
+            </button>
+            <h2>
+                <i class="fas fa-chalkboard-teacher"></i> Teacher Management
+            </h2>
+        </div>
+
+        <!-- Table wrapper adds glass effect, but original table remains -->
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-hashtag"></i> ID</th>
+                        <th><i class="fas fa-user"></i> Name</th>
+                        <th><i class="fas fa-flask"></i> Department</th>
+                        <th><i class="fas fa-tag"></i> Designation</th>
+                        <th><i class="fas fa-envelope"></i> Email</th>
+                        <th><i class="fas fa-briefcase"></i> Experience</th>
+                        <th><i class="fas fa-cog"></i> Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="teacherTable">
+                    <tr>
+                        <td colspan="7"><i class="fas fa-spinner fa-pulse"></i> Loading teachers...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- subtle glow line (purely visual) -->
+        <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; opacity: 0.5; gap: 1.5rem; font-size: 0.8rem;">
+            <!-- <span><i class="fas fa-shield-alt"></i> secure admin</span>
+            <span><i class="fas fa-database"></i> live sync</span> -->
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT SECTION — 100% UNTOUCHED, EXACTLY AS PROVIDED -->
+    <script>
+        const API = "http://localhost:8080";
+        const token = localStorage.getItem("token");
+
+
+        window.onload = () => {
+
+            if(!token){
+
+                alert("Login required");
+                location.href="../login.html";
+                return;
+
+            }
+
+            loadTeachers();
+
+        };
+
+
+
+        async function loadTeachers(){
+
+            try{
+
+                const res = await fetch(`${API}/admin/teachers`,{
+
+                    headers:{
+                        "Authorization":"Bearer "+token
+                    }
+
+                });
+
+                if(!res.ok){
+
+                    throw new Error("Failed to load teachers");
+
+                }
+
+                const teachers = await res.json();
+
+                const table = document.getElementById("teacherTable");
+
+                table.innerHTML="";
+
+
+                teachers.forEach(t=>{
+
+                    table.innerHTML += `
+
+                        <tr>
+
+                            <td>${t.id}</td>
+
+                            <td>${t.fullName || "N/A"}</td>
+
+                            <td>${t.department || "N/A"}</td>
+
+                            <td>${t.designation || "N/A"}</td>
+
+                            <td>${t.email || "N/A"}</td>
+
+                            <td>${t.experienceYears || 0} yrs</td>
+
+                            <td>
+
+                                
+
+                                <button class="deleteBtn" onclick="deleteTeacher(${t.id})">
+                                    <i class="fas fa-trash-alt"></i> Delete
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                });
+
+            }catch(err){
+
+                document.getElementById("teacherTable").innerHTML =
+
+                    `<tr><td colspan="7" style="color:#ffa8b5"><i class="fas fa-exclamation-triangle"></i> Error loading teachers</td></tr>`;
+
+            }
+
+        }
+
+
+
+        function viewTeacher(id){
+
+            location.href = `../teacher/teacher-profile.html?id=${id}`;
+
+        }
+
+
+
+        async function deleteTeacher(id){
+
+            if(!confirm("Are you sure you want to delete this teacher?")){
+                return;
+            }
+
+            try{
+
+                await fetch(`${API}/admin/teacher/${id}`,{
+
+                    method:"DELETE",
+
+                    headers:{
+                        "Authorization":"Bearer "+token
+                    }
+
+                });
+
+                alert("Teacher deleted");
+
+                loadTeachers();
+
+            }catch(err){
+
+                alert("Error deleting teacher");
+
+            }
+
+        }
+    </script>
+</body>
+</html>

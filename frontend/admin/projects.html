@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Directory with Projects</title>
+</head>
+<body>
+    <h3>📋 STUDENT DIRECTORY WITH PROJECTS</h3>
+    
+    <div>
+        <button onclick="window.location.href='dashboard.html'">← BACK TO DASHBOARD</button>
+        <button onclick="loadStudentsWithProjects()">⟳ REFRESH</button>
+        <button onclick="toggleView()" id="toggleViewBtn">👥 SHOW ALL STUDENTS</button>
+    </div>
+    
+    <!-- FILTER SECTION -->
+    <div style="margin:20px 0; padding:15px; border:2px solid #333; background:#f0f0f0;">
+        <h4>🔍 FILTER STUDENTS</h4>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:10px;">
+            <div>
+                <label>Branch:</label><br>
+                <select id="filterBranch" onchange="applyFilters()">
+                    <option value="">ALL</option>
+                </select>
+            </div>
+            <div>
+                <label>Section:</label><br>
+                <select id="filterSection" onchange="applyFilters()">
+                    <option value="">ALL</option>
+                </select>
+            </div>
+            <div>
+                <label>Semester:</label><br>
+                <select id="filterSemester" onchange="applyFilters()">
+                    <option value="">ALL</option>
+                </select>
+            </div>
+            <div>
+                <label>Batch:</label><br>
+                <select id="filterBatch" onchange="applyFilters()">
+                    <option value="">ALL</option>
+                </select>
+            </div>
+            <div>
+                <label>Status:</label><br>
+                <select id="filterStatus" onchange="applyFilters()">
+                    <option value="">ALL</option>
+                    <option value="ACTIVE">ACTIVE</option>
+                    <option value="INACTIVE">INACTIVE</option>
+                    <option value="SUSPENDED">SUSPENDED</option>
+                    <option value="GRADUATED">GRADUATED</option>
+                </select>
+            </div>
+            <div>
+                <label>Search:</label><br>
+                <input type="text" id="filterSearch" placeholder="Name or Roll" onkeyup="applyFilters()">
+            </div>
+            <div>
+                <label>Project Filter:</label><br>
+                <select id="filterProjectStatus" onchange="applyFilters()">
+                    <option value="">ALL PROJECTS</option>
+                    <option value="HAS_PROJECTS">Has Projects</option>
+                    <option value="NO_PROJECTS">No Projects</option>
+                </select>
+            </div>
+        </div>
+        <div style="margin-top:10px;">
+            <span id="filterStats">Loading students...</span>
+            <button onclick="resetFilters()" style="margin-left:10px;">⟲ RESET</button>
+        </div>
+    </div>
+    
+    <!-- MAIN CONTAINER -->
+    <div style="display:flex; gap:20px; flex-wrap:wrap;">
+        <!-- STUDENT LIST -->
+        <div id="studentList" style="flex:1; min-width:300px; border:2px solid #333; padding:15px; background:#f9f9f9; height:600px; overflow-y:auto;">
+            <h4>📋 STUDENTS <span id="studentCount"></span></h4>
+            <div id="studentListContainer">Loading...</div>
+        </div>
+        
+        <!-- STUDENT DETAILS WITH PROJECTS -->
+        <div id="studentDetails" style="flex:2; min-width:500px; border:2px solid #333; padding:15px; background:#f9f9f9; height:600px; overflow-y:auto;">
+            <h4>👤 STUDENT DETAILS & PROJECTS</h4>
+            <div id="detailsContent">
+                <p>Select a student to view profile and projects</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- DEBUG SECTION -->
+    <details style="margin-top:20px;">
+        <summary>🔍 DEBUG INFO</summary>
+        <div id="debugInfo" style="background:#f0f0f0; padding:10px; font-family:monospace; font-size:12px; max-height:200px; overflow-y:auto;"></div>
+    </details>
+    
+    <script>
+        // ==================== CONFIG ====================
+        console.log('🚀 Student Directory with Projects initializing...');
+        
+        const API = "http://localhost:8080";
+        let allStudentsWithProjects = [];
+        let filteredStudents = [];
+        let selectedStudent = null;
+        let currentView = "with-projects"; // "with-projects" or "all"
+        
+        // ==================== TOKEN ====================
+        function getToken() {
+            const token = localStorage.getItem("token");
+            console.log('🔑 Token exists:', !!token);
+            return token;
+        }
+        
+        // ==================== CHECK AUTH ====================
+        function checkAuth() {
+            const token = getToken();
+            if (!token) {
+                alert("Please login first");
+                window.location.href = "../login.html";
+                return false;
+            }
+            return true;
+        }
+        
+        // ==================== TOGGLE VIEW ====================
+        function toggleView() {
+            const btn = document.getElementById('toggleViewBtn');
+            if (currentView === "with-projects") {
+                currentView = "all";
+                btn.innerHTML = "👥 SHOW WITH PROJECTS";
+                loadAllStudents();
+            } else {
+                currentView = "with-projects";
+                btn.innerHTML = "👥 SHOW ALL STUDENTS";
+                loadStudentsWithProjects();
+            }
+        }
+        
+        // ==================== LOAD STUDENTS WITH PROJECTS ====================
+        async function loadStudentsWithProjects() {
+            console.log('📥 Loading students with projects...');
+            
+            if (!checkAuth()) return;
+            
+            const token = getToken();
+            
+            try {
+                document.getElementById('studentListContainer').innerHTML = 'Loading...';
+                
+                const response = await fetch(`${API}/admin/with-projects`, {
+                    headers: { "Authorization": "Bearer " + token }
+                });
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                allStudentsWithProjects = await response.json();
+                console.log('✅ Students with projects loaded:', allStudentsWithProjects.length, allStudentsWithProjects);
+                
+                // Extract filter options
+                extractFilterOptions();
+                
+                // Apply filters
+                applyFilters();
+                
+                updateDebugInfo('Students with projects loaded: ' + allStudentsWithProjects.length);
+                
+            } catch (error) {
+                console.error('❌ Error:', error);
+                document.getElementById('studentListContainer').innerHTML = 
+                    `<p style="color:red;">❌ Error: ${error.message}</p>`;
+                updateDebugInfo('Error: ' + error.message);
+            }
+        }
+        
+        // ==================== LOAD ALL STUDENTS (BASIC) ====================
+        async function loadAllStudents() {
+            console.log('📥 Loading all students (basic)...');
+            
+            if (!checkAuth()) return;
+            
+            const token = getToken();
+            
+            try {
+                document.getElementById('studentListContainer').innerHTML = 'Loading...';
+                
+                const response = await fetch(`${API}/api/admin/students`, {
+                    headers: { "Authorization": "Bearer " + token }
+                });
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const students = await response.json();
+                
+                // Convert to the same format as with-projects for consistency
+                allStudentsWithProjects = students.map(student => ({
+                    student: student,
+                    projects: []
+                }));
+                
+                console.log('✅ Students loaded:', allStudentsWithProjects.length);
+                
+                // Extract filter options
+                extractFilterOptions();
+                
+                // Apply filters
+                applyFilters();
+                
+                updateDebugInfo('Students loaded: ' + allStudentsWithProjects.length);
+                
+            } catch (error) {
+                console.error('❌ Error:', error);
+                document.getElementById('studentListContainer').innerHTML = 
+                    `<p style="color:red;">❌ Error: ${error.message}</p>`;
+            }
+        }
+        
+        // ==================== EXTRACT FILTER OPTIONS ====================
+        function extractFilterOptions() {
+            const branches = new Set();
+            const sections = new Set();
+            const semesters = new Set();
+            const batches = new Set();
+            
+            allStudentsWithProjects.forEach(item => {
+                const s = item.student;
+                if (s.branch) branches.add(s.branch);
+                if (s.section) sections.add(s.section);
+                if (s.semester) semesters.add(s.semester);
+                if (s.batch) batches.add(s.batch);
+            });
+            
+            populateSelect('filterBranch', [...branches]);
+            populateSelect('filterSection', [...sections]);
+            populateSelect('filterSemester', [...semesters]);
+            populateSelect('filterBatch', [...batches]);
+        }
+        
+        function populateSelect(selectId, values) {
+            const select = document.getElementById(selectId);
+            if (!select) return;
+            
+            select.innerHTML = '<option value="">ALL</option>';
+            values.sort().forEach(value => {
+                const option = document.createElement('option');
+                option.value = value;
+                option.textContent = value;
+                select.appendChild(option);
+            });
+        }
+        
+        // ==================== APPLY FILTERS ====================
+        function applyFilters() {
+            console.log('🔍 Applying filters...');
+            
+            const branch = document.getElementById('filterBranch').value;
+            const section = document.getElementById('filterSection').value;
+            const semester = document.getElementById('filterSemester').value;
+            const batch = document.getElementById('filterBatch').value;
+            const status = document.getElementById('filterStatus').value;
+            const search = document.getElementById('filterSearch').value.toLowerCase();
+            const projectFilter = document.getElementById('filterProjectStatus').value;
+            
+            filteredStudents = allStudentsWithProjects.filter(item => {
+                const s = item.student;
+                const projects = item.projects || [];
+                
+                // Branch filter
+                if (branch && s.branch !== branch) return false;
+                
+                // Section filter
+                if (section && s.section !== section) return false;
+                
+                // Semester filter
+                if (semester && s.semester != semester) return false;
+                
+                // Batch filter
+                if (batch && s.batch !== batch) return false;
+                
+                // Status filter
+                if (status && s.profileStatus !== status) return false;
+                
+                // Project filter
+                if (projectFilter === 'HAS_PROJECTS' && projects.length === 0) return false;
+                if (projectFilter === 'NO_PROJECTS' && projects.length > 0) return false;
+                
+                // Search filter
+                if (search) {
+                    const name = (s.fullName || '').toLowerCase();
+                    const roll = (s.rollNumber || '').toLowerCase();
+                    if (!name.includes(search) && !roll.includes(search)) return false;
+                }
+                
+                return true;
+            });
+            
+            console.log(`✅ Filters applied: ${filteredStudents.length} students`);
+            
+            // Update stats
+            document.getElementById('filterStats').innerHTML = 
+                `Showing ${filteredStudents.length} of ${allStudentsWithProjects.length} students`;
+            
+            // Render student list
+            renderStudentList();
+        }
+        
+        // ==================== RESET FILTERS ====================
+        function resetFilters() {
+            console.log('⟲ Resetting filters...');
+            
+            document.getElementById('filterBranch').value = '';
+            document.getElementById('filterSection').value = '';
+            document.getElementById('filterSemester').value = '';
+            document.getElementById('filterBatch').value = '';
+            document.getElementById('filterStatus').value = '';
+            document.getElementById('filterSearch').value = '';
+            document.getElementById('filterProjectStatus').value = '';
+            
+            applyFilters();
+        }
+        
+        // ==================== RENDER STUDENT LIST ====================
+        function renderStudentList() {
+            const container = document.getElementById('studentListContainer');
+            const countSpan = document.getElementById('studentCount');
+            
+            if (filteredStudents.length === 0) {
+                container.innerHTML = '<p>No students match the filters</p>';
+                if (countSpan) countSpan.textContent = '(0)';
+                return;
+            }
+            
+            let html = '';
+            filteredStudents.forEach(item => {
+                const s = item.student;
+                const projectCount = item.projects ? item.projects.length : 0;
+                const isSelected = selectedStudent && selectedStudent.id === s.id;
+                const bgColor = isSelected ? '#e0e0ff' : '#fff';
+                
+                html += `
+                    <div onclick="selectStudent(${s.id})" 
+                         style="border:2px solid ${isSelected ? '#00f' : '#ccc'}; 
+                                padding:10px; margin:5px 0; 
+                                background:${bgColor}; 
+                                cursor:pointer;">
+                        <b>${s.fullName || 'Unnamed'}</b><br>
+                        <span style="font-size:12px;">
+                            Roll: ${s.rollNumber || 'N/A'} | 
+                            Branch: ${s.branch || 'N/A'} | 
+                            Sem: ${s.semester || 'N/A'} |
+                            Projects: ${projectCount}
+                        </span>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            if (countSpan) countSpan.textContent = `(${filteredStudents.length})`;
+        }
+        
+        // ==================== SELECT STUDENT ====================
+        function selectStudent(studentId) {
+            console.log('👤 Selecting student:', studentId);
+            
+            const item = allStudentsWithProjects.find(item => item.student.id == studentId);
+            if (!item) return;
+            
+            selectedStudent = item.student;
+            showStudentDetails(item);
+            
+            // Re-render list to highlight selected student
+            renderStudentList();
+        }
+        
+        // ==================== SHOW STUDENT DETAILS WITH PROJECTS ====================
+        function showStudentDetails(item) {
+            const s = item.student;
+            const projects = item.projects || [];
+            
+            console.log(`📋 Showing details for ${s.fullName} with ${projects.length} projects`);
+            
+            // Student info HTML
+            let studentInfoHtml = `
+                <div style="border:2px solid #00f; padding:15px; margin-bottom:20px; background:#eef;">
+                    <h4 style="margin-top:0;">👤 ${s.fullName}</h4>
+                    <div style="display:grid; grid-template-columns:1fr 2fr; gap:5px;">
+                        <div><b>Roll Number:</b></div><div>${s.rollNumber || '—'}</div>
+                        <div><b>Register Number:</b></div><div>${s.registerNumber || '—'}</div>
+                        <div><b>Branch:</b></div><div>${s.branch || '—'}</div>
+                        <div><b>Section:</b></div><div>${s.section || '—'}</div>
+                        <div><b>Semester:</b></div><div>${s.semester || '—'}</div>
+                        <div><b>Batch:</b></div><div>${s.batch || '—'}</div>
+                        <div><b>Admission Year:</b></div><div>${s.admissionYear || '—'}</div>
+                        <div><b>College:</b></div><div>${s.collegeName || '—'}</div>
+                        <div><b>University:</b></div><div>${s.university || '—'}</div>
+                        <div><b>Status:</b></div><div>${s.profileStatus || '—'}</div>
+                    </div>
+                </div>
+            `;
+            
+            // Projects HTML
+            let projectsHtml = '<h4>📁 PROJECTS</h4>';
+            
+            if (projects.length === 0) {
+                projectsHtml += '<p>No projects found for this student.</p>';
+            } else {
+                projects.forEach((project, index) => {
+                    const statusColor = {
+                        'IDEA': '#888',
+                        'IN_PROGRESS': '#36f',
+                        'PAUSED': '#f90',
+                        'COMPLETED': '#2c7'
+                    }[project.currentStatus] || '#888';
+                    
+                    projectsHtml += `
+                        <div style="border:2px solid #333; padding:15px; margin:10px 0; background:#fff;">
+                            <div style="display:flex; justify-content:space-between;">
+                                <h5 style="margin:0;">${project.title || 'Untitled'}</h5>
+                                <span style="background:${statusColor}; color:white; padding:3px 10px; border-radius:10px;">${project.currentStatus || 'IDEA'}</span>
+                            </div>
+                            <p style="margin:10px 0;">${project.description || 'No description'}</p>
+                            <div style="margin:10px 0;">
+                                <div>Progress: ${project.progressPercentage || 0}%</div>
+                                <div style="background:#ddd; height:8px; border-radius:4px;">
+                                    <div style="background:#2c7; height:8px; border-radius:4px; width:${project.progressPercentage || 0}%;"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Tech Stack -->
+                            ${renderTechStack(project.techStack)}
+                            
+                            <div style="margin-top:10px; font-size:12px;">
+                                <div>Start: ${project.startDate ? new Date(project.startDate).toLocaleDateString() : 'Not set'}</div>
+                                <div>Target: ${project.expectedEndDate ? new Date(project.expectedEndDate).toLocaleDateString() : 'Not set'}</div>
+                                ${project.githubRepo ? `<div>GitHub: <a href="${project.githubRepo}" target="_blank">${project.githubRepo}</a></div>` : ''}
+                                ${project.liveDemoUrl ? `<div>Demo: <a href="${project.liveDemoUrl}" target="_blank">${project.liveDemoUrl}</a></div>` : ''}
+                            </div>
+                            
+                            <div style="margin-top:10px;">
+                                <button onclick="viewProjectDetails(${project.id})" style="margin-right:5px;">🔍 VIEW</button>
+                                <button onclick="editProject(${project.id})">✎ EDIT</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            const details = document.getElementById("studentDetails");
+            details.innerHTML = `
+                ${studentInfoHtml}
+                ${projectsHtml}
+                <div style="margin-top:20px;">
+                    <button onclick="createNewProject(${s.id})" style="background:#28a745; color:white; padding:8px 16px;">➕ CREATE NEW PROJECT</button>
+                </div>
+            `;
+        }
+        
+        // ==================== RENDER TECH STACK ====================
+        function renderTechStack(techStack) {
+            if (!techStack || techStack.length === 0) {
+                return '<p style="color:#666; font-style:italic;">No technologies added</p>';
+            }
+            
+            let html = '<div style="margin:10px 0;"><b>Tech Stack:</b><br>';
+            techStack.forEach(tech => {
+                html += `<span style="display:inline-block; background:#446; color:white; padding:4px 12px; margin:4px; border-radius:20px; font-size:12px;">${tech.technology} (${tech.type})</span>`;
+            });
+            html += '</div>';
+            
+            return html;
+        }
+        
+        // ==================== NAVIGATION FUNCTIONS ====================
+        function viewProjectDetails(projectId) {
+            localStorage.setItem("currentProjectId", projectId);
+            window.location.href = `project-details.html?id=${projectId}`;
+        }
+        
+        function editProject(projectId) {
+            localStorage.setItem("currentProjectId", projectId);
+            window.location.href = `project-edit.html?id=${projectId}`;
+        }
+        
+        function createNewProject(studentId) {
+            window.location.href = `project-create.html?studentId=${studentId}`;
+        }
+        
+        // ==================== UPDATE DEBUG ====================
+        function updateDebugInfo(message) {
+            const debugEl = document.getElementById('debugInfo');
+            if (debugEl) {
+                debugEl.innerHTML = new Date().toLocaleTimeString() + ': ' + message + '<br>' + debugEl.innerHTML;
+            }
+        }
+        
+        // ==================== INIT ====================
+        window.onload = function() {
+            console.log('🟢 Page loaded');
+            
+            if (!checkAuth()) return;
+            
+            // Load with projects by default
+            loadStudentsWithProjects();
+        };
+    </script>
+</body>
+</html>

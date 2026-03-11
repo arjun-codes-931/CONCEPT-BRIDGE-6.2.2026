@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin · Material Management</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts (Inter) for premium typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 (icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: radial-gradient(circle at 10% 30%, #0f0c29, #1e1a4a, #2d1b5e);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            margin: 0;
+            color: rgba(255, 255, 255, 0.95);
+            line-height: 1.5;
+        }
+
+        /* main glass container */
+        .admin-container {
+            width: 100%;
+            max-width: 1500px;
+            background: rgba(18, 14, 45, 0.4);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 2.5rem;
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(160, 120, 255, 0.2) inset, 0 0 50px rgba(100, 70, 255, 0.25);
+            overflow: hidden;
+            padding: 2.2rem 2.2rem;
+        }
+
+        /* header area */
+        .page-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            margin-bottom: 2.2rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .title-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .title-section i {
+            font-size: 2.8rem;
+            background: linear-gradient(145deg, #8b7aff, #5f8cff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            filter: drop-shadow(0 0 10px #4d3dff);
+        }
+
+        h1 {
+            font-weight: 700;
+            font-size: 2.3rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(to right, #ffffff, #ded1ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(145deg, #4a3a9e, #5f4bcb);
+            border: none;
+            border-radius: 3rem;
+            padding: 0.8rem 1.8rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-primary i {
+            color: #ffffffcc;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(145deg, #5f4bcb, #7b64e0);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px -8px #4a3a9e, 0 0 0 1px rgba(255,255,255,0.3) inset;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 3rem;
+            padding: 0.8rem 1.8rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* search/filter card */
+        .search-card {
+            background: rgba(25, 18, 51, 0.5);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 2rem;
+            padding: 1.8rem 2rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 20px 35px -10px #0000004d;
+            transition: 0.2s;
+        }
+
+        .search-card:hover {
+            border-color: rgba(168, 139, 255, 0.3);
+            background: rgba(30, 22, 60, 0.6);
+        }
+
+        .search-header {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-header i {
+            font-size: 1.6rem;
+            background: linear-gradient(145deg, #b49aff, #7f6eff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .search-header span {
+            font-weight: 600;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(200, 180, 255, 0.9);
+        }
+
+        .search-grid {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 1.2rem;
+        }
+
+        .search-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            min-width: 180px;
+        }
+
+        .search-field label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #b3a2e0;
+            letter-spacing: 0.3px;
+        }
+
+        .search-field input {
+            background: rgba(8, 5, 25, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 2.5rem;
+            padding: 0.75rem 1.2rem;
+            font-size: 0.95rem;
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .search-field input:focus {
+            outline: none;
+            border-color: #9f86ff;
+            box-shadow: 0 0 0 3px rgba(159, 134, 255, 0.2);
+        }
+
+        .search-field input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .search-actions {
+            display: flex;
+            gap: 0.8rem;
+            margin-left: auto;
+            align-items: center;
+        }
+
+        /* ===== PREMIUM TABLE STYLES ===== */
+        .table-container {
+            background: rgba(16, 12, 42, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 2rem;
+            padding: 1.5rem;
+            box-shadow: 0 20px 35px -12px #000000;
+            overflow-x: auto;
+            margin-top: 0.5rem;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .admin-table thead tr {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 1rem;
+        }
+
+        .admin-table th {
+            text-align: left;
+            padding: 1rem 1.2rem;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #c5b2ff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .admin-table td {
+            padding: 1.2rem 1.2rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 1rem;
+            transition: all 0.2s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .admin-table tbody tr {
+            transition: all 0.2s;
+        }
+
+        .admin-table tbody tr:hover td {
+            background: rgba(167, 139, 250, 0.1);
+            transform: scale(1.01);
+            box-shadow: 0 8px 16px rgba(90, 60, 180, 0.3);
+        }
+
+        .badge {
+            background: linear-gradient(145deg, #2a2355, #1f1b4a);
+            border-radius: 2rem;
+            padding: 0.25rem 0.8rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: inline-block;
+        }
+
+        .action-cell {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .table-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 2rem;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .table-btn i {
+            font-size: 0.9rem;
+        }
+
+        .table-btn.view:hover {
+            background: rgba(40, 167, 69, 0.2);
+            border-color: #2ecc71;
+        }
+
+        .table-btn.delete:hover {
+            background: rgba(220, 53, 69, 0.2);
+            border-color: #ff6b6b;
+        }
+
+        .empty-row td {
+            text-align: center;
+            padding: 2.5rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+        }
+
+        /* loading state */
+        .loading-placeholder {
+            text-align: center;
+            padding: 2.5rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* responsive */
+        @media (max-width: 700px) {
+            .admin-container {
+                padding: 1.5rem;
+            }
+            .page-header {
+                flex-direction: column;
+                align-items: start;
+            }
+            .search-grid {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .search-actions {
+                margin-left: 0;
+                justify-content: flex-start;
+            }
+            .admin-table th, .admin-table td {
+                padding: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Header with navigation and actions -->
+        <div class="page-header">
+            <div class="title-section">
+                <i class="fas fa-folder-open"></i>
+                <h1>Material Management</h1>
+            </div>
+            <div class="header-actions">
+                <button class="btn-primary" onclick="goDashboard()"><i class="fas fa-home"></i> Dashboard</button>
+                <button class="btn-secondary" onclick="loadMaterials()"><i class="fas fa-sync-alt"></i> Refresh</button>
+            </div>
+        </div>
+
+        <!-- Search/Filter Card -->
+        <div class="search-card">
+            <div class="search-header">
+                <i class="fas fa-filter"></i>
+                <span>FILTER MATERIALS</span>
+            </div>
+            <div class="search-grid">
+                <div class="search-field">
+                    <label>Search Title</label>
+                    <input type="text" id="searchTitle" placeholder="e.g., Algorithms">
+                </div>
+                <div class="search-field">
+                    <label>Subject</label>
+                    <input type="text" id="searchSubject" placeholder="e.g., Mathematics">
+                </div>
+                <div class="search-field">
+                    <label>Branch</label>
+                    <input type="text" id="searchBranch" placeholder="e.g., CSE">
+                </div>
+                <div class="search-actions">
+                    <button class="btn-primary searchBtn" onclick="searchMaterials()"><i class="fas fa-search"></i> Search</button>
+                    <button class="btn-secondary" onclick="clearSearch()"><i class="fas fa-undo-alt"></i> Clear</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Materials Table Section -->
+        <div style="margin-top: 1rem;">
+            <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem;">
+                <i class="fas fa-table" style="font-size: 1.8rem; color: #b59eff;"></i>
+                <h2 style="font-weight: 700; font-size: 1.8rem; color: rgba(255,255,255,0.95);">All Materials</h2>
+            </div>
+            <div class="table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Subject</th>
+                            <th>Branch</th>
+                            <th>Semester</th>
+                            <th>Teacher</th>
+                            <th>Uploaded</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="materialsTable">
+                        <tr class="empty-row">
+                            <td colspan="8">
+                                <i class="fas fa-spinner fa-pulse"></i> Loading materials...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ORIGINAL JAVASCRIPT – UNMODIFIED (preserved exactly) -->
+    <script>
+        const API = "http://localhost:8080";
+        const token = localStorage.getItem("token");
+
+        function goDashboard(){
+            window.location.href="dashboard.html";
+        }
+
+        window.onload = () => {
+            if(!token){
+                alert("Login required");
+                window.location.href="../login.html";
+                return;
+            }
+            loadMaterials();
+        };
+
+        async function loadMaterials(){
+            try{
+                const res = await fetch(`${API}/admin/materials`,{
+                    headers:{
+                        "Authorization":"Bearer "+token
+                    }
+                });
+                if(!res.ok){
+                    throw new Error("Failed to load materials");
+                }
+                const materials = await res.json();
+                displayMaterials(materials);
+            }catch(err){
+                document.getElementById("materialsTable").innerHTML =
+                    `<tr><td colspan="8" style="color:red; text-align:center;">Error loading materials</td></tr>`;
+            }
+        }
+
+        function displayMaterials(materials){
+            const table = document.getElementById("materialsTable");
+            table.innerHTML="";
+            if(!materials || materials.length===0){
+                table.innerHTML=`<tr><td colspan="8" style="text-align:center;">No materials found</td></tr>`;
+                return;
+            }
+            materials.forEach(m=>{
+                const date = m.createdAt
+                    ? new Date(m.createdAt).toLocaleDateString()
+                    : "-";
+                table.innerHTML += `
+                    <tr>
+                        <td><span class="badge">${m.id}</span></td>
+                        <td><span style="font-weight:500;">${m.title}</span></td>
+                        <td>${m.subject || "-"}</td>
+                        <td>${m.branch || "-"}</td>
+                        <td>${m.semester || "-"}</td>
+                        <td>${m.teacherName || "-"}</td>
+                        <td>${date}</td>
+                        <td class="action-cell">
+                            <button class="table-btn view" onclick="viewPDF(${m.id})"><i class="fas fa-eye"></i> View</button>
+                            <button class="table-btn delete" onclick="deletePDF(${m.id})"><i class="fas fa-trash-alt"></i> Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function searchMaterials(){
+            const title = document.getElementById("searchTitle").value.toLowerCase();
+            const subject = document.getElementById("searchSubject").value.toLowerCase();
+            const branch = document.getElementById("searchBranch").value.toLowerCase();
+            const rows = document.querySelectorAll("#materialsTable tr");
+            rows.forEach(row=>{
+                const text = row.innerText.toLowerCase();
+                if(text.includes(title) && text.includes(subject) && text.includes(branch)){
+                    row.style.display="";
+                }else{
+                    row.style.display="none";
+                }
+            });
+        }
+
+        function clearSearch(){
+            document.getElementById("searchTitle").value="";
+            document.getElementById("searchSubject").value="";
+            document.getElementById("searchBranch").value="";
+            loadMaterials();
+        }
+
+        function viewPDF(id){
+            window.open(`../student/pdf-viewer.html?id=${id}&from=admin`);
+        }
+
+        async function deletePDF(id){
+            if(!confirm("Delete this material?")) return;
+            try{
+                const res = await fetch(`${API}/admin/material/${id}`,{
+                    method:"DELETE",
+                    headers:{
+                        "Authorization":"Bearer "+token
+                    }
+                });
+                if(!res.ok){
+                    throw new Error("Delete failed");
+                }
+                alert("Material deleted");
+                loadMaterials();
+            }catch(err){
+                alert("Error deleting material");
+            }
+        }
+    </script>
+</body>
+</html>

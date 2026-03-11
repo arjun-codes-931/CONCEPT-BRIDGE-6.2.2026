@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My Projects · Nebula Labs</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: radial-gradient(circle at 10% 20%, #0c0a2a, #190f40, #200f4a);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 2rem 1.5rem;
+            color: #ffffff;
+            line-height: 1.5;
+        }
+
+        .projects-glass-card {
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+            background: rgba(15, 18, 45, 0.55);
+            backdrop-filter: blur(16px) saturate(200%);
+            -webkit-backdrop-filter: blur(16px) saturate(200%);
+            border-radius: 3rem;
+            padding: 2.5rem 2.5rem;
+            box-shadow: 0 40px 70px -20px #030014, 0 0 0 1px rgba(160, 130, 255, 0.2) inset, 0 0 60px rgba(100, 60, 230, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .projects-glass-card:hover {
+            box-shadow: 0 50px 80px -18px #1a0740, 0 0 0 1px rgba(200, 160, 255, 0.3) inset;
+        }
+
+        .projects-header {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem 1.5rem;
+            margin-bottom: 2.2rem;
+        }
+
+        button[onclick="window.history.back()"] {
+            background: rgba(25, 22, 60, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1.5px solid rgba(200, 170, 255, 0.25);
+            color: #eeeaff;
+            font-weight: 500;
+            font-size: 1rem;
+            padding: 0.7rem 1.8rem;
+            border-radius: 3rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            transition: 0.2s;
+            box-shadow: 0 12px 28px -10px #0b0820;
+        }
+
+        button[onclick="window.history.back()"] i {
+            font-size: 1rem;
+            color: #b9adff;
+        }
+
+        button[onclick="window.history.back()"]:hover {
+            background: rgba(45, 35, 95, 0.8);
+            border-color: #bba6ff;
+            transform: translateX(-2px);
+        }
+
+        h2 {
+            font-weight: 600;
+            font-size: 2.5rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(130deg, #ffffff, #dacdff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex: 1;
+        }
+
+        h2 i {
+            font-size: 2.5rem;
+            background: linear-gradient(145deg, #6d8eff, #c184ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        button[onclick="createNewProject()"] {
+            background: linear-gradient(115deg, #2f55e0, #9f4eff, #c147ff);
+            background-size: 200% 100%;
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 0.9rem 2.2rem;
+            border-radius: 3rem;
+            cursor: pointer;
+            box-shadow: 0 16px 28px -12px #4020a0, 0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            margin-left: auto;
+        }
+
+        button[onclick="createNewProject()"] i {
+            font-size: 1.1rem;
+        }
+
+        button[onclick="createNewProject()"]:hover {
+            background-position: 100% 0;
+            box-shadow: 0 22px 35px -8px #7a41e0, 0 0 0 1px rgba(255, 210, 255, 0.4) inset;
+            transform: scale(1.02);
+        }
+
+        #projectList {
+            margin-top: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
+
+        #projectList > div[style*="border:1px solid #ccc"] {
+            background: rgba(20, 22, 55, 0.7) !important;
+            backdrop-filter: blur(8px) !important;
+            border: 1px solid rgba(200, 170, 255, 0.2) !important;
+            border-radius: 2rem !important;
+            padding: 1.8rem 2rem !important;
+            margin: 0 !important;
+            box-shadow: 0 20px 30px -15px #050016 !important;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        #projectList > div[style*="border:1px solid #ccc"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 28px 40px -12px #2f1780 !important;
+            border-color: rgba(220, 190, 255, 0.4) !important;
+        }
+
+        #projectList > div > div[style*="display:flex; justify-content:space-between;"] {
+            margin-bottom: 1rem !important;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        #projectList h3 {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: white;
+            margin: 0 0 0.4rem 0 !important;
+        }
+
+        #projectList span[style*="background:"] {
+            font-size: 0.8rem !important;
+            font-weight: 600 !important;
+            padding: 0.4rem 1.2rem !important;
+            border-radius: 40px !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.3px;
+            display: inline-block;
+            box-shadow: 0 0 10px currentColor !important;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-right: 0.5rem;
+        }
+
+        #projectList span[style*="background:gray"] {
+            background: rgba(120, 120, 140, 0.8) !important;
+            color: white !important;
+        }
+        #projectList span[style*="background:blue"] {
+            background: rgba(60, 100, 230, 0.9) !important;
+            color: white !important;
+        }
+        #projectList span[style*="background:orange"] {
+            background: rgba(240, 140, 40, 0.9) !important;
+            color: white !important;
+        }
+        #projectList span[style*="background:green"] {
+            background: rgba(40, 180, 90, 0.9) !important;
+            color: white !important;
+        }
+        #projectList span[style*="background:#eee"] {
+            background: rgba(110, 100, 150, 0.6) !important;
+            color: #f0f0ff !important;
+        }
+
+        #projectList div[style*="font-size:20px; font-weight:bold; color:green;"] {
+            color: #b5ffb5 !important;
+            font-size: 1.8rem !important;
+            filter: drop-shadow(0 0 6px #3eff9e);
+        }
+
+        #projectList div[style*="background:#eee; height:8px; border-radius:4px;"] {
+            background: rgba(255,255,255,0.1) !important;
+            height: 10px !important;
+            border-radius: 20px !important;
+            overflow: hidden;
+            margin: 1.2rem 0 !important;
+        }
+
+        #projectList div[style*="background:green; height:100%;"] {
+            background: linear-gradient(90deg, #5effb0, #3ccf8c) !important;
+            border-radius: 20px !important;
+            box-shadow: 0 0 10px #2edc8c;
+        }
+
+        #projectList p {
+            color: #d4d0ff !important;
+            font-size: 1rem;
+            margin: 1rem 0 0.8rem !important;
+        }
+
+        #projectList div[style*="display:flex; justify-content:space-between; font-size:14px;"] {
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            color: #b3b0e0 !important;
+        }
+
+        /* View button */
+        #projectList button[onclick^="viewProjectDetails"] {
+            background: linear-gradient(115deg, #4466ee, #9a5eff) !important;
+            border: none !important;
+            border-radius: 3rem !important;
+            padding: 0.7rem 2rem !important;
+            font-weight: 600 !important;
+            font-size: 0.9rem !important;
+            box-shadow: 0 8px 18px -6px #342090 !important;
+            transition: 0.15s !important;
+            cursor: pointer;
+            color: white !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-right: 10px;
+        }
+
+        #projectList button[onclick^="viewProjectDetails"]:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 24px -6px #6b3aff !important;
+        }
+
+        /* Delete button - NEW STYLE */
+        #projectList button[onclick^="deleteProject"] {
+            background: linear-gradient(115deg, #dc3545, #b02a37) !important;
+            border: none !important;
+            border-radius: 3rem !important;
+            padding: 0.7rem 2rem !important;
+            font-weight: 600 !important;
+            font-size: 0.9rem !important;
+            box-shadow: 0 8px 18px -6px #8b0000 !important;
+            transition: 0.15s !important;
+            cursor: pointer;
+            color: white !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        #projectList button[onclick^="deleteProject"]:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 24px -6px #a71d2a !important;
+        }
+
+        #projectList button[onclick^="deleteProject"] i {
+            color: white;
+        }
+
+        /* Empty state */
+        #projectList p, #projectList div[style*="color: red;"] {
+            background: rgba(20, 18, 45, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 2rem;
+            padding: 2rem;
+            text-align: center;
+            color: #f0eaff;
+            border: 1px solid rgba(255,200,255,0.1);
+        }
+
+        /* Confirmation dialog overlay */
+        .delete-confirm-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .delete-confirm-box {
+            background: rgba(20, 22, 55, 0.95);
+            border: 2px solid rgba(255, 100, 100, 0.5);
+            border-radius: 2rem;
+            padding: 2.5rem;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
+
+        .delete-confirm-box h3 {
+            color: #ff8a8a;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .delete-confirm-box p {
+            color: #d0d0ff;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .delete-confirm-box button {
+            padding: 0.8rem 2rem;
+            margin: 0 10px;
+            border-radius: 3rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+        }
+
+        .delete-confirm-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .delete-cancel-btn {
+            background: #6c757d;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- main glass container -->
+    <div class="projects-glass-card">
+        <!-- header section -->
+        <div class="projects-header">
+            <button onclick="window.history.back()"><i class="fas fa-arrow-left"></i> Back</button>
+            <h2><i class="fas fa-rocket"></i> My Projects</h2>
+            <button onclick="createNewProject()"><i class="fas fa-plus-circle"></i> New Project</button>
+        </div>
+
+        <!-- projectList container -->
+        <div id="projectList">Loading...</div>
+    </div>
+
+    <!-- Delete Confirmation Modal (hidden by default) -->
+    <div id="deleteConfirmModal" style="display:none;"></div>
+
+    <script>
+    const API = "http://localhost:8080";
+    const token = localStorage.getItem("token");
+    
+    // Store current profile
+    let currentProfile = null;
+    
+    // Profile loader
+    async function getStudentProfile() {
+        // Try to get from localStorage first
+        let profile = JSON.parse(localStorage.getItem("studentProfile") || '{}');
+        if (profile.id) {
+            currentProfile = profile;
+            return profile;
+        }
+        
+        // Try API
+        try {
+            const response = await fetch(`${API}/student/profile`, {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            
+            if (response.ok) {
+                profile = await response.json();
+                localStorage.setItem("studentProfile", JSON.stringify(profile));
+                currentProfile = profile;
+                return profile;
+            } else {
+                throw new Error(`HTTP ${response.status}: Profile not found`);
+            }
+        } catch (err) {
+            showProfileError();
+            throw err;
+        }
+    }
+    
+    function showProfileError() {
+        document.body.innerHTML = `
+            <div style="padding: 40px; text-align: center;">
+                <h2 style="color: #dc3545;">⚠️ Profile Required</h2>
+                <p>Your student profile needs to be created first.</p>
+                <p style="color: #666; margin: 20px 0;">
+                    Please go to your dashboard and complete your profile.
+                </p>
+                <div style="margin-top: 30px;">
+                    <button onclick="window.history.back()" 
+                            style="padding: 10px 20px; margin: 5px; background: #6c757d; color: white; border: none;">
+                        ← Go Back
+                    </button>
+                    <button onclick="goToDashboard()" 
+                            style="padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none;">
+                        Go to Dashboard
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+    
+    function goToDashboard() {
+        window.location.href = "dashboard.html";
+    }
+    
+    window.onload = async () => {
+        if (!token) {
+            alert("Login required");
+            location.href = "../login.html";
+            return;
+        }
+        
+        try {
+            const profile = await getStudentProfile();
+            await loadProjects(profile);
+        } catch (err) {
+            // Error already shown
+        }
+    };
+    
+    async function loadProjects(profile) {
+        try {
+            const res = await fetch(`${API}/student/project/list?studentId=${profile.id}`, {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            
+            if (!res.ok) throw new Error('Failed to load projects');
+            
+            const projects = await res.json();
+            displayProjects(projects);
+        } catch (err) {
+            document.getElementById("projectList").innerHTML = `
+                <div style="color: red; padding: 20px; text-align: center;">
+                    <h3>⚠️ Cannot Load Projects</h3>
+                    <p>${err.message}</p>
+                </div>
+            `;
+        }
+    }
+    
+    function displayProjects(projects) {
+        const container = document.getElementById("projectList");
+        
+        if (!projects || projects.length === 0) {
+            container.innerHTML = `<p>No projects. <button onclick="createNewProject()">Create one</button></p>`;
+            return;
+        }
+    
+        let html = '';
+        projects.forEach(p => {
+            const statusColor = {
+                'IDEA': 'gray', 'IN_PROGRESS': 'blue', 
+                'PAUSED': 'orange', 'COMPLETED': 'green'
+            }[p.currentStatus] || 'gray';
+    
+            html += `
+                <div style="border:1px solid #ccc; padding:15px; margin:10px 0;">
+                    <div style="display:flex; justify-content:space-between;">
+                        <div>
+                            <h3 style="margin:0;">${p.title}</h3>
+                            <span style="background:${statusColor}; color:white; padding:3px 10px; border-radius:10px;">
+                                ${p.currentStatus}
+                            </span>
+                            <span style="background:#eee; padding:3px 10px; border-radius:10px; margin-left:5px;">
+                                ${p.category}
+                            </span>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="font-size:20px; font-weight:bold; color:green;">${p.progressPercentage}%</div>
+                            <small>Progress</small>
+                        </div>
+                    </div>
+                    
+                    <p>${p.description || 'No description'}</p>
+                    
+                    <div style="background:#eee; height:8px; border-radius:4px; margin:10px 0;">
+                        <div style="background:green; height:100%; width:${p.progressPercentage}%; border-radius:4px;"></div>
+                    </div>
+                    
+                    <div style="display:flex; justify-content:space-between; align-items:center; font-size:14px; color:#666;">
+                        <div>
+                            Start: ${new Date(p.startDate).toLocaleDateString()} | 
+                            Target: ${new Date(p.expectedEndDate).toLocaleDateString()}
+                        </div>
+                        <div>
+                            <button onclick="viewProjectDetails(${p.id})"><i class="fas fa-eye"></i> View</button>
+                            <button onclick="confirmDelete(${p.id}, '${p.title}')" style="background:#dc3545; color:white; border:none; border-radius:3rem; padding:0.7rem 2rem; margin-left:10px; cursor:pointer;">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+    
+    // View project details
+    function viewProjectDetails(projectId) {
+        window.location.href = `project-details.html?id=${projectId}`;
+    }
+    
+    // Delete confirmation
+    function confirmDelete(projectId, projectTitle) {
+        const modal = document.getElementById('deleteConfirmModal');
+        
+        modal.style.display = 'block';
+        modal.innerHTML = `
+            <div class="delete-confirm-overlay">
+                <div class="delete-confirm-box">
+                    <h3><i class="fas fa-exclamation-triangle" style="color: #ff8a8a;"></i> Delete Project</h3>
+                    <p>Are you sure you want to delete "<strong>${projectTitle}</strong>"?</p>
+                    <p style="font-size: 0.9rem; color: #ffb0b0;">This action cannot be undone. All associated data will be permanently removed.</p>
+                    <div>
+                        <button class="delete-confirm-btn" onclick="deleteProject(${projectId})">
+                            <i class="fas fa-trash"></i> Yes, Delete
+                        </button>
+                        <button class="delete-cancel-btn" onclick="closeDeleteModal()">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    
+    function closeDeleteModal() {
+        document.getElementById('deleteConfirmModal').style.display = 'none';
+    }
+    
+    // DELETE PROJECT FUNCTION
+    // DELETE PROJECT FUNCTION - FIXED
+async function deleteProject(projectId) {
+    try {
+        console.log('🗑️ Deleting project:', projectId);
+        
+        // Show loading state
+        const deleteBtn = event?.target;
+        if (deleteBtn) {
+            deleteBtn.disabled = true;
+            deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+        }
+        
+        const response = await fetch(`${API}/student/project/${projectId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        console.log('📊 Response status:', response.status);
+        
+        // Check if response is OK
+        if (!response.ok) {
+            if (response.status === 403) {
+                throw new Error('Permission denied. You may not have access to delete this project.');
+            } else if (response.status === 404) {
+                throw new Error('Project not found');
+            } else {
+                throw new Error(`HTTP error ${response.status}`);
+            }
+        }
+        
+        // Try to parse JSON, but handle empty response
+        let data = {};
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            data = await response.json();
+        } else {
+            const text = await response.text();
+            console.log('Response text:', text);
+            data = { message: text || 'Project deleted successfully' };
+        }
+        
+        console.log('✅ Delete successful:', data);
+        
+        // Close modal
+        closeDeleteModal();
+        
+        // Show success message
+        alert('✅ Project deleted successfully!');
+        
+        // Reload projects list
+        if (currentProfile) {
+            await loadProjects(currentProfile);
+        }
+        
+    } catch (error) {
+        console.error('❌ Delete error:', error);
+        alert('❌ Error deleting project: ' + error.message);
+        closeDeleteModal();
+    }
+}
+    
+    function createNewProject() {
+        location.href = "project-create.html";
+    }
+    
+    // Also keep the old viewProject function for backward compatibility
+    function viewProject(id) {
+        localStorage.setItem("currentProjectId", id);
+        location.href = "project-details.html";
+    }
+    </script>
+</body>
+</html>

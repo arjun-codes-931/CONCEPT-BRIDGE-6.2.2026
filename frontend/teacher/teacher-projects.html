@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Teacher · Student Projects · Nebula</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Font: Inter (modern academic) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(145deg, #5f79ff 0%, #7a5cff 50%, #a16cff 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 1.5rem;
+            display: flex;
+            gap: 1.5rem;
+            color: #1e1e2f;
+            line-height: 1.5;
+        }
+
+        /* ---------- LEFT SIDE MENU (vertical sidebar) ---------- */
+        .sidebar {
+            flex: 0 0 260px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
+            border: 1px solid #e3e3e3;
+            padding: 2rem 1rem 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            height: fit-content;
+            max-height: calc(100vh - 3rem);
+            position: sticky;
+            top: 1.5rem;
+        }
+
+        .sidebar-header {
+            padding: 0 0.8rem 1rem 0.8rem;
+            border-bottom: 1px solid #e3e3e3;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.3px;
+        }
+
+        .sidebar-header p {
+            color: #777;
+            font-size: 0.85rem;
+            margin-top: 0.2rem;
+            font-weight: 500;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            padding: 0.85rem 1rem;
+            border-radius: 16px;
+            color: #4a4a6a;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            background: transparent;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            border: none;
+            width: 100%;
+            text-align: left;
+            cursor: default;
+        }
+
+        /* active item simulation: first item */
+        .nav-item.active {
+            background: linear-gradient(135deg, #4c74ff0c, #8a52ff0c);
+            color: #4c74ff;
+            font-weight: 600;
+            border-left: 4px solid #8a52ff;
+            border-radius: 16px 12px 12px 16px;
+        }
+
+        .nav-item:hover {
+            background: #f3f6fb;
+            color: #4c74ff;
+            transform: translateX(4px);
+        }
+
+        .nav-item i {
+            font-style: normal;
+            width: 24px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e3e3e3;
+        }
+
+        /* ---------- MAIN CONTENT AREA ---------- */
+        .main-content {
+            flex: 1;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid #e3e3e3;
+            padding: 2rem 2rem;
+            overflow-y: auto;
+            max-height: calc(100vh - 3rem);
+        }
+
+        /* TOP AREA – minimal header */
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #e3e3e3;
+        }
+
+        .top-header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e1e2f, #4c74ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Buttons – primary gradient, soft rounded */
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 8px 16px -8px rgba(0,0,0,0.1);
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #4c74ff;
+            border: 1px solid #e3e3e3;
+        }
+        .btn-primary:hover {
+            background: #f3f6fb;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #fff1f0;
+            color: #d14545;
+            border: 1px solid #ffcdcd;
+        }
+        .btn-danger:hover {
+            background: #ffe5e5;
+            transform: translateY(-2px);
+        }
+
+        /* gradient primary button (used inside table) */
+        .btn-gradient {
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.3rem;
+            border-radius: 30px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 16px -8px #4c74ff;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, #5f83ff, #9b66ff);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px -10px #4c74ff;
+        }
+
+        /* Teacher info card */
+        .teacher-info-card {
+            background: #f3f6fb;
+            border: 1px solid #e3e3e3;
+            border-radius: 18px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            align-items: center;
+            box-shadow: 0 8px 18px -10px rgba(0,0,0,0.1);
+        }
+
+        .teacher-info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .teacher-info-item .label {
+            color: #777;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            font-weight: 600;
+        }
+
+        .teacher-info-item .value {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #1e1e2f;
+            margin-top: 0.15rem;
+        }
+
+        .teacher-info-item.small .value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #4c74ff;
+        }
+
+        /* Section title */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #1e1e2f;
+        }
+
+        /* Table styling – clean card */
+        .table-wrapper {
+            border-radius: 18px;
+            border: 1px solid #e3e3e3;
+            background: white;
+            overflow: auto;
+            box-shadow: 0 8px 20px -12px rgba(0,0,0,0.15);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        th {
+            background: #f3f6fb;
+            color: #4a4a6a;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 1.2rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e3e3e3;
+        }
+
+        td {
+            padding: 1rem 1rem;
+            border-bottom: 1px solid #e3e3e3;
+            color: #2e2e44;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: #f9faff;
+        }
+
+        /* badge */
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: #e8edff;
+            color: #4c74ff;
+        }
+
+        .badge-info {
+            background: #e8edff;
+            color: #4c74ff;
+        }
+
+        /* error / loading */
+        .error-box {
+            background: #ffe8e8;
+            border: 1px solid #ffc9c9;
+            border-radius: 18px;
+            padding: 1.5rem;
+            color: #b00020;
+            font-weight: 500;
+            margin: 1rem 0;
+        }
+
+        .loading {
+            color: #777;
+            font-style: italic;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        /* preserve original IDs and classes – we override but keep them functional */
+        .container { max-width: 100%; margin: 0; background: transparent; padding: 0; box-shadow: none; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 0; border-bottom: none; }
+        .teacher-info { background: transparent; padding: 0; border-left: none; margin-bottom: 0; }
+        #teacherInfo .loading { display: block; } /* we replace content anyway */
+
+        /* ensure old buttons match new design */
+        .btn-primary { background: white; color: #4c74ff; border: 1px solid #e3e3e3; }
+        .btn-danger { background: #fff1f0; color: #d14545; border: 1px solid #ffcdcd; }
+
+        /* style the "View" button inside table (original) */
+        td button[onclick^="viewStudentProjects"] {
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            border: none;
+            color: white;
+            padding: 0.5rem 1.3rem;
+            border-radius: 30px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+            box-shadow: 0 8px 12px -8px #4c74ff;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        td button[onclick^="viewStudentProjects"]:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #5f83ff, #9b66ff);
+            box-shadow: 0 12px 18px -10px #4c74ff;
+        }
+
+        /* custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f3f6fb;
+            border-radius: 20px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 20px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* responsive */
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            .sidebar {
+                flex: auto;
+                position: static;
+                max-height: none;
+            }
+            .main-content {
+                max-height: none;
+            }
+        }
+    </style>
+    <script src="../js/auth.js"></script>
+</head>
+<body>
+    <!-- LEFT SIDE MENU (vertical sidebar) – icons + labels using text/emoji -->
+    
+
+    <!-- MAIN CONTENT AREA (cards) -->
+    <main class="main-content">
+        <!-- TOP AREA header minimal -->
+        <div class="top-header">
+            <h1>📚 Student Projects</h1>
+            <div class="header-actions">
+                <!-- original buttons, with original classes and IDs -->
+                <button id="backBtn" class="btn btn-primary" onclick="window.location.href='dashboard.html'">
+                    ← Back to Dashboard
+                </button>
+                <button id="logoutBtn" class="btn btn-danger" onclick="logout()">
+                    Logout
+                </button>
+            </div>
+        </div>
+
+        <!-- original container (kept for JS integrity) -->
+        <div class="container">
+            <!-- teacher info card – original ID #teacherInfo, but styled via new card -->
+            <div id="teacherInfo" class="teacher-info-card">
+                <div class="loading">Loading teacher information...</div>
+            </div>
+            
+            <div id="errorContainer" style="display: none;"></div>
+            
+            <div id="studentsContainer">
+                <div class="section-title">
+                    <span>👨‍🎓</span> Students in Your Department
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Roll Number</th>
+                                <th>Branch</th>
+                                <th>Semester</th>
+                                <th>Section</th>
+                                <th>Actions</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody id="studentsTable">
+                            <tr>
+                                <td colspan="6" style="text-align:center; padding:40px;">
+                                    <div class="loading">Loading students...</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript – EXACT original, untouched -->
+    <script>
+        const API_BASE_URL = 'http://localhost:8080/api/teacher';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication
+            if (!checkAuth()) {
+                window.location.href = '../login.html';
+                return;
+            }
+            
+            // Get username from token
+            const username = getUsernameFromToken();
+            console.log('📌 Username from token:', username);
+            
+            if (!username) {
+                showError('Username not found. Please login again.');
+                setTimeout(() => logout(), 3000);
+                return;
+            }
+            
+            // Load teacher data by username
+            loadTeacherByUsername(username);
+        });
+        
+        function showError(message) {
+            const errorContainer = document.getElementById('errorContainer');
+            errorContainer.style.display = 'block';
+            errorContainer.innerHTML = `
+                <div class="error-box">
+                    <strong>❌ Error:</strong> ${message}
+                </div>
+            `;
+            
+            document.getElementById('teacherInfo').innerHTML = `
+                <div class="error-box">
+                    Failed to load teacher information. Please try again.
+                </div>
+            `;
+        }
+        
+        async function loadTeacherByUsername(username) {
+            try {
+                console.log('🔍 Loading teacher data for username:', username);
+                
+                const response = await fetch(`${API_BASE_URL}/by-username?username=${encodeURIComponent(username)}`, {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
+                
+                console.log('📡 Response status:', response.status);
+                
+                if (response.status === 401) {
+                    showError('Session expired. Please login again.');
+                    setTimeout(() => logout(), 3000);
+                    return;
+                }
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('❌ Error response:', errorText);
+                    
+                    let errorMessage = `Server error: ${response.status}`;
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        errorMessage = errorJson.message || errorJson.error || errorMessage;
+                    } catch(e) {
+                        errorMessage = errorText || errorMessage;
+                    }
+                    
+                    throw new Error(errorMessage);
+                }
+                
+                const data = await response.json();
+                console.log('✅ Teacher data received:', data);
+                
+                displayTeacherData(data);
+                
+            } catch (error) {
+                console.error('❌ Error in loadTeacherByUsername:', error);
+                showError(error.message);
+                
+                document.getElementById('studentsTable').innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align:center; padding:40px; color: #dc3545;">
+                            ❌ Error loading students: ${error.message}
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+        
+        function displayTeacherData(data) {
+            // Hide error container if visible
+            document.getElementById('errorContainer').style.display = 'none';
+            
+            // Show teacher info – we style it as cards, but keep the same inner HTML structure
+            // to not break any JS expectations, we just inject the same HTML format,
+            // but it will inherit the teacher-info-card styling.
+            document.getElementById('teacherInfo').innerHTML = `
+                <p><strong>👤 Teacher:</strong> ${data.teacherName || 'N/A'}</p>
+                <p><strong>🏢 Department:</strong> ${data.department || 'N/A'}</p>
+                <p><strong>📊 Total Students:</strong> ${data.studentCount || 0}</p>
+                <p><small>Teacher ID: ${data.teacherId || 'N/A'}</small></p>
+            `;
+            
+            // Show students table
+            const tableBody = document.getElementById('studentsTable');
+            tableBody.innerHTML = '';
+            
+            if (!data.students || data.students.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align:center; padding:40px;">
+                            <div style="color: #666;">
+                                <p>📭 No students found in ${data.department || 'your'} department</p>
+                                <p style="font-size: 14px; margin-top: 10px;">
+                                    This could mean:
+                                    <br>• No students have been added to this department yet
+                                    <br>• Students haven't completed their profiles
+                                    <br>• The department name might be different in student records
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            data.students.forEach(student => {
+                const studentName = student.fullName || 'Student Name Not Set';
+                const rollNumber = student.rollNumber || 'N/A';
+                const branch = student.branch || data.department || 'N/A';
+                const semester = student.semester || 'N/A';
+                const section = student.section || 'N/A';
+                const userId = student.userId || student.id;
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${studentName}</strong></td>
+                    <td>${rollNumber}</td>
+                    <td><span class="badge badge-info">${branch}</span></td>
+                    <td>Semester ${semester}</td>
+                    <td>${section}</td>
+                    <td>
+                       <button onclick="viewStudentProjects(${student.id})">View</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+        
+       function viewStudentProjects(studentId) {
+    window.location.href = `view-student-projects.html?userId=${studentId}`;
+}
+function viewProjectDetails(projectId) {
+    window.location.href = "project-details.html?id=" + projectId;
+}
+   function openProjectPage(userId) {
+
+    // store student id for next page
+    localStorage.setItem("selectedStudentId", userId);
+
+    // open project details page
+    window.open("../student/project-details.html", "_blank");
+
+}     
+        function logout() {
+            localStorage.clear();
+            window.location.href = '../login.html';
+        }
+    </script>
+</body>
+</html>

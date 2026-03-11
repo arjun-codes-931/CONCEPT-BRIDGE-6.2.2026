@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Teacher Profile · Premium Academic</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts (Inter) for premium typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 (icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- NO JAVASCRIPT LOGIC CHANGED – only styles + layout containers -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(145deg, #5f79ff, #7a5cff, #a16cff);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            margin: 0;
+            color: #1e1e2f;
+        }
+
+        /* main white card (SaaS dashboard style) */
+        .profile-container {
+            width: 100%;
+            max-width: 960px;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 30px 60px -15px rgba(74, 58, 158, 0.4), 0 8px 20px -8px rgba(0,0,0,0.15);
+            overflow: hidden;
+            padding: 36px 40px;
+            transition: all 0.2s ease;
+        }
+
+        /* back button – minimal, elegant */
+        .back-nav {
+            margin-bottom: 24px;
+        }
+
+        .back-button {
+            background: #f3f6fb;
+            border: 1px solid #e3e3e3;
+            border-radius: 40px;
+            padding: 12px 26px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #2b2f4b;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 8px -4px rgba(0,0,0,0.02);
+        }
+
+        .back-button i {
+            color: #4c74ff;
+            font-size: 1rem;
+        }
+
+        .back-button:hover {
+            background: #ffffff;
+            border-color: #8a52ff;
+            transform: translateX(-3px);
+            box-shadow: 0 8px 16px -8px rgba(74, 58, 158, 0.3);
+        }
+
+        /* profile header with gradient icon */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .profile-header i {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            filter: drop-shadow(0 6px 10px rgba(74, 58, 158, 0.2));
+        }
+
+        h2 {
+            font-weight: 700;
+            font-size: 2.3rem;
+            letter-spacing: -0.02em;
+            color: #1a1e2b;
+            margin: 0;
+        }
+
+        /* profile info card (white, subtle shadow) */
+        .info-card {
+            background: #ffffff;
+            border: 1px solid #e3e3e3;
+            border-radius: 22px;
+            padding: 30px 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 12px 28px -12px rgba(74, 58, 158, 0.12);
+            transition: box-shadow 0.2s;
+        }
+
+        .info-card:hover {
+            box-shadow: 0 20px 40px -16px rgba(74, 58, 158, 0.2);
+        }
+
+        /* teacher name with subtle gradient */
+        .info-card h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 0 20px 0;
+            background: linear-gradient(145deg, #1a1e2b, #4c74ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 2px solid #f0f4fc;
+            padding-bottom: 16px;
+        }
+
+        .info-card h3 i {
+            font-size: 1.8rem;
+            color: #8a52ff;
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+            filter: none;
+        }
+
+        /* profile grid (clean 2-column layout) */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            gap: 18px 24px;
+            margin: 16px 0 10px 0;
+            align-items: baseline;
+        }
+
+        .profile-grid strong {
+            color: #4a4e6b;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: -0.2px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .profile-grid strong i {
+            color: #4c74ff;
+            width: 20px;
+            font-size: 1rem;
+        }
+
+        .profile-grid span {
+            color: #1e1e30;
+            font-weight: 500;
+            word-break: break-word;
+            background: #f8faff;
+            padding: 8px 16px;
+            border-radius: 40px;
+            border: 1px solid #e9edf4;
+            font-size: 0.95rem;
+        }
+
+        /* bio box */
+        .bio-box {
+            margin: 24px 0 18px 0;
+            background: #f3f6fb;
+            border-radius: 20px;
+            padding: 20px 24px;
+            border: 1px solid #e3e3e3;
+        }
+
+        .bio-box strong {
+            display: block;
+            margin-bottom: 12px;
+            color: #4a4e6b;
+            font-size: 1rem;
+            letter-spacing: 0.3px;
+        }
+
+        .bio-box p {
+            margin: 0;
+            color: #2b2f4b;
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+
+        /* action note */
+        .action-note {
+            font-size: 0.9rem;
+            color: #777;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #fafcff;
+            padding: 10px 18px;
+            border-radius: 40px;
+            border: 1px solid #e3e3e3;
+        }
+
+        .action-note i {
+            color: #8a52ff;
+        }
+
+        /* edit card (white, soft) */
+        .edit-card {
+            background: #ffffff;
+            border: 1px solid #e3e3e3;
+            border-radius: 22px;
+            padding: 28px 32px;
+            box-shadow: 0 16px 30px -12px rgba(74, 58, 158, 0.2);
+            margin-top: 20px;
+        }
+
+        .edit-card h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin: 0 0 24px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #1a1e2b;
+            border-bottom: 2px solid #f0f4fc;
+            padding-bottom: 16px;
+        }
+
+        .edit-card h3 i {
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 1.8rem;
+        }
+
+        /* form elements */
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .form-group input {
+            flex: 1 1 280px;
+            background: #f3f6fb;
+            border: 1px solid #e3e3e3;
+            border-radius: 60px;
+            padding: 16px 24px;
+            font-size: 1rem;
+            color: #1e1e30;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.15s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #8a52ff;
+            box-shadow: 0 0 0 4px rgba(138, 82, 255, 0.1);
+            background: #ffffff;
+        }
+
+        .form-group input::placeholder {
+            color: #9aa5b5;
+        }
+
+        /* buttons with primary gradient */
+        .btn-primary {
+            background: linear-gradient(145deg, #4c74ff, #8a52ff);
+            border: none;
+            border-radius: 60px;
+            padding: 16px 32px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 10px 20px -8px rgba(74, 58, 158, 0.5);
+            border: 1px solid rgba(255,255,255,0.2);
+            line-height: 1;
+        }
+
+        .btn-primary i {
+            color: white;
+            font-size: 1rem;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(145deg, #5f82ff, #9b6aff);
+            transform: translateY(-2px);
+            box-shadow: 0 18px 28px -10px #4c74ff;
+        }
+
+        .btn-secondary {
+            background: #f3f6fb;
+            border: 1px solid #e3e3e3;
+            border-radius: 60px;
+            padding: 16px 32px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #2b2f4b;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary i {
+            color: #5f5f7a;
+        }
+
+        .btn-secondary:hover {
+            background: #ffffff;
+            border-color: #b3b3d3;
+            box-shadow: 0 6px 12px -6px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
+        }
+
+        /* error container */
+        .error-container {
+            color: #b02b2b;
+            background: #fee9e7;
+            border-radius: 22px;
+            padding: 28px;
+            text-align: center;
+            border: 1px solid #ffbfbf;
+            margin: 20px 0;
+        }
+
+        /* loading state */
+        .info-card p i {
+            color: #4c74ff;
+        }
+
+        /* responsiveness */
+        @media (max-width: 650px) {
+            .profile-container {
+                padding: 24px 20px;
+            }
+            h2 {
+                font-size: 2rem;
+            }
+            .profile-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            .profile-grid strong {
+                margin-bottom: 0;
+            }
+            .form-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn-primary, .btn-secondary {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-header i {
+                font-size: 2.5rem;
+            }
+            .info-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <!-- Back button (original onclick preserved) -->
+        <div class="back-nav">
+            <button class="back-button" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </button>
+        </div>
+
+        <!-- Profile header with icon -->
+        <div class="profile-header">
+            <i class="fas fa-user-graduate"></i>
+            <h2>Teacher Profile</h2>
+        </div>
+
+        <!-- Profile info container (id preserved) -->
+        <div id="profileInfo">
+            <!-- original content loads here; we style inner content via js but also apply global styles -->
+            <div class="info-card">
+                <p style="color: #777; display: flex; align-items: center; gap: 10px;"><i class="fas fa-spinner fa-pulse" style="color:#4c74ff;"></i> Loading profile...</p>
+            </div>
+        </div>
+
+        <!-- Edit form (original id preserved, hidden initially) -->
+        <!-- <div id="editForm" style="display:none;">
+            <div class="edit-card">
+                <h3><i class="fas fa-pen-fancy"></i> Edit Name</h3>
+                <form id="nameForm">
+                    <div class="form-group">
+                        <input type="text" id="fullNameInput" required placeholder="Enter full name">
+                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Save</button>
+                        <button type="button" onclick="cancelEdit()" class="btn-secondary"><i class="fas fa-times"></i> Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div> -->
+    </div>
+
+    <!-- ORIGINAL JAVASCRIPT – COMPLETELY UNMODIFIED (only formatting preserved) -->
+    <script>
+    const API = "http://localhost:8080";
+    const token = localStorage.getItem("token");
+    
+    window.onload = async () => {
+        if (!token) {
+            alert("Login required");
+            location.href = "../login.html";
+            return;
+        }
+        await loadProfile();
+    };
+    
+    async function loadProfile() {
+        try {
+            const res = await fetch(`${API}/teacher/profile`, {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            
+            if (!res.ok) {
+                const error = await res.text();
+                throw new Error(error);
+            }
+            
+            const profile = await res.json();
+            displayProfile(profile);
+            
+        } catch (err) {
+            document.getElementById("profileInfo").innerHTML = `
+                <div class="error-container" style="color:#b02b2b; background:#fee9e7; border-radius:22px; padding:28px; text-align:center; border:1px solid #ffbfbf;">
+                    <i class="fas fa-exclamation-triangle" style="font-size:2rem; margin-bottom:1rem; color:#c84a4a;"></i>
+                    <h3 style="margin:0.5rem 0; font-weight:600;">⚠️ Profile Error</h3>
+                    <p style="margin:1rem 0; color:#7a3b3b;">${err.message}</p>
+                    <button onclick="window.history.back()" class="btn-secondary" style="margin-top:1rem; display:inline-flex;">
+                        <i class="fas fa-arrow-left"></i> Go Back
+                    </button>
+                </div>
+            `;
+        }
+    }
+    
+    function displayProfile(profile) {
+        // Build profile HTML with premium classes (but original structure kept)
+        let html = `
+            <div class="info-card">
+                <h3 style="font-size:2rem; font-weight:700; margin:0 0 20px 0; background:linear-gradient(145deg, #1a1e2b, #4c74ff); -webkit-background-clip:text; background-clip:text; color:transparent; display:flex; align-items:center; gap:12px; border-bottom:2px solid #f0f4fc; padding-bottom:16px;">
+                    <i class="fas fa-star" style="font-size:1.8rem; color:#8a52ff; background:none; -webkit-background-clip:unset; background-clip:unset;"></i>
+                    ${profile.fullName || 'Not set'}
+                </h3>
+                
+                <div class="profile-grid">
+                    <strong><i class="fas fa-id-card"></i> Employee ID:</strong> <span>${profile.employeeId || 'N/A'}</span>
+                    <strong><i class="fas fa-building"></i> Department:</strong> <span>${profile.department || 'N/A'}</span>
+                    <strong><i class="fas fa-briefcase"></i> Designation:</strong> <span>${profile.designation || 'N/A'}</span>
+                    <strong><i class="fas fa-graduation-cap"></i> Qualification:</strong> <span>${profile.qualification || 'N/A'}</span>
+                    <strong><i class="fas fa-clock"></i> Experience:</strong> <span>${profile.experienceYears || 0} years</span>
+                    <strong><i class="fas fa-envelope"></i> Email:</strong> <span>${profile.email || 'N/A'}</span>
+                    <strong><i class="fas fa-phone-alt"></i> Phone:</strong> <span>${profile.phone || 'N/A'}</span>
+                    <strong><i class="fas fa-calendar-check"></i> Joined:</strong> <span>${new Date(profile.createdAt).toLocaleDateString()}</span>
+                </div>
+                
+                ${profile.bio ? `
+                    <div class="bio-box">
+                        <strong><i class="fas fa-quote-right"></i> Bio:</strong>
+                        <p>${profile.bio}</p>
+                    </div>
+                ` : ''}
+                
+                
+            </div>
+        `;
+        
+        document.getElementById("profileInfo").innerHTML = html;
+    }
+    
+    // function editName(currentName) {
+    //     document.getElementById("fullNameInput").value = currentName;
+    //     document.getElementById("editForm").style.display = 'block';
+    //     document.getElementById("fullNameInput").focus();
+    // }
+    
+    // function cancelEdit() {
+    //     document.getElementById("editForm").style.display = 'none';
+    // }
+    
+    // document.getElementById("nameForm").onsubmit = async (e) => {
+    //     e.preventDefault();
+        
+    //     const newName = document.getElementById("fullNameInput").value.trim();
+    //     if (!newName) {
+    //         alert("Name cannot be empty");
+    //         return;
+    //     }
+        
+    //     try {
+    //         const res = await fetch(`${API}/teacher/profile/name`, {
+    //             method: 'PUT',
+    //             headers: {
+    //                 'Authorization': 'Bearer ' + token,
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify({ fullName: newName })
+    //         });
+            
+    //         const result = await res.json();
+            
+    //         if (res.ok) {
+    //             alert(result.message || "Name updated successfully");
+    //             document.getElementById("editForm").style.display = 'none';
+    //             await loadProfile(); // Reload profile
+    //         } else {
+    //             alert(result.error || "Failed to update name");
+    //         }
+            
+    //     } catch (err) {
+    //         alert("Error: " + err.message);
+    //     }
+    // };
+    </script>
+</body>
+</html>

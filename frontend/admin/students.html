@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Directory · Admin Portal</title>
+</head>
+<body>
+    <h3>📋 STUDENT DIRECTORY</h3>
+    
+    <div>
+        <button onclick="window.location.href='dashboard.html'">← BACK TO DASHBOARD</button>
+        <button onclick="toggleEditMode()" id="editModeBtn">✎ EDIT MODE OFF</button>
+        <button onclick="saveStudent()" id="saveBtn" style="display:none; background:#28a745; color:white;">💾 SAVE CHANGES</button>
+        <button onclick="cancelEdit()" id="cancelBtn" style="display:none;">✖ CANCEL</button>
+    </div>
+    
+    <!-- FILTER SECTION -->
+    <div style="margin:20px 0; padding:15px; border:2px solid #333; background:#f0f0f0;">
+        <h4>🔍 FILTER STUDENTS</h4>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:10px;">
+            <div>
+                <label>Branch:</label><br>
+                <select id="filterBranch" onchange="applyFilters()">
+                    <option value="">ALL</option>
+                </select>
+            </div>
+            <div>
+                <label>Section:</label><br>
+                <select id="filterSection" onchange="applyFilters()">
+                    <option value="">ALL</option>
+                </select>
+            </div>
+            <div>
+                <label>Semester:</label><br>
+                <select id="filterSemester" onchange="applyFilters()">
+                    <option value="">ALL</option>
+                </select>
+            </div>
+            <div>
+                <label>Batch:</label><br>
+                <select id="filterBatch" onchange="applyFilters()">
+                    <option value="">ALL</option>
+                </select>
+            </div>
+            <div>
+                <label>Status:</label><br>
+                <select id="filterStatus" onchange="applyFilters()">
+                    <option value="">ALL</option>
+                    <option value="ACTIVE">ACTIVE</option>
+                    <option value="INACTIVE">INACTIVE</option>
+                    <option value="SUSPENDED">SUSPENDED</option>
+                    <option value="GRADUATED">GRADUATED</option>
+                </select>
+            </div>
+            <div>
+                <label>Search:</label><br>
+                <input type="text" id="filterSearch" placeholder="Name or Roll" onkeyup="applyFilters()">
+            </div>
+        </div>
+        <div style="margin-top:10px;">
+            <span id="filterStats">Loading students...</span>
+            <button onclick="resetFilters()" style="margin-left:10px;">⟲ RESET</button>
+        </div>
+    </div>
+    
+    <!-- MAIN CONTAINER -->
+    <div style="display:flex; gap:20px; flex-wrap:wrap;">
+        <!-- STUDENT LIST -->
+        <div id="studentList" style="flex:1; min-width:300px; border:2px solid #333; padding:15px; background:#f9f9f9; height:600px; overflow-y:auto;">
+            <h4>📋 STUDENTS <span id="studentCount"></span></h4>
+            <div id="studentListContainer">Loading...</div>
+        </div>
+        
+        <!-- STUDENT DETAILS / EDIT FORM -->
+        <div id="studentDetails" style="flex:2; min-width:400px; border:2px solid #333; padding:15px; background:#f9f9f9;">
+            <h4>👤 STUDENT DETAILS</h4>
+            <div id="detailsContent">
+                <p>Select a student to view profile</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- EDIT FORM (matches entity fields exactly) -->
+    <div id="editFormTemplate" style="display:none;">
+        <div style="display:grid; grid-template-columns:1fr 2fr; gap:10px;">
+            <div>Full Name:</div>
+            <div><input type="text" id="editFullName" style="width:100%;"></div>
+            
+            <div>Roll Number:</div>
+            <div><input type="text" id="editRollNumber" style="width:100%;"></div>
+            
+            <div>Register Number:</div>
+            <div><input type="text" id="editRegisterNumber" style="width:100%;"></div>
+            
+            <div>Branch:</div>
+            <div>
+                <select id="editBranch" style="width:100%;">
+                    <option value="CSE">CSE</option>
+                    <option value="ECE">ECE</option>
+                    <option value="EEE">EEE</option>
+                    <option value="MECH">MECH</option>
+                    <option value="CIVIL">CIVIL</option>
+                    <option value="IT">IT</option>
+                </select>
+            </div>
+            
+            <div>Section:</div>
+            <div>
+                <select id="editSection" style="width:100%;">
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                </select>
+            </div>
+            
+            <div>Semester:</div>
+            <div>
+                <select id="editSemester" style="width:100%;">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                </select>
+            </div>
+            
+            <div>Batch:</div>
+            <div><input type="text" id="editBatch" style="width:100%;" placeholder="e.g. 2024"></div>
+            
+            <div>Admission Year:</div>
+            <div><input type="text" id="editAdmissionYear" style="width:100%;"></div>
+            
+            <div>College Name:</div>
+            <div><input type="text" id="editCollegeName" style="width:100%;"></div>
+            
+            <div>University:</div>
+            <div><input type="text" id="editUniversity" style="width:100%;"></div>
+            
+            <div>Status:</div>
+            <div>
+                <select id="editProfileStatus" style="width:100%;">
+                    <option value="ACTIVE">ACTIVE</option>
+                    <option value="INACTIVE">INACTIVE</option>
+                    <option value="SUSPENDED">SUSPENDED</option>
+                    <option value="GRADUATED">GRADUATED</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const API = "http://localhost:8080";
+        let allStudents = [];
+        let filteredStudents = [];
+        let selectedStudent = null;
+        let editMode = false;
+        let editStudentId = null;
+        
+        function getToken() {
+            return localStorage.getItem("token");
+        }
+        
+        async function loadStudents() {
+            if (!getToken()) {
+                alert("Please login first");
+                window.location.href = "../login.html";
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API}/admin/students`, {
+                    headers: { "Authorization": "Bearer " + getToken() }
+                });
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                allStudents = await response.json();
+                console.log('✅ Students loaded:', allStudents.length);
+                
+                extractFilterOptions();
+                applyFilters();
+                
+            } catch (error) {
+                console.error('❌ Error:', error);
+                document.getElementById('studentListContainer').innerHTML = 
+                    `<p style="color:red;">❌ Error: ${error.message}</p>`;
+            }
+        }
+        
+        function extractFilterOptions() {
+            const branches = [...new Set(allStudents.map(s => s.branch).filter(Boolean))];
+            const sections = [...new Set(allStudents.map(s => s.section).filter(Boolean))];
+            const semesters = [...new Set(allStudents.map(s => s.semester).filter(Boolean))];
+            const batches = [...new Set(allStudents.map(s => s.batch).filter(Boolean))];
+            
+            populateSelect('filterBranch', branches);
+            populateSelect('filterSection', sections);
+            populateSelect('filterSemester', semesters);
+            populateSelect('filterBatch', batches);
+        }
+        
+        function populateSelect(selectId, values) {
+            const select = document.getElementById(selectId);
+            if (!select) return;
+            
+            select.innerHTML = '<option value="">ALL</option>';
+            values.sort().forEach(value => {
+                const option = document.createElement('option');
+                option.value = value;
+                option.textContent = value;
+                select.appendChild(option);
+            });
+        }
+        
+        function applyFilters() {
+            const branch = document.getElementById('filterBranch').value;
+            const section = document.getElementById('filterSection').value;
+            const semester = document.getElementById('filterSemester').value;
+            const batch = document.getElementById('filterBatch').value;
+            const status = document.getElementById('filterStatus').value;
+            const search = document.getElementById('filterSearch').value.toLowerCase();
+            
+            filteredStudents = allStudents.filter(student => {
+                if (branch && student.branch !== branch) return false;
+                if (section && student.section !== section) return false;
+                if (semester && student.semester != semester) return false;
+                if (batch && student.batch !== batch) return false;
+                if (status && student.profileStatus !== status) return false;
+                
+                if (search) {
+                    const name = (student.fullName || '').toLowerCase();
+                    const roll = (student.rollNumber || '').toLowerCase();
+                    if (!name.includes(search) && !roll.includes(search)) return false;
+                }
+                return true;
+            });
+            
+            document.getElementById('filterStats').innerHTML = 
+                `Showing ${filteredStudents.length} of ${allStudents.length} students`;
+            
+            renderStudentList();
+        }
+        
+        function resetFilters() {
+            document.getElementById('filterBranch').value = '';
+            document.getElementById('filterSection').value = '';
+            document.getElementById('filterSemester').value = '';
+            document.getElementById('filterBatch').value = '';
+            document.getElementById('filterStatus').value = '';
+            document.getElementById('filterSearch').value = '';
+            applyFilters();
+        }
+        
+        function renderStudentList() {
+            const container = document.getElementById('studentListContainer');
+            
+            if (filteredStudents.length === 0) {
+                container.innerHTML = '<p>No students match the filters</p>';
+                document.getElementById('studentCount').textContent = '(0)';
+                return;
+            }
+            
+            let html = '';
+            filteredStudents.forEach(student => {
+                const isSelected = selectedStudent && selectedStudent.id === student.id;
+                const bgColor = isSelected ? '#e0e0ff' : '#fff';
+                
+                html += `
+                    <div onclick="selectStudent(${student.id})" 
+                         style="border:2px solid ${isSelected ? '#00f' : '#ccc'}; 
+                                padding:10px; margin:5px 0; 
+                                background:${bgColor}; 
+                                cursor:pointer;">
+                        <b>${student.fullName || 'Unnamed'}</b><br>
+                        <span>Roll: ${student.rollNumber || 'N/A'} | 
+                              Branch: ${student.branch || 'N/A'} | 
+                              Sem: ${student.semester || 'N/A'}</span>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            document.getElementById('studentCount').textContent = `(${filteredStudents.length})`;
+        }
+        
+        function selectStudent(studentId) {
+            const student = allStudents.find(s => s.id == studentId);
+            if (!student) return;
+            
+            selectedStudent = student;
+            
+            if (editMode && editStudentId == studentId) {
+                showEditForm(student);
+            } else {
+                showStudentDetails(student);
+            }
+            
+            renderStudentList();
+        }
+        
+        function showStudentDetails(student) {
+            const details = document.getElementById("studentDetails");
+            
+            details.innerHTML = `
+                <h4>👤 ${student.fullName}</h4>
+                <div style="display:grid; grid-template-columns:1fr 2fr; gap:8px; margin:15px 0;">
+                    <div><b>Full Name:</b></div><div>${student.fullName || '—'}</div>
+                    <div><b>Roll Number:</b></div><div>${student.rollNumber || '—'}</div>
+                    <div><b>Register Number:</b></div><div>${student.registerNumber || '—'}</div>
+                    <div><b>Branch:</b></div><div>${student.branch || '—'}</div>
+                    <div><b>Section:</b></div><div>${student.section || '—'}</div>
+                    <div><b>Semester:</b></div><div>${student.semester || '—'}</div>
+                    <div><b>Batch:</b></div><div>${student.batch || '—'}</div>
+                    <div><b>Admission Year:</b></div><div>${student.admissionYear || '—'}</div>
+                    <div><b>College Name:</b></div><div>${student.collegeName || '—'}</div>
+                    <div><b>University:</b></div><div>${student.university || '—'}</div>
+                    <div><b>Status:</b></div><div>${student.profileStatus || '—'}</div>
+                </div>
+                <div>
+                    <button onclick="enableEditMode(${student.id})" style="background:#ffc107; padding:8px 16px;">✎ EDIT</button>
+                </div>
+            `;
+        }
+        
+        function toggleEditMode() {
+            editMode = !editMode;
+            const btn = document.getElementById('editModeBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+            
+            if (editMode) {
+                btn.innerHTML = '✎ EDIT MODE ON';
+                btn.style.background = '#ffc107';
+                saveBtn.style.display = 'inline-block';
+                cancelBtn.style.display = 'inline-block';
+                
+                if (selectedStudent) {
+                    enableEditMode(selectedStudent.id);
+                }
+            } else {
+                btn.innerHTML = '✎ EDIT MODE OFF';
+                btn.style.background = '';
+                saveBtn.style.display = 'none';
+                cancelBtn.style.display = 'none';
+                
+                if (selectedStudent) {
+                    showStudentDetails(selectedStudent);
+                }
+            }
+        }
+        
+        function enableEditMode(studentId) {
+            editMode = true;
+            editStudentId = studentId;
+            
+            const student = allStudents.find(s => s.id == studentId);
+            if (!student) return;
+            
+            selectedStudent = student;
+            
+            document.getElementById('editModeBtn').innerHTML = '✎ EDIT MODE ON';
+            document.getElementById('editModeBtn').style.background = '#ffc107';
+            document.getElementById('saveBtn').style.display = 'inline-block';
+            document.getElementById('cancelBtn').style.display = 'inline-block';
+            
+            showEditForm(student);
+        }
+        
+        function showEditForm(student) {
+            const template = document.getElementById('editFormTemplate').innerHTML;
+            
+            const details = document.getElementById('studentDetails');
+            details.innerHTML = `
+                <h4>✎ EDITING: ${student.fullName}</h4>
+                ${template}
+            `;
+            
+            // Populate form
+            document.getElementById('editFullName').value = student.fullName || '';
+            document.getElementById('editRollNumber').value = student.rollNumber || '';
+            document.getElementById('editRegisterNumber').value = student.registerNumber || '';
+            document.getElementById('editBranch').value = student.branch || 'CSE';
+            document.getElementById('editSection').value = student.section || 'A';
+            document.getElementById('editSemester').value = student.semester || '1';
+            document.getElementById('editBatch').value = student.batch || '';
+            document.getElementById('editAdmissionYear').value = student.admissionYear || '';
+            document.getElementById('editCollegeName').value = student.collegeName || '';
+            document.getElementById('editUniversity').value = student.university || '';
+            document.getElementById('editProfileStatus').value = student.profileStatus || 'ACTIVE';
+        }
+        
+        async function saveStudent() {
+            if (!editStudentId) {
+                alert('No student selected for editing');
+                return;
+            }
+            
+            const studentData = {
+                fullName: document.getElementById('editFullName').value,
+                rollNumber: document.getElementById('editRollNumber').value,
+                registerNumber: document.getElementById('editRegisterNumber').value,
+                branch: document.getElementById('editBranch').value,
+                section: document.getElementById('editSection').value,
+                semester: parseInt(document.getElementById('editSemester').value),
+                batch: document.getElementById('editBatch').value,
+                admissionYear: parseInt(document.getElementById('editAdmissionYear').value) || null,
+                collegeName: document.getElementById('editCollegeName').value,
+                university: document.getElementById('editUniversity').value,
+                profileStatus: document.getElementById('editProfileStatus').value
+            };
+            
+            console.log('📦 Saving:', studentData);
+            
+            try {
+                const response = await fetch(`${API}/admin/students/${editStudentId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': 'Bearer ' + getToken(),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(studentData)
+                });
+                
+                if (!response.ok) {
+                    const error = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${error}`);
+                }
+                
+                const updated = await response.json();
+                console.log('✅ Saved:', updated);
+                
+                // Update local data
+                const index = allStudents.findIndex(s => s.id == editStudentId);
+                if (index !== -1) {
+                    allStudents[index] = {...allStudents[index], ...studentData};
+                }
+                
+                selectedStudent = {...selectedStudent, ...studentData};
+                
+                alert('✅ Student updated successfully!');
+                
+                // Exit edit mode
+                editMode = false;
+                editStudentId = null;
+                document.getElementById('editModeBtn').innerHTML = '✎ EDIT MODE OFF';
+                document.getElementById('saveBtn').style.display = 'none';
+                document.getElementById('cancelBtn').style.display = 'none';
+                
+                showStudentDetails(selectedStudent);
+                extractFilterOptions();
+                applyFilters();
+                
+            } catch (error) {
+                console.error('❌ Error:', error);
+                alert('❌ Error: ' + error.message);
+            }
+        }
+        
+        function cancelEdit() {
+            editMode = false;
+            editStudentId = null;
+            
+            document.getElementById('editModeBtn').innerHTML = '✎ EDIT MODE OFF';
+            document.getElementById('saveBtn').style.display = 'none';
+            document.getElementById('cancelBtn').style.display = 'none';
+            
+            if (selectedStudent) {
+                showStudentDetails(selectedStudent);
+            }
+        }
+        
+        window.onload = loadStudents;
+    </script>
+</body>
+</html>

@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>PDF Viewer · Nebula</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Font: Inter (clean, modern) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- PDF.js library - untouched -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(145deg, #5f79ff 0%, #7a5cff 50%, #a16cff 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            padding: 1.5rem;
+            gap: 1.5rem;
+            color: #1e1e2f;
+            line-height: 1.5;
+        }
+
+        /* LEFT PANEL – now acts as vertical sidebar with icons + labels (matching academic dashboard) */
+        #viewer-container {
+            flex: 3;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: auto;
+            padding: 1.8rem;
+            display: flex;
+            justify-content: center;
+            border: 1px solid #e3e3e3;
+            transition: box-shadow 0.2s ease;
+        }
+
+        /* PDF canvas */
+        #pdf-canvas {
+            display: block;
+            margin: 0 auto;
+            border-radius: 18px;
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.15);
+            background: #ffffff;
+            border: 1px solid #e3e3e3;
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* RIGHT PANEL – main content area (cards) */
+        #controls-container {
+            flex: 1;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 2rem 1.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+            overflow-y: auto;
+            max-height: 170vh;
+            border: 1px solid #e3e3e3;
+        }
+
+        /* --- TOP area / header minimal style --- */
+        /* (no explicit header, but the first button acts as header element) */
+
+        /* Buttons – gradient primary */
+        button {
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 0.9rem 1.8rem;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 10px 20px -8px rgba(74, 46, 176, 0.3);
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            letter-spacing: 0.3px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #5f83ff, #9b66ff);
+            box-shadow: 0 14px 28px -8px #3a2799;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 6px 12px -6px #2e1e7a;
+        }
+
+        /* Back button – still gradient but slightly different to keep variation */
+        button[onclick="window.close()"] {
+            width: 100%;
+            background: #f3f6fb;
+            color: #4c74ff;
+            border: 1px solid #e3e3e3;
+            box-shadow: 0 4px 8px -4px rgba(0,0,0,0.05);
+            font-weight: 600;
+        }
+        button[onclick="window.close()"]:hover {
+            background: #e8eef7;
+            color: #3a5be0;
+            border-color: #cbd5e1;
+        }
+
+        /* PDF info card */
+        #pdf-info {
+            background: #f3f6fb;
+            border-radius: 18px;
+            padding: 1.5rem 1.5rem;
+            border: 1px solid #e3e3e3;
+            box-shadow: 0 6px 12px -8px rgba(0,0,0,0.1);
+        }
+
+        #pdf-info strong {
+            color: #777;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        #pdf-title {
+            color: #1e1e2f;
+            font-weight: 700;
+            font-size: 1.2rem;
+            word-break: break-word;
+            display: block;
+            margin-top: 0.2rem;
+        }
+
+        /* Page navigation – modern card */
+        .page-nav {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            justify-content: space-between;
+            background: #f3f6fb;
+            border-radius: 18px;
+            padding: 0.5rem;
+            border: 1px solid #e3e3e3;
+            box-shadow: 0 6px 12px -8px rgba(0,0,0,0.05);
+        }
+
+        .page-nav button {
+            flex: 1;
+            padding: 0.7rem 1rem;
+            background: white;
+            color: #1e1e2f;
+            border: 1px solid #e3e3e3;
+            box-shadow: none;
+            font-weight: 500;
+        }
+        .page-nav button:hover {
+            background: #f9faff;
+            border-color: #4c74ff;
+            color: #4c74ff;
+        }
+
+        #page-info {
+            color: #777;
+            font-weight: 500;
+            min-width: 100px;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        /* Zoom control – soft background */
+        .zoom-card {
+            background: #f3f6fb;
+            border-radius: 18px;
+            padding: 0.9rem 1.5rem;
+            border: 1px solid #e3e3e3;
+            box-shadow: 0 6px 12px -8px rgba(0,0,0,0.1);
+        }
+
+        #zoom-select {
+            background: white;
+            border: 1px solid #e3e3e3;
+            border-radius: 40px;
+            padding: 0.4rem 1.5rem 0.4rem 1rem;
+            color: #1e1e2f;
+            font-family: 'Inter', sans-serif;
+            margin-left: 0.5rem;
+            cursor: pointer;
+            outline: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        #zoom-select:hover {
+            border-color: #4c74ff;
+        }
+
+        #zoom-select option {
+            background: white;
+            color: #1e1e2f;
+        }
+
+        /* Extract text button – uses primary gradient (already) */
+        button[onclick="extractText()"] {
+            width: 100%;
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            border: none;
+            box-shadow: 0 12px 24px -12px #4c74ff;
+            font-weight: 600;
+            padding: 1rem;
+        }
+
+        /* Extracted text area */
+        #extracted-text {
+            background: #f3f6fb;
+            border: 1px solid #e3e3e3;
+            border-radius: 18px;
+            padding: 1.5rem;
+            height: 380px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-size: 0.95rem;
+            color: #1e1e2f;
+            line-height: 1.7;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.02);
+            margin-top: 0.8rem;
+        }
+
+        #extracted-text strong {
+            color: #4c74ff;
+            font-weight: 600;
+        }
+
+        /* Debug info – subtle card */
+        #debug-info {
+            background: #f3f6fb;
+            border-radius: 18px;
+            padding: 1.2rem 1.5rem;
+            border: 1px solid #e3e3e3;
+            font-size: 0.85rem;
+            color: #555;
+            box-shadow: 0 4px 10px -6px rgba(0,0,0,0.05);
+        }
+
+        #debug-info strong {
+            color: #777;
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        #debug-text {
+            word-break: break-word;
+            color: #4f4f6f;
+        }
+
+        /* Headings */
+        h4 {
+            color: #1e1e2f;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Error states – consistent soft card */
+        #pdf-viewer div[style*="text-align:center"] {
+            background: #fff5f5;
+            border-radius: 20px;
+            padding: 2rem !important;
+            border: 1px solid #ffd7d7;
+            box-shadow: 0 15px 30px -12px rgba(255, 70, 70, 0.15);
+            color: #b91c1c;
+        }
+
+        #pdf-viewer h3 {
+            color: #b91c1c;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        #pdf-viewer button {
+            margin: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            #controls-container {
+                max-height: none;
+            }
+            #viewer-container {
+                flex: auto;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f3f6fb;
+            border-radius: 20px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 20px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Icon simulation (simple via text, since no icons in original html, but we can add subtle emoji) 
+           we are NOT adding new content, but we can style existing text as icons via pseudo? 
+           To avoid adding new text, we just style buttons with gap – they already have ← and →.
+           we keep exactly the same text, no new icons.
+        */
+
+        /* Additional polish: left menu feeling – make #viewer-container slightly like a card with subtle active */
+        #viewer-container:after {
+            content: '';
+            display: block;
+            height: 0;
+        }
+
+        /* smooth hover on cards */
+        #controls-container > div, #controls-container > button {
+            transition: transform 0.15s ease, box-shadow 0.2s ease;
+        }
+        #controls-container > div:hover, #controls-container > button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 30px -12px rgba(74, 74, 140, 0.2);
+        }
+        /* except we don't want all divs to move, but it's fine */
+
+        /* the page-nav already has its own hover */
+        .page-nav:hover {
+            transform: none;
+            box-shadow: 0 6px 12px -8px rgba(0,0,0,0.1);
+        }
+
+        /* selected / active item simulation: we have no actual menu, but pdf-info gets subtle border */
+        #pdf-info {
+            border-left: 4px solid #8a52ff;
+        }
+
+        /* input background already f3f6fb */
+        /* secondary text color #777 applied to labels, etc */
+        label {
+            color: #777;
+            font-weight: 500;
+        }
+
+        /* make "Zoom:" label consistent */
+        .zoom-card label {
+            color: #777;
+        }
+
+        /* improve spacing */
+        .zoom-card {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* no additional mock content */
+    </style>
+</head>
+<body>
+    <!-- Left panel – PDF viewer (vertical sidebar feel with canvas) -->
+    <div id="viewer-container">
+        <div id="pdf-viewer"></div>
+    </div>
+    
+    <!-- Right panel – controls (main content area) -->
+    <div id="controls-container">
+        <!-- Back button – minimal top area -->
+        <button onclick="window.close()">← Back to PDF List</button>
+        
+        <!-- PDF info card -->
+        <div id="pdf-info">
+            <strong>PDF Info</strong>
+            <span id="pdf-title">Loading...</span>
+        </div>
+        
+        <!-- Page navigation card -->
+        <div class="page-nav">
+            <button onclick="prevPage()">← Previous</button>
+            <span id="page-info">Page: 1 / 1</span>
+            <button onclick="nextPage()">Next →</button>
+        </div>
+        
+        <!-- Zoom control – card style -->
+        <div class="zoom-card">
+            <label style="color:#777;">Zoom:
+                <select id="zoom-select" onchange="changeZoom()">
+                    <option value="1">100%</option>
+                    <option value="1.5" selected>150%</option>
+                    <option value="2">200%</option>
+                    <option value="0.75">75%</option>
+                </select>
+            </label>
+        </div>
+        
+        <!-- Extract text button – primary gradient -->
+        <button onclick="extractText()">Extract Text from Current Page</button>
+        
+        <!-- Extracted text section -->
+        <div>
+            <h4>Extracted Text</h4>
+            <div id="extracted-text">Click "Extract Text" button</div>
+        </div>
+        
+        <!-- Debug info -->
+        <div id="debug-info">
+            <strong>Debug</strong>
+            <div id="debug-text">Checking PDF ID...</div>
+        </div>
+    </div>
+
+    <!-- JavaScript - EXACT original, untouched -->
+    <script>
+    const API = "http://localhost:8080";
+    let token = localStorage.getItem("token");
+    let pdfDoc = null;
+    let currentPage = 1;
+    let scale = 1.5;
+    let currentPdfId = null;
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    // Function to get PDF ID from multiple sources
+    function getPDFId() {
+        console.log("=== Getting PDF ID ===");
+        
+        // 1. Try to get from URL parameters first
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlId = urlParams.get('id') || 
+                     urlParams.get('pdfId') || 
+                     urlParams.get('materialId') || 
+                     urlParams.get('documentId');
+        
+        if (urlId) {
+            console.log("Found ID in URL:", urlId);
+            // Store in localStorage for future use
+            localStorage.setItem('currentPDFId', urlId);
+            return urlId;
+        }
+        
+        // 2. Try localStorage
+        const localId = localStorage.getItem('currentPDFId');
+        if (localId) {
+            console.log("Found ID in localStorage:", localId);
+            return localId;
+        }
+        
+        // 3. Try sessionStorage
+        const sessionId = sessionStorage.getItem('currentPDFId');
+        if (sessionId) {
+            console.log("Found ID in sessionStorage:", sessionId);
+            localStorage.setItem('currentPDFId', sessionId); // Copy to localStorage
+            return sessionId;
+        }
+        
+        console.log("No PDF ID found in any source");
+        return null;
+    }
+
+    window.onload = function() {
+        if (!token) {
+            alert("Login required");
+            window.location.href = "../login.html";
+            return;
+        }
+        
+        // Get PDF ID
+        currentPdfId = getPDFId();
+        
+        // Update debug info
+        document.getElementById('debug-text').innerHTML = 
+            `PDF ID: ${currentPdfId || 'Not found'}<br>
+             Source: ${getPDFIdSource()}<br>
+             URL: ${window.location.href}`;
+        
+        if (!currentPdfId) {
+            showError("No PDF selected. Please select a PDF from the list.");
+            
+            // Add a button to go back
+            setTimeout(() => {
+                document.getElementById('pdf-viewer').innerHTML += `
+                    <div style="text-align:center; margin-top:20px;">
+                        <button onclick="window.location.href='pdf-list.html'" 
+                                style="padding:10px 20px;">
+                            ← Back to PDF List
+                        </button>
+                    </div>
+                `;
+            }, 100);
+            return;
+        }
+        
+        console.log("Loading PDF with ID:", currentPdfId);
+        loadPDF(currentPdfId);
+    };
+
+
+
+    function getPDFIdSource() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('id')) return 'URL (id parameter)';
+        if (urlParams.get('pdfId')) return 'URL (pdfId parameter)';
+        if (urlParams.get('materialId')) return 'URL (materialId parameter)';
+        if (localStorage.getItem('currentPDFId')) return 'localStorage';
+        if (sessionStorage.getItem('currentPDFId')) return 'sessionStorage';
+        return 'Unknown';
+    }
+
+    async function loadPDF(pdfId) {
+        try {
+            console.log("Fetching PDF from:", `${API}/student/material/pdf/base64/${pdfId}`);
+            
+            // Show loading message
+            document.getElementById('pdf-title').textContent = `Loading PDF ${pdfId}...`;
+            
+            const response = await fetch(`${API}/student/material/pdf/base64/${pdfId}`, {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            
+            console.log("Response status:", response.status);
+            
+            if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error(`PDF ${pdfId} not found on server`);
+                }
+                throw new Error(`Server error: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            console.log("PDF data received:", data);
+            
+            if (!data.success) {
+                throw new Error(data.error || 'Unknown error from server');
+            }
+            
+            // Update PDF title if available
+            if (data.title) {
+                document.getElementById('pdf-title').textContent = data.title;
+            } else {
+                document.getElementById('pdf-title').textContent = `PDF ${pdfId}`;
+            }
+            
+            // Load PDF from base64
+            const dataUrl = `data:application/pdf;base64,${data.data}`;
+            console.log("Loading PDF with data URL (length):", dataUrl.length);
+            
+            pdfjsLib.getDocument(dataUrl).promise.then(pdf => {
+                pdfDoc = pdf;
+                console.log("PDF loaded successfully, pages:", pdfDoc.numPages);
+                renderPage(currentPage);
+                
+                // Update debug info
+                document.getElementById('debug-text').innerHTML += 
+                    `<br>PDF loaded: ${pdfDoc.numPages} pages`;
+                
+            }).catch(err => {
+                console.error("PDF.js error:", err);
+                showError("Failed to load PDF document: " + err.message);
+            });
+            
+        } catch (err) {
+            console.error("Error in loadPDF:", err);
+            showError("Error: " + err.message);
+            
+            // Update debug info
+            document.getElementById('debug-text').innerHTML += 
+                `<br><span style="color:red;">Error: ${err.message}</span>`;
+        }
+    }
+
+    function renderPage(pageNum) {
+        if (!pdfDoc) return;
+        
+        pdfDoc.getPage(pageNum).then(page => {
+            const viewer = document.getElementById("pdf-viewer");
+            viewer.innerHTML = "";
+            
+            const canvas = document.createElement("canvas");
+            canvas.id = "pdf-canvas";
+            viewer.appendChild(canvas);
+            
+            const context = canvas.getContext('2d');
+            const viewport = page.getViewport({ scale: scale });
+            
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            
+            document.getElementById("page-info").textContent = 
+                `Page: ${pageNum} / ${pdfDoc.numPages}`;
+            
+            page.render({
+                canvasContext: context,
+                viewport: viewport
+            });
+            
+        }).catch(err => {
+            console.error("Error rendering page:", err);
+            showError("Error rendering page: " + err.message);
+        });
+    }
+
+    function prevPage() {
+        if (currentPage <= 1) return;
+        currentPage--;
+        renderPage(currentPage);
+    }
+
+    function nextPage() {
+        if (!pdfDoc || currentPage >= pdfDoc.numPages) return;
+        currentPage++;
+        renderPage(currentPage);
+    }
+
+    function changeZoom() {
+        const zoomSelect = document.getElementById('zoom-select');
+        scale = parseFloat(zoomSelect.value);
+        if (pdfDoc) {
+            renderPage(currentPage);
+        }
+    }
+
+    async function extractText() {
+        if (!pdfDoc) return;
+        
+        const textDiv = document.getElementById("extracted-text");
+        textDiv.textContent = "Extracting text from page " + currentPage + "...";
+        
+        try {
+            const page = await pdfDoc.getPage(currentPage);
+            const textContent = await page.getTextContent();
+            
+            let text = "";
+            textContent.items.forEach(item => {
+                text += item.str + " ";
+            });
+            
+            const cleanedText = text.trim();
+            if (cleanedText) {
+                textDiv.textContent = cleanedText;
+                // Add page info
+                textDiv.innerHTML = `<strong>Page ${currentPage}:</strong><br><br>${cleanedText}`;
+            } else {
+                textDiv.textContent = "No text found on this page (might be scanned/image PDF)";
+            }
+        } catch (err) {
+            textDiv.textContent = "Error extracting text: " + err.message;
+        }
+    }
+
+    function showError(message) {
+        const viewer = document.getElementById("pdf-viewer");
+        viewer.innerHTML = `
+            <div style="padding:20px; text-align:center;">
+                <h3 style="color:red;">Error Loading PDF</h3>
+                <p>${message}</p>
+                <p>PDF ID: ${currentPdfId || 'Unknown'}</p>
+                <div style="margin-top:20px;">
+                    <button onclick="window.location.href='pdf-list.html'" 
+                            style="padding:10px 20px; margin:5px;">
+                        ← Back to PDF List
+                    </button>
+                    <button onclick="location.reload()" 
+                            style="padding:10px 20px; margin:5px;">
+                        ↻ Retry
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+    
+    // Initialize zoom selector
+    document.addEventListener('DOMContentLoaded', function() {
+        const zoomSelect = document.getElementById('zoom-select');
+        zoomSelect.value = scale.toString();
+    });
+    </script>
+</body>
+</html>

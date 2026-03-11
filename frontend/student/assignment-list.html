@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My Assignments · Nebula</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: radial-gradient(circle at 10% 20%, #0c0a2a, #190f40, #200f4a);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1.5rem;
+            color: #ffffff;
+            line-height: 1.5;
+        }
+
+        .premium-container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .glass-card {
+            background: rgba(15, 18, 48, 0.6);
+            backdrop-filter: blur(18px) saturate(200%);
+            -webkit-backdrop-filter: blur(18px) saturate(200%);
+            border-radius: 3rem;
+            padding: 2.5rem 2.8rem;
+            box-shadow: 0 40px 70px -20px #030014, 0 0 0 1px rgba(160, 130, 255, 0.2) inset;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .header-section {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .back-btn {
+            background: rgba(25, 22, 60, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1.5px solid rgba(200, 170, 255, 0.25);
+            color: #eeeaff;
+            font-weight: 500;
+            font-size: 1rem;
+            padding: 0.7rem 1.8rem;
+            border-radius: 3rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 12px 28px -10px #0b0820;
+        }
+
+        .back-btn:hover {
+            background: rgba(45, 35, 95, 0.8);
+            border-color: #bba6ff;
+            transform: translateX(-2px);
+        }
+
+        .premium-title {
+            font-weight: 700;
+            font-size: 2.4rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(130deg, #ffffff, #e1d5ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            flex: 1;
+        }
+
+        #assignmentList {
+            margin-top: 1.5rem;
+        }
+
+        /* Assignment items */
+        .assignment-item {
+            background: rgba(25, 23, 60, 0.7) !important;
+            backdrop-filter: blur(8px) !important;
+            border: 1px solid rgba(200, 170, 255, 0.2) !important;
+            border-radius: 2rem !important;
+            padding: 1.5rem 2rem !important;
+            margin: 1rem 0 !important;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 15px 30px -12px #0d0825;
+        }
+
+        .assignment-item:hover {
+            transform: translateY(-3px);
+            border-color: rgba(220, 190, 255, 0.5) !important;
+            box-shadow: 0 22px 35px -10px #3f28a0 !important;
+            background: rgba(40, 35, 90, 0.8) !important;
+        }
+
+        /* Status-specific backgrounds - override JS inline styles */
+        .assignment-item[class*="status-not-viewed"] {
+            background: rgba(90, 70, 30, 0.7) !important;
+            border-left: 6px solid #ffb347 !important;
+        }
+        .assignment-item[class*="status-viewed"] {
+            background: rgba(30, 70, 100, 0.7) !important;
+            border-left: 6px solid #5bc0de !important;
+        }
+        .assignment-item[class*="status-submitted"] {
+            background: rgba(30, 80, 50, 0.7) !important;
+            border-left: 6px solid #5cb85c !important;
+        }
+
+        /* Status badge styling */
+        .status-badge {
+            padding: 0.4rem 1.2rem !important;
+            border-radius: 3rem !important;
+            font-size: 0.8rem !important;
+            font-weight: 600 !important;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            display: inline-block;
+            margin-left: 1rem !important;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .not-viewed { background: #ffb347 !important; }
+        .viewed { background: #5bc0de !important; }
+        .submitted { background: #5cb85c !important; }
+
+        /* Assignment content */
+        .assignment-item strong {
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .assignment-item small {
+            color: #b0b0d0;
+        }
+
+        /* Due date */
+        .assignment-item > div > div[style*="font-size: 12px"] {
+            color: #c0b8ff !important;
+            background: rgba(0,0,0,0.2);
+            padding: 0.3rem 1rem;
+            border-radius: 2rem;
+            font-weight: 500;
+        }
+
+        /* Subject line */
+        .assignment-item div[style*="margin-top: 8px"] {
+            color: #d0c8ff !important;
+            margin-top: 0.8rem !important;
+        }
+
+        /* Marks obtained */
+        .assignment-item div[style*="color: #28a745"] {
+            color: #8affb8 !important;
+            background: rgba(40, 180, 90, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            display: inline-block;
+            margin-top: 0.8rem;
+        }
+
+        /* Test mode notice */
+        #assignmentList > div[style*="background:#e7f1ff"] {
+            background: rgba(60, 55, 120, 0.8) !important;
+            border: 1px solid #9e8cff !important;
+            border-radius: 2rem !important;
+            color: #e4dbff !important;
+            padding: 1rem 1.5rem !important;
+            margin-bottom: 1.5rem;
+        }
+
+        #assignmentList > div[style*="background:#fff3cd"] {
+            background: rgba(90, 70, 30, 0.7) !important;
+            border: 1px solid #ffb347 !important;
+            border-radius: 2rem !important;
+            color: #ffe5b4 !important;
+        }
+
+        button {
+            background: rgba(60, 55, 120, 0.8);
+            border: 1.5px solid #9e8cff;
+            border-radius: 3rem;
+            padding: 0.7rem 2rem;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: rgba(80, 70, 160, 0.9);
+            border-color: #bba6ff;
+        }
+
+        @media (max-width: 650px) {
+            .glass-card { padding: 1.8rem 1.2rem; }
+            .premium-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="premium-container">
+        <div class="glass-card">
+            <div class="header-section">
+                <button class="back-btn" onclick="window.history.back()">← Back to Dashboard</button>
+                <h2 class="premium-title">📋 My Assignments</h2>
+            </div>
+            <div id="assignmentList">Loading assignments...</div>
+        </div>
+    </div>
+
+    <!-- JavaScript - EXACT original -->
+    <script>
+const API = "http://localhost:8080";
+let token = localStorage.getItem("token");
+
+window.onload = async function() {
+    if (!token) {
+        alert("Login required");
+        window.location.href = "../login.html";
+        return;
+    }
+    
+    // Try to get profile from localStorage first
+    let studentProfile = JSON.parse(localStorage.getItem("studentProfile") || '{}');
+    
+    // If no profile in localStorage, try to fetch it
+    if (!studentProfile.id) {
+        try {
+            const response = await fetch(`${API}/student/profile`, {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            
+            if (response.ok) {
+                studentProfile = await response.json();
+                localStorage.setItem("studentProfile", JSON.stringify(studentProfile));
+            } else {
+                // Profile not found - use test data
+                showTestMode();
+                return;
+            }
+        } catch (err) {
+            showTestMode();
+            return;
+        }
+    }
+    
+    // Now load assignments with the profile
+    await loadAssignments(studentProfile);
+};
+
+function showTestMode() {
+    document.getElementById("assignmentList").innerHTML = `
+        <div style="background:#fff3cd; padding:15px; border-radius:5px; margin:20px 0;">
+            <h3>⚠️ Test Mode</h3>
+            <p>Student profile not found. Using test data.</p>
+            <button onclick="useTestData()" style="padding:8px 16px; margin-top:10px;">
+                Continue with Test Data
+            </button>
+        </div>
+    `;
+}
+
+function useTestData() {
+    const testProfile = {
+        id: 1,
+        branch: "CSE",
+        semester: 2,
+        fullName: "Test Student"
+    };
+    
+    localStorage.setItem("studentProfile", JSON.stringify(testProfile));
+    loadAssignments(testProfile);
+}
+
+async function loadAssignments(studentProfile) {
+    const { id: studentId, branch, semester } = studentProfile;
+    
+    try {
+        const response = await fetch(
+            `${API}/student/assignment/list?studentId=${studentId}&branch=${branch}&semester=${semester}`,
+            {
+                headers: { 'Authorization': 'Bearer ' + token }
+            }
+        );
+        
+        if (!response.ok) throw new Error('Failed to load assignments');
+        
+        const assignments = await response.json();
+        displayAssignments(assignments);
+        
+    } catch (err) {
+        // If assignment endpoint fails, show test assignments
+        showTestAssignments();
+    }
+}
+function displayAssignments(assignments) {
+    const container = document.getElementById("assignmentList");
+    container.innerHTML = "";
+    
+    if (!assignments || assignments.length === 0) {
+        container.innerHTML = "<p>No assignments for your batch.</p>";
+        return;
+    }
+    
+    // Sort: pending first, then submitted
+    assignments.sort((a, b) => {
+        if (a.status === 'SUBMITTED' && b.status !== 'SUBMITTED') return 1;
+        if (a.status !== 'SUBMITTED' && b.status === 'SUBMITTED') return -1;
+        return 0;
+    });
+    
+    assignments.forEach(item => {
+        const assignment = item.assignment;
+        const status = item.status || "NOT_VIEWED";
+        
+        const div = document.createElement("div");
+        div.className = `assignment-item status-${status.toLowerCase().replace('_', '-')}`;
+        
+        const statusClass = status.toLowerCase().replace('_', '-');
+        const statusText = status.replace('_', ' ');
+        
+        div.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <strong>${assignment.title}</strong>
+                    <span class="status-badge ${statusClass}">${statusText}</span>
+                </div>
+                <div style="font-size: 12px; color: #666;">
+                    Due: ${new Date(assignment.dueDate).toLocaleDateString()}
+                </div>
+            </div>
+            <div style="margin-top: 8px; font-size: 14px;">
+                Subject: ${assignment.subject} | 
+                Marks: ${assignment.maxMarks}
+            </div>
+            ${item.marksObtained ? 
+                `<div style="margin-top: 5px; color: #28a745;">
+                    ✓ Marks Obtained: ${item.marksObtained}/${assignment.maxMarks}
+                </div>` : ''
+            }
+        `;
+        
+        div.onclick = () => openAssignment(assignment.id, status);
+        container.appendChild(div);
+    });
+}
+function openAssignment(assignmentId, currentStatus) {
+    // Mark as viewed if not already
+    if (currentStatus === "NOT_VIEWED") {
+        markAsViewed(assignmentId);
+    }
+    
+    localStorage.setItem("currentAssignmentId", assignmentId);
+    window.location.href = "assignment-details.html";
+}
+
+async function markAsViewed(assignmentId) {
+    const studentId = studentProfile.id;
+    try {
+        await fetch(`${API}/student/assignment/view/${assignmentId}?studentId=${studentId}`, {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+    } catch (err) {
+        console.error("Failed to mark as viewed:", err);
+    }
+}
+function showTestAssignments() {
+    const testAssignments = [
+        {
+            assignment: {
+                id: 1,
+                title: "Mathematics Assignment 1",
+                subject: "Mathematics",
+                dueDate: "2024-03-15T23:59:00",
+                maxMarks: 20,
+                description: "Solve calculus problems from chapter 1-3"
+            },
+            status: "NOT_VIEWED"
+        },
+        {
+            assignment: {
+                id: 2,
+                title: "Physics Lab Report",
+                subject: "Physics",
+                dueDate: "2024-03-10T23:59:00",
+                maxMarks: 15,
+                description: "Optics experiment analysis"
+            },
+            status: "VIEWED"
+        }
+    ];
+    
+    displayAssignments(testAssignments);
+    
+    // Show test mode notice
+    document.getElementById("assignmentList").innerHTML = 
+        `<div style="background:#e7f1ff; padding:10px; margin:10px 0; border-radius:5px;">
+            <small>⚠️ Showing test data - Real assignments will load when profile is created</small>
+        </div>` + document.getElementById("assignmentList").innerHTML;
+}
+
+// Rest of your existing displayAssignments function...
+</script>
+</body>
+</html>

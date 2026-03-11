@@ -1,0 +1,27 @@
+<input id="user" placeholder="username">
+<input id="pass" type="password" placeholder="password">
+
+<select id="role">
+  <option value="STUDENT">Student</option>
+  <option value="TEACHER">Teacher</option>
+  <option value="ADMIN">Admin</option>
+</select>
+
+<button onclick="register()">Register</button>
+
+<script>
+async function register() {
+  const res = await fetch("http://localhost:8080/auth/register", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      username: user.value,
+      password: pass.value,
+      role: role.value
+    })
+  });
+
+  const text = await res.text();
+  alert(text);
+}
+</script>

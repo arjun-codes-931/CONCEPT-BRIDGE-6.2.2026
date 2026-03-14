@@ -87,4 +87,8 @@ public class Assignment {
     public Integer getMaxMarks() { return maxMarks; }
     public String getAttachmentUrl() { return attachmentUrl; }
     public LocalDateTime getCreatedAt() { return createdAt; }
+
+    public Long getCreatedBy() {
+        return createdBy;
+    }
 }

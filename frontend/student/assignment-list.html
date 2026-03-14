@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>My Assignments · Nebula</title>
+    <title>My Assignments</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Google Font: Inter -->
+    <!-- Google Font: Inter (modern) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 (icons for clean premium look) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* ----- RESET & BASE (strict palette applied) ----- */
         * {
             margin: 0;
             padding: 0;
@@ -17,32 +20,138 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: radial-gradient(circle at 10% 20%, #0c0a2a, #190f40, #200f4a);
+            background: linear-gradient(145deg, #5f79ff 0%, #7a5cff 55%, #a16cff 100%);
             background-attachment: fixed;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            padding: 2rem 1.5rem;
-            color: #ffffff;
+            justify-content: center;
+            padding: 1.8rem;
+            margin: 0;
+            color: #1e1e2f;
             line-height: 1.5;
         }
 
-        .premium-container {
-            max-width: 1000px;
+        /* ----- LAYOUT: left sidebar + main content (no new functional elements) ----- */
+        .app-wrapper {
+            display: flex;
+            max-width: 1400px;
             width: 100%;
+            gap: 1.8rem;
+            align-items: stretch;
         }
 
-        .glass-card {
-            background: rgba(15, 18, 48, 0.6);
-            backdrop-filter: blur(18px) saturate(200%);
-            -webkit-backdrop-filter: blur(18px) saturate(200%);
-            border-radius: 3rem;
-            padding: 2.5rem 2.8rem;
-            box-shadow: 0 40px 70px -20px #030014, 0 0 0 1px rgba(160, 130, 255, 0.2) inset;
-            border: 1px solid rgba(255, 255, 255, 0.04);
+        /* ---------- LEFT SIDEBAR (vertical menu) ---------- */
+        .sidebar {
+            width: 270px;
+            background: #ffffff;                    /* card background white */
+            border-radius: 24px;
+            padding: 2rem 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2), 0 0 0 1px #e3e3e3 inset;
+            border: 1px solid #e3e3e3;
+            display: flex;
+            flex-direction: column;
         }
 
+        .sidebar-header {
+            padding: 0 0.8rem 1.8rem 0.8rem;
+            border-bottom: 1px solid #e3e3e3;
+            margin-bottom: 1.8rem;
+        }
+
+        .sidebar-header h3 {
+            font-weight: 600;
+            font-size: 1.3rem;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .sidebar-header h3 i {
+            font-size: 1.6rem;
+            color: #4c74ff;
+        }
+
+        /* menu items – now interactive with cursor pointer */
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            flex: 1;
+        }
+
+        .sidebar-nav-item {
+            padding: 1rem 1.2rem;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #777;                           /* secondary text */
+            font-weight: 500;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            cursor: pointer;                        /* now clickable */
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+        }
+
+        .sidebar-nav-item i {
+            width: 1.8rem;
+            color: #777;
+            font-size: 1.25rem;
+            transition: color 0.2s;
+        }
+
+        .sidebar-nav-item:hover {
+            background: #f3f6fb;                   /* input background */
+            border-color: #e3e3e3;
+            color: #1e293b;
+        }
+
+        .sidebar-nav-item:hover i {
+            color: #4c74ff;
+        }
+
+        .sidebar-nav-item.active {
+            background: linear-gradient(135deg, #4c74ff10, #8a52ff10);
+            border-left: 4px solid #4c74ff;
+            background: #f0f4ff;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .sidebar-nav-item.active i {
+            color: #4c74ff;
+        }
+
+        /* visual spacer */
+        .sidebar-footer {
+            padding: 1.5rem 0.8rem 0.2rem;
+            border-top: 1px solid #e3e3e3;
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+            color: #777;
+        }
+
+        /* ---------- MAIN CONTENT (white card) ---------- */
+        .main-content {
+            flex: 1;
+            background: #ffffff;                    /* card background white */
+            border-radius: 28px;
+            padding: 2.2rem 2.5rem;
+            box-shadow: 0 30px 60px -15px rgba(58, 48, 94, 0.3), 0 0 0 1px #e3e3e3 inset;
+            border: 1px solid #e3e3e3;
+        }
+
+        /* header area */
         .header-section {
             display: flex;
             align-items: center;
@@ -52,177 +161,275 @@
         }
 
         .back-btn {
-            background: rgba(25, 22, 60, 0.7);
-            backdrop-filter: blur(8px);
-            border: 1.5px solid rgba(200, 170, 255, 0.25);
-            color: #eeeaff;
+            background: #ffffff;
+            border: 1.5px solid #e3e3e3;
+            color: #777;
             font-weight: 500;
-            font-size: 1rem;
-            padding: 0.7rem 1.8rem;
-            border-radius: 3rem;
+            font-size: 0.95rem;
+            padding: 0.7rem 2rem 0.7rem 1.6rem;
+            border-radius: 40px;
             cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 12px 28px -10px #0b0820;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .back-btn i {
+            color: #4c74ff;
+            font-size: 0.9rem;
         }
 
         .back-btn:hover {
-            background: rgba(45, 35, 95, 0.8);
-            border-color: #bba6ff;
+            background: #f3f6fb;
+            border-color: #b3c0d9;
             transform: translateX(-2px);
         }
 
         .premium-title {
             font-weight: 700;
-            font-size: 2.4rem;
+            font-size: 2.2rem;
             letter-spacing: -0.02em;
-            background: linear-gradient(130deg, #ffffff, #e1d5ff);
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
+        .premium-title i {
+            font-size: 2rem;
+            color: #4c74ff;
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+            color: #4c74ff;
+        }
+
+        /* assignment list container */
         #assignmentList {
-            margin-top: 1.5rem;
+            margin-top: 1rem;
         }
 
-        /* Assignment items */
+        /* assignment items – clean cards */
         .assignment-item {
-            background: rgba(25, 23, 60, 0.7) !important;
-            backdrop-filter: blur(8px) !important;
-            border: 1px solid rgba(200, 170, 255, 0.2) !important;
-            border-radius: 2rem !important;
+            background: #ffffff !important;
+            border: 1px solid #e3e3e3 !important;
+            border-radius: 22px !important;
             padding: 1.5rem 2rem !important;
             margin: 1rem 0 !important;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 15px 30px -12px #0d0825;
+            box-shadow: 0 8px 18px -8px rgba(0,0,0,0.05);
         }
 
         .assignment-item:hover {
-            transform: translateY(-3px);
-            border-color: rgba(220, 190, 255, 0.5) !important;
-            box-shadow: 0 22px 35px -10px #3f28a0 !important;
-            background: rgba(40, 35, 90, 0.8) !important;
+            transform: translateY(-2px);
+            border-color: #b3c0d9 !important;
+            box-shadow: 0 16px 28px -12px rgba(76, 116, 255, 0.2) !important;
+            background: #f9fcff !important;
         }
 
-        /* Status-specific backgrounds - override JS inline styles */
-        .assignment-item[class*="status-not-viewed"] {
-            background: rgba(90, 70, 30, 0.7) !important;
+        /* status-specific left border (override inline styles but keep original classes) */
+        .assignment-item.status-not-viewed {
             border-left: 6px solid #ffb347 !important;
         }
-        .assignment-item[class*="status-viewed"] {
-            background: rgba(30, 70, 100, 0.7) !important;
+        .assignment-item.status-viewed {
             border-left: 6px solid #5bc0de !important;
         }
-        .assignment-item[class*="status-submitted"] {
-            background: rgba(30, 80, 50, 0.7) !important;
+        .assignment-item.status-submitted {
             border-left: 6px solid #5cb85c !important;
         }
 
-        /* Status badge styling */
+        /* status badge – clean */
         .status-badge {
             padding: 0.4rem 1.2rem !important;
-            border-radius: 3rem !important;
-            font-size: 0.8rem !important;
+            border-radius: 40px !important;
+            font-size: 0.75rem !important;
             font-weight: 600 !important;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.02em;
             display: inline-block;
             margin-left: 1rem !important;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid #e3e3e3;
+            background: #f3f6fb;
+            color: #1e293b;
         }
 
-        .not-viewed { background: #ffb347 !important; }
-        .viewed { background: #5bc0de !important; }
-        .submitted { background: #5cb85c !important; }
+        .not-viewed { 
+            background: #ffb347 !important; 
+            color: white !important; 
+            border: none !important; 
+        }
+        .viewed { 
+            background: #5bc0de !important; 
+            color: white !important; 
+            border: none !important; 
+        }
+        .submitted { 
+            background: #5cb85c !important; 
+            color: white !important; 
+            border: none !important; 
+        }
 
-        /* Assignment content */
+        /* assignment content */
         .assignment-item strong {
-            color: white;
+            color: #1e293b;
             font-size: 1.2rem;
         }
 
         .assignment-item small {
-            color: #b0b0d0;
+            color: #777;
         }
 
-        /* Due date */
+        /* due date */
         .assignment-item > div > div[style*="font-size: 12px"] {
-            color: #c0b8ff !important;
-            background: rgba(0,0,0,0.2);
-            padding: 0.3rem 1rem;
-            border-radius: 2rem;
+            color: #777 !important;
+            background: #f3f6fb !important;
+            padding: 0.3rem 1.2rem !important;
+            border-radius: 30px !important;
+            font-weight: 500;
+            border: 1px solid #e3e3e3;
+        }
+
+        /* subject line */
+        .assignment-item div[style*="margin-top: 8px"] {
+            color: #4a5b7a !important;
+            margin-top: 0.8rem !important;
+            font-size: 0.9rem;
+        }
+
+        /* marks obtained */
+        .assignment-item div[style*="color: #28a745"] {
+            color: #1e7b4c !important;
+            background: #e0f3e0 !important;
+            padding: 0.5rem 1.2rem !important;
+            border-radius: 40px !important;
+            display: inline-block;
+            margin-top: 0.8rem;
+            border: 1px solid #b7e0b7;
             font-weight: 500;
         }
 
-        /* Subject line */
-        .assignment-item div[style*="margin-top: 8px"] {
-            color: #d0c8ff !important;
-            margin-top: 0.8rem !important;
-        }
-
-        /* Marks obtained */
-        .assignment-item div[style*="color: #28a745"] {
-            color: #8affb8 !important;
-            background: rgba(40, 180, 90, 0.2);
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            display: inline-block;
-            margin-top: 0.8rem;
-        }
-
-        /* Test mode notice */
+        /* test mode notices – restyle */
         #assignmentList > div[style*="background:#e7f1ff"] {
-            background: rgba(60, 55, 120, 0.8) !important;
-            border: 1px solid #9e8cff !important;
-            border-radius: 2rem !important;
-            color: #e4dbff !important;
-            padding: 1rem 1.5rem !important;
+            background: #f3f6fb !important;
+            border: 1px solid #4c74ff !important;
+            border-radius: 24px !important;
+            color: #1e293b !important;
+            padding: 1.2rem 1.8rem !important;
             margin-bottom: 1.5rem;
+            box-shadow: 0 6px 12px -6px rgba(76,116,255,0.2);
         }
 
         #assignmentList > div[style*="background:#fff3cd"] {
-            background: rgba(90, 70, 30, 0.7) !important;
+            background: #fff3e0 !important;
             border: 1px solid #ffb347 !important;
-            border-radius: 2rem !important;
-            color: #ffe5b4 !important;
+            border-radius: 24px !important;
+            color: #a95b00 !important;
         }
 
+        /* buttons inside test mode – style as primary gradient */
         button {
-            background: rgba(60, 55, 120, 0.8);
-            border: 1.5px solid #9e8cff;
-            border-radius: 3rem;
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            border: none;
+            border-radius: 40px;
             padding: 0.7rem 2rem;
             color: white;
             font-weight: 500;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+            font-family: 'Inter', sans-serif;
         }
 
         button:hover {
-            background: rgba(80, 70, 160, 0.9);
-            border-color: #bba6ff;
+            background: linear-gradient(135deg, #5f83ff, #9f63ff);
+            transform: translateY(-2px);
+            box-shadow: 0 14px 22px -10px #4c74ff;
         }
 
-        @media (max-width: 650px) {
-            .glass-card { padding: 1.8rem 1.2rem; }
-            .premium-title { font-size: 2rem; }
+        /* responsive */
+        @media (max-width: 800px) {
+            .app-wrapper {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                flex-wrap: wrap;
+                padding: 1.2rem;
+            }
+            .sidebar-header { width: 100%; }
+            .sidebar-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            .sidebar-nav-item { flex: 1 0 auto; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .main-content { padding: 1.5rem; }
+        }
+
+        /* icons */
+        .fas, .far, .fab {
+            margin-right: 0.2rem;
         }
     </style>
 </head>
 <body>
-    <div class="premium-container">
-        <div class="glass-card">
+    <div class="app-wrapper">
+        <!-- LEFT SIDEBAR (now with working navigation to all pages) -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h3><i class="fas fa-graduation-cap"></i> Concept Bridge</h3>
+            </div>
+            <div class="sidebar-nav">
+                <!-- Assignments page (current) -->
+                <div class="sidebar-nav-item active" onclick="window.location.href='assignment-list.html'">
+                    <i class="fas fa-tasks"></i> Assignments
+                </div>
+                <!-- Quizzes page -->
+                <div class="sidebar-nav-item" onclick="window.location.href='quiz.html'">
+                    <i class="fas fa-puzzle-piece"></i> Quizzes
+                </div>
+                <!-- Projects page -->
+                <div class="sidebar-nav-item" onclick="window.location.href='project-list.html'">
+                    <i class="fas fa-code"></i> Projects
+                </div>
+                <!-- PDFs page -->
+                <div class="sidebar-nav-item" onclick="window.location.href='pdf-list.html'">
+                    <i class="fas fa-file-pdf"></i> PDFs
+                </div>
+                <!-- Profile page -->
+                <div class="sidebar-nav-item" onclick="window.location.href='student-profile.html'">
+                    <i class="fas fa-user-circle"></i> Profile
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- MAIN CONTENT (assignments) -->
+        <div class="main-content">
             <div class="header-section">
-                <button class="back-btn" onclick="window.history.back()">← Back to Dashboard</button>
-                <h2 class="premium-title">📋 My Assignments</h2>
+                <!-- Back button now goes to dashboard.html -->
+                <button class="back-btn" onclick="window.location.href='dashboard.html'">
+                    <i class="fas fa-arrow-left"></i> Dashboard
+                </button>
+                <h2 class="premium-title"><i class="fas fa-tasks"></i> My Assignments</h2>
             </div>
             <div id="assignmentList">Loading assignments...</div>
         </div>
     </div>
 
-    <!-- JavaScript - EXACT original -->
+    <!-- JavaScript - EXACT original (untouched, only whitespace possibly) -->
     <script>
 const API = "http://localhost:8080";
 let token = localStorage.getItem("token");

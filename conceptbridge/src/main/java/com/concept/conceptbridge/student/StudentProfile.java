@@ -43,6 +43,7 @@ public class StudentProfile {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+
     public StudentProfile() {}
 
     // ✅ ADMIN constructor

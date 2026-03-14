@@ -799,26 +799,8 @@
             <!-- RIGHT CONTENT AREA -->
             <div class="content-area">
                 <!-- Filter Section -->
-                <div class="filter-card">
-                    <div class="filter-header">
-                        <i class="fas fa-filter"></i>
-                        <h3>Filter Assignments</h3>
-                    </div>
-                    <div class="filter-row">
-                        <div class="filter-item">
-                            <label>Branch</label>
-                            <input type="text" id="filterBranch" placeholder="e.g., CSE">
-                        </div>
-                        <div class="filter-item">
-                            <label>Subject</label>
-                            <input type="text" id="filterSubject" placeholder="e.g., Mathematics">
-                        </div>
-                        <div class="filter-actions">
-                            <button class="btn-primary" onclick="applyFilter()"><i class="fas fa-check"></i> Apply</button>
-                            <button class="btn-secondary" onclick="clearFilter()"><i class="fas fa-times"></i> Clear</button>
-                        </div>
-                    </div>
-                </div>
+                <!-- Filter Section -->
+
 
                 <!-- Assignments List Section -->
                 <div id="assignmentsSection" class="assignments-section">
@@ -966,42 +948,34 @@ document.addEventListener('click', function(e) {
         
         // Load assignments
         function loadAssignments() {
-            const teacherId = getTeacherId();
-            const branch = document.getElementById('filterBranch').value;
-            const subject = document.getElementById('filterSubject').value;
-            
-            let url = `http://localhost:8080/teacher/assignment?teacherId=${teacherId}`;
-            if (branch || subject) {
-                url += `&branch=${encodeURIComponent(branch)}&subject=${encodeURIComponent(subject)}`;
-            }
-            
-            console.log('Fetching:', url);
-            
-            fetch(url, {
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(assignments => {
-                displayAssignments(assignments);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('assignmentsContainer').innerHTML = `
-                    <div style="color: #dc2626; background: #fef2f2; border-radius:12px; padding:2rem; text-align:center; border:1px solid #fecaca;">
-                        <i class="fas fa-exclamation-triangle" style="font-size:2rem; margin-bottom:1rem; color:#dc2626;"></i>
-                        <p>Error loading assignments: ${error.message}</p>
-                        <button onclick="loadAssignments()" class="btn-secondary" style="margin-top:1rem;"><i class="fas fa-redo"></i> Try Again</button>
-                    </div>
-                `;
-            });
+    const teacherId = getTeacherId();
+
+    const url = `http://localhost:8080/teacher/assignment?teacherId=${teacherId}`;
+
+    fetch(url, {
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(assignments => {
+        displayAssignments(assignments);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('assignmentsContainer').innerHTML = `
+            <div style="color: #dc2626; background: #fef2f2; border-radius:12px; padding:2rem; text-align:center; border:1px solid #fecaca;">
+                <i class="fas fa-exclamation-triangle" style="font-size:2rem; margin-bottom:1rem; color:#dc2626;"></i>
+                <p>Error loading assignments: ${error.message}</p>
+            </div>
+        `;
+    });
+}
         
         // Display assignments
         function displayAssignments(assignments) {
@@ -1195,15 +1169,14 @@ Attachment: ${assignment.attachmentUrl || 'None'}`);
         
         // Filter functions
         function applyFilter() {
-            loadAssignments();
-        }
-        
-        function clearFilter() {
-            document.getElementById('filterBranch').value = '';
-            document.getElementById('filterSubject').value = '';
-            loadAssignments();
-        }
-        
+    loadAssignments();
+}
+
+function clearFilter() {
+    document.getElementById('filterBranch').value = '';
+    document.getElementById('filterSubject').value = '';
+    loadAssignments();
+}
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
             const token = localStorage.getItem('token');

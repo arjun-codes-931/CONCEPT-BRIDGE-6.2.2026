@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Teacher · Student Projects · Nebula</title>
+    <title>Teacher · Student Projects · Nexus</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Google Font: Inter (modern academic) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 (icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -17,53 +19,63 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(145deg, #5f79ff 0%, #7a5cff 50%, #a16cff 100%);
+            background: linear-gradient(145deg, #5f79ff, #7a5cff, #a16cff);
             background-attachment: fixed;
             min-height: 100vh;
             padding: 1.5rem;
             display: flex;
             gap: 1.5rem;
-            color: #1e1e2f;
             line-height: 1.5;
         }
 
-        /* ---------- LEFT SIDE MENU (vertical sidebar) ---------- */
+        /* ---------- LEFT VERTICAL SIDEBAR ---------- */
         .sidebar {
-            flex: 0 0 260px;
+            flex: 0 0 280px;
             background: white;
-            border-radius: 20px;
+            border-radius: 24px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
             border: 1px solid #e3e3e3;
             padding: 2rem 1rem 1.5rem 1rem;
             display: flex;
             flex-direction: column;
-            gap: 1.2rem;
+            gap: 1.5rem;
             height: fit-content;
             max-height: calc(100vh - 3rem);
             position: sticky;
             top: 1.5rem;
         }
 
-        .sidebar-header {
-            padding: 0 0.8rem 1rem 0.8rem;
-            border-bottom: 1px solid #e3e3e3;
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-left: 0.8rem;
+            margin-bottom: 0.5rem;
         }
 
-        .sidebar-header h2 {
-            font-size: 1.4rem;
+        .brand-icon {
+            width: 2.8rem;
+            height: 2.8rem;
+            background: linear-gradient(145deg, #4c74ff, #8a52ff);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 14px -6px #4c74ff66;
+        }
+
+        .brand-icon i {
+            font-size: 1.6rem;
+            color: white;
+        }
+
+        .brand-text {
             font-weight: 700;
-            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            font-size: 1.4rem;
+            background: linear-gradient(145deg, #1e1e3f, #4c74ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -0.3px;
-        }
-
-        .sidebar-header p {
-            color: #777;
-            font-size: 0.85rem;
-            margin-top: 0.2rem;
-            font-weight: 500;
+            letter-spacing: -0.02em;
         }
 
         .nav-menu {
@@ -75,8 +87,8 @@
         .nav-item {
             display: flex;
             align-items: center;
-            gap: 0.9rem;
-            padding: 0.85rem 1rem;
+            gap: 1rem;
+            padding: 0.9rem 1rem;
             border-radius: 16px;
             color: #4a4a6a;
             font-weight: 500;
@@ -90,25 +102,31 @@
             cursor: default;
         }
 
-        /* active item simulation: first item */
-        .nav-item.active {
-            background: linear-gradient(135deg, #4c74ff0c, #8a52ff0c);
-            color: #4c74ff;
+        .nav-item i {
+            font-size: 1.3rem;
+            width: 2rem;
+            text-align: center;
+            background: linear-gradient(145deg, #4c74ff, #8a52ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-item span {
             font-weight: 600;
+        }
+
+        .nav-item.active {
+            background: #f3f6fb;
             border-left: 4px solid #8a52ff;
             border-radius: 16px 12px 12px 16px;
+            color: #1e1e3a;
         }
 
         .nav-item:hover {
             background: #f3f6fb;
-            color: #4c74ff;
             transform: translateX(4px);
-        }
-
-        .nav-item i {
-            font-style: normal;
-            width: 24px;
-            text-align: center;
+            color: #4c74ff;
         }
 
         .sidebar-footer {
@@ -117,14 +135,47 @@
             border-top: 1px solid #e3e3e3;
         }
 
+        .logout-btn {
+            background: #f3f6fb;
+            border: 1px solid #e3e3e3;
+            border-radius: 40px;
+            padding: 0.9rem 1.2rem;
+            color: #4c516d;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .logout-btn i {
+            font-size: 1.2rem;
+            color: #777;
+        }
+
+        .logout-btn:hover {
+            background: white;
+            border-color: #ffb7b7;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 18px -14px #e5515b;
+        }
+        .logout-btn:hover i {
+            color: #e5515b;
+        }
+
         /* ---------- MAIN CONTENT AREA ---------- */
         .main-content {
             flex: 1;
             background: white;
-            border-radius: 24px;
+            border-radius: 28px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             border: 1px solid #e3e3e3;
-            padding: 2rem 2rem;
+            padding: 2rem 2.5rem;
             overflow-y: auto;
             max-height: calc(100vh - 3rem);
         }
@@ -137,16 +188,17 @@
             margin-bottom: 2rem;
             padding-bottom: 0.75rem;
             border-bottom: 1px solid #e3e3e3;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .top-header h1 {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #1e1e2f, #4c74ff);
+            background: linear-gradient(145deg, #1e1e30, #4c74ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.02em;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -154,13 +206,12 @@
 
         .header-actions {
             display: flex;
-            gap: 1rem;
+            gap: 0.8rem;
         }
 
-        /* Buttons – primary gradient, soft rounded */
+        /* buttons */
         .btn {
-            padding: 0.7rem 1.5rem;
-            border: none;
+            padding: 0.7rem 1.6rem;
             border-radius: 40px;
             font-weight: 600;
             font-size: 0.95rem;
@@ -170,55 +221,36 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            box-shadow: 0 8px 16px -8px rgba(0,0,0,0.1);
             border: 1px solid transparent;
         }
 
         .btn-primary {
-            background: white;
-            color: #4c74ff;
+            background: #f3f6fb;
             border: 1px solid #e3e3e3;
+            color: #3f3f60;
         }
         .btn-primary:hover {
-            background: #f3f6fb;
+            background: white;
+            border-color: #b5c8ff;
             transform: translateY(-2px);
+            box-shadow: 0 8px 16px -10px #4c74ff;
         }
 
         .btn-danger {
             background: #fff1f0;
-            color: #d14545;
             border: 1px solid #ffcdcd;
+            color: #d14545;
         }
         .btn-danger:hover {
             background: #ffe5e5;
             transform: translateY(-2px);
         }
 
-        /* gradient primary button (used inside table) */
-        .btn-gradient {
-            background: linear-gradient(135deg, #4c74ff, #8a52ff);
-            color: white;
-            border: none;
-            padding: 0.5rem 1.3rem;
-            border-radius: 30px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            box-shadow: 0 8px 16px -8px #4c74ff;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: 'Inter', sans-serif;
-        }
-        .btn-gradient:hover {
-            background: linear-gradient(135deg, #5f83ff, #9b66ff);
-            transform: translateY(-2px);
-            box-shadow: 0 12px 20px -10px #4c74ff;
-        }
-
-        /* Teacher info card */
+        /* teacher info card */
         .teacher-info-card {
-            background: #f3f6fb;
+            background: #f9fbfe;
             border: 1px solid #e3e3e3;
-            border-radius: 18px;
+            border-radius: 22px;
             padding: 1.5rem 2rem;
             margin-bottom: 2.5rem;
             display: flex;
@@ -228,99 +260,118 @@
             box-shadow: 0 8px 18px -10px rgba(0,0,0,0.1);
         }
 
-        .teacher-info-item {
+        .teacher-info-card p {
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            color: #1e1e30;
+            font-weight: 500;
+            margin: 0.25rem 0;
         }
-
-        .teacher-info-item .label {
+        .teacher-info-card i {
+            background: linear-gradient(145deg, #4c74ff, #8a52ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            width: 1.5rem;
+        }
+        .teacher-info-card small {
             color: #777;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            font-weight: 600;
         }
 
-        .teacher-info-item .value {
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: #1e1e2f;
-            margin-top: 0.15rem;
-        }
-
-        .teacher-info-item.small .value {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #4c74ff;
-        }
-
-        /* Section title */
+        /* section title */
         .section-title {
             display: flex;
             align-items: center;
             gap: 0.6rem;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: 700;
             margin-bottom: 1.5rem;
-            color: #1e1e2f;
+            color: #1e1e30;
+        }
+        .section-title i {
+            background: linear-gradient(145deg, #4c74ff, #8a52ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
-        /* Table styling – clean card */
+        /* table card */
         .table-wrapper {
-            border-radius: 18px;
+            border-radius: 22px;
             border: 1px solid #e3e3e3;
-            background: white;
+            background: #f9fbfe;
             overflow: auto;
-            box-shadow: 0 8px 20px -12px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 20px -12px rgba(0,0,0,0.12);
+            padding: 0.5rem 0;
         }
 
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0 0.8rem;
             min-width: 700px;
+            padding: 0 1rem;
         }
 
         th {
-            background: #f3f6fb;
-            color: #4a4a6a;
-            font-weight: 600;
-            font-size: 0.9rem;
-            padding: 1.2rem 1rem;
             text-align: left;
+            padding: 1rem 1rem 0.8rem 1rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #777;
             border-bottom: 1px solid #e3e3e3;
+            background: transparent;
         }
 
         td {
             padding: 1rem 1rem;
-            border-bottom: 1px solid #e3e3e3;
-            color: #2e2e44;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
+            background: white;
+            border: 1px solid #e3e3e3;
+            border-radius: 18px;
+            color: #1e1e30;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 10px -8px rgba(0,0,0,0.1);
         }
 
         tr:hover td {
-            background-color: #f9faff;
+            background: #f3f6fb;
+            border-color: #b5c8ff;
         }
 
-        /* badge */
         .badge {
             display: inline-block;
-            padding: 0.3rem 1rem;
-            border-radius: 40px;
+            padding: 0.25rem 1rem;
+            border-radius: 30px;
             font-size: 0.8rem;
             font-weight: 600;
-            background: #e8edff;
+            background: #f3f6fb;
             color: #4c74ff;
+            border: 1px solid #e3e3e3;
         }
 
-        .badge-info {
-            background: #e8edff;
-            color: #4c74ff;
+        /* view button in table */
+        td button {
+            background: linear-gradient(145deg, #4c74ff, #8a52ff);
+            border: none;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            box-shadow: 0 8px 12px -8px #4c74ff;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        td button:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(145deg, #5f83ff, #9b66ff);
+            box-shadow: 0 12px 18px -10px #4c74ff;
         }
 
-        /* error / loading */
         .error-box {
             background: #ffe8e8;
             border: 1px solid #ffc9c9;
@@ -328,65 +379,18 @@
             padding: 1.5rem;
             color: #b00020;
             font-weight: 500;
-            margin: 1rem 0;
         }
 
         .loading {
             color: #777;
-            font-style: italic;
             padding: 2rem;
             text-align: center;
         }
 
-        /* preserve original IDs and classes – we override but keep them functional */
-        .container { max-width: 100%; margin: 0; background: transparent; padding: 0; box-shadow: none; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 0; border-bottom: none; }
-        .teacher-info { background: transparent; padding: 0; border-left: none; margin-bottom: 0; }
-        #teacherInfo .loading { display: block; } /* we replace content anyway */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f3f6fb; border-radius: 12px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(145deg, #4c74ff, #8a52ff); border-radius: 12px; }
 
-        /* ensure old buttons match new design */
-        .btn-primary { background: white; color: #4c74ff; border: 1px solid #e3e3e3; }
-        .btn-danger { background: #fff1f0; color: #d14545; border: 1px solid #ffcdcd; }
-
-        /* style the "View" button inside table (original) */
-        td button[onclick^="viewStudentProjects"] {
-            background: linear-gradient(135deg, #4c74ff, #8a52ff);
-            border: none;
-            color: white;
-            padding: 0.5rem 1.3rem;
-            border-radius: 30px;
-            font-weight: 500;
-            font-size: 0.85rem;
-            cursor: pointer;
-            box-shadow: 0 8px 12px -8px #4c74ff;
-            transition: all 0.2s;
-            font-family: 'Inter', sans-serif;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        td button[onclick^="viewStudentProjects"]:hover {
-            transform: translateY(-2px);
-            background: linear-gradient(135deg, #5f83ff, #9b66ff);
-            box-shadow: 0 12px 18px -10px #4c74ff;
-        }
-
-        /* custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f3f6fb;
-            border-radius: 20px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 20px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-        /* responsive */
         @media (max-width: 900px) {
             body {
                 flex-direction: column;
@@ -405,21 +409,21 @@
     <script src="../js/auth.js"></script>
 </head>
 <body>
-    <!-- LEFT SIDE MENU (vertical sidebar) – icons + labels using text/emoji -->
+    <!-- LEFT VERTICAL SIDEBAR -->
     
 
-    <!-- MAIN CONTENT AREA (cards) -->
+    <!-- MAIN CONTENT AREA -->
     <main class="main-content">
         <!-- TOP AREA header minimal -->
         <div class="top-header">
-            <h1>📚 Student Projects</h1>
+            <h1><i class="fas fa-folder-open"></i> Student Projects</h1>
             <div class="header-actions">
                 <!-- original buttons, with original classes and IDs -->
                 <button id="backBtn" class="btn btn-primary" onclick="window.location.href='dashboard.html'">
-                    ← Back to Dashboard
+                    <i class="fas fa-arrow-left"></i> Dashboard
                 </button>
                 <button id="logoutBtn" class="btn btn-danger" onclick="logout()">
-                    Logout
+                    <i class="fas fa-sign-out-alt"></i> Logout
                 </button>
             </div>
         </div>
@@ -435,7 +439,7 @@
             
             <div id="studentsContainer">
                 <div class="section-title">
-                    <span>👨‍🎓</span> Students in Your Department
+                    <i class="fas fa-users"></i> Students in Your Department
                 </div>
                 <div class="table-wrapper">
                     <table>
@@ -560,14 +564,12 @@
             // Hide error container if visible
             document.getElementById('errorContainer').style.display = 'none';
             
-            // Show teacher info – we style it as cards, but keep the same inner HTML structure
-            // to not break any JS expectations, we just inject the same HTML format,
-            // but it will inherit the teacher-info-card styling.
+            // Show teacher info – styled nicely within teacher-info-card
             document.getElementById('teacherInfo').innerHTML = `
-                <p><strong>👤 Teacher:</strong> ${data.teacherName || 'N/A'}</p>
-                <p><strong>🏢 Department:</strong> ${data.department || 'N/A'}</p>
-                <p><strong>📊 Total Students:</strong> ${data.studentCount || 0}</p>
-                <p><small>Teacher ID: ${data.teacherId || 'N/A'}</small></p>
+                <p><i class="fas fa-user-circle"></i> <strong>Teacher:</strong> ${data.teacherName || 'N/A'}</p>
+                <p><i class="fas fa-building"></i> <strong>Department:</strong> ${data.department || 'N/A'}</p>
+                <p><i class="fas fa-users"></i> <strong>Total Students:</strong> ${data.studentCount || 0}</p>
+                <p><small><i class="fas fa-id-badge"></i> Teacher ID: ${data.teacherId || 'N/A'}</small></p>
             `;
             
             // Show students table
@@ -579,6 +581,7 @@
                     <tr>
                         <td colspan="6" style="text-align:center; padding:40px;">
                             <div style="color: #666;">
+                                <p><i class="fas fa-inbox" style="font-size:2rem; color:#ccc;"></i></p>
                                 <p>📭 No students found in ${data.department || 'your'} department</p>
                                 <p style="font-size: 14px; margin-top: 10px;">
                                     This could mean:
@@ -605,11 +608,11 @@
                 row.innerHTML = `
                     <td><strong>${studentName}</strong></td>
                     <td>${rollNumber}</td>
-                    <td><span class="badge badge-info">${branch}</span></td>
+                    <td><span class="badge">${branch}</span></td>
                     <td>Semester ${semester}</td>
                     <td>${section}</td>
                     <td>
-                       <button onclick="viewStudentProjects(${student.id})">View</button>
+                       <button onclick="viewStudentProjects(${student.id})"><i class="fas fa-eye"></i> View</button>
                     </td>
                 `;
                 tableBody.appendChild(row);

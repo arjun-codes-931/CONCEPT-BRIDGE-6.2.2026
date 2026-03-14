@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>PDF Viewer · Nebula</title>
+    <title>PDF Viewer</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Google Font: Inter (clean, modern) -->
@@ -385,6 +385,163 @@
         }
 
         /* no additional mock content */
+        
+        /* AI Modal Styles - Added without modifying existing CSS */
+        .ai-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        
+        .ai-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .ai-modal {
+            background: white;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .ai-modal-overlay.active .ai-modal {
+            transform: scale(1);
+            opacity: 1;
+        }
+        
+        .ai-modal-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #e3e3e3;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .ai-modal-header h2 {
+            color: #1e1e2f;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        
+        .ai-modal-close {
+            background: #f3f6fb;
+            border: 1px solid #e3e3e3;
+            color: #777;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0;
+            box-shadow: none;
+        }
+        
+        .ai-modal-close:hover {
+            background: #e8eef7;
+            color: #4c74ff;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .ai-modal-content {
+            padding: 2rem;
+        }
+        
+        .ai-loading {
+            text-align: center;
+            padding: 3rem;
+        }
+        
+        .ai-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #f3f6fb;
+            border-top: 3px solid #4c74ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .ai-loading p {
+            color: #777;
+            font-size: 1rem;
+            margin: 0;
+        }
+        
+        .ai-response {
+            display: none;
+        }
+        
+        .ai-section {
+            margin-bottom: 2rem;
+        }
+        
+        .ai-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .ai-section h3 {
+            color: #4c74ff;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.25rem;
+            border-bottom: 2px solid #f3f6fb;
+        }
+        
+        .ai-section p {
+            color: #1e1e2f;
+            line-height: 1.7;
+            font-size: 0.95rem;
+            white-space: pre-wrap;
+        }
+        
+        .ai-section ul {
+            color: #1e1e2f;
+            line-height: 1.7;
+            font-size: 0.95rem;
+            padding-left: 1.5rem;
+        }
+        
+        .ai-section li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .ai-error {
+            color: #b91c1c;
+            text-align: center;
+            padding: 2rem;
+            background: #fff5f5;
+            border-radius: 14px;
+        }
     </style>
 </head>
 <body>
@@ -423,13 +580,13 @@
             </label>
         </div>
         
-        <!-- Extract text button – primary gradient -->
-        <button onclick="extractText()">Extract Text from Current Page</button>
+        <!-- Extract text button – primary gradient (text changed to "Explain using AI") -->
+        <button onclick="openAIModal()">Explain using AI</button>
         
         <!-- Extracted text section -->
         <div>
-            <h4>Extracted Text</h4>
-            <div id="extracted-text">Click "Extract Text" button</div>
+            <h4>Explain Text</h4>
+            <div id="extracted-text">Click "Explain using AI" button</div>
         </div>
         
         <!-- Debug info -->
@@ -438,9 +595,28 @@
             <div id="debug-text">Checking PDF ID...</div>
         </div>
     </div>
+    
+    <!-- AI Modal - Added without modifying existing structure -->
+    <div id="aiModalOverlay" class="ai-modal-overlay" onclick="closeModalOnOutsideClick(event)">
+        <div class="ai-modal">
+            <div class="ai-modal-header">
+                <h2>Explain using AI</h2>
+                <button class="ai-modal-close" onclick="closeAIModal()">✕</button>
+            </div>
+            <div class="ai-modal-content">
+                <div id="aiLoading" class="ai-loading">
+                    <div class="ai-spinner"></div>
+                    <p>Analyzing this page using AI...</p>
+                </div>
+                <div id="aiResponse" class="ai-response"></div>
+            </div>
+        </div>
+    </div>
 
-    <!-- JavaScript - EXACT original, untouched -->
+    <!-- JavaScript - EXACT original, untouched, plus new AI modal functions -->
     <script>
+
+        const OPENROUTER_API_KEY = "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";
     const API = "http://localhost:8080";
     let token = localStorage.getItem("token");
     let pdfDoc = null;
@@ -704,6 +880,153 @@
         const zoomSelect = document.getElementById('zoom-select');
         zoomSelect.value = scale.toString();
     });
+    
+    // AI Modal Functions
+    function openAIModal() {
+        document.getElementById('aiModalOverlay').classList.add('active');
+        document.getElementById('aiLoading').style.display = 'block';
+        document.getElementById('aiResponse').style.display = 'none';
+        document.getElementById('aiResponse').innerHTML = '';
+        
+        // Get page text and call AI
+        getPageTextAndExplain();
+    }
+    
+    function closeAIModal() {
+        document.getElementById('aiModalOverlay').classList.remove('active');
+    }
+    
+    function closeModalOnOutsideClick(event) {
+        if (event.target.classList.contains('ai-modal-overlay')) {
+            closeAIModal();
+        }
+    }
+    
+    async function getPageTextAndExplain() {
+        if (!pdfDoc) {
+            showModalError("PDF not loaded");
+            return;
+        }
+        
+        try {
+            const page = await pdfDoc.getPage(currentPage);
+            const textContent = await page.getTextContent();
+            
+            let text = "";
+            textContent.items.forEach(item => {
+                text += item.str + " ";
+            });
+            
+            const cleanedText = text.trim();
+            if (!cleanedText) {
+                showModalError("No text found on this page. It might be a scanned image.");
+                return;
+            }
+            
+            await callGeminiAI(cleanedText);
+            
+        } catch (err) {
+            showModalError("Error extracting text: " + err.message);
+        }
+    }
+    
+   async function callGeminiAI(pageText) {
+    try {
+
+        const safeText = pageText.substring(0, 3000);
+
+        const prompt = `
+You are an AI tutor helping a student understand academic material.
+Explain the content clearly using simple language. Keep explanations concise and easy to read.
+
+Bold text is allowed for important words, but never use markdown bold syntax. Use HTML bold tags instead: <b>text</b>.
+
+Follow this exact structure and spacing.
+
+EXPLANATION
+Explain the topic in simple terms. Break complex ideas into smaller parts. Use examples or analogies when helpful.
+
+WHY THIS MATTERS
+Explain why students study this topic and why it is useful in academics, real life, or future careers.
+
+KEY TERMS
+List important terms from the material.
+
+<b>Term</b>: Simple definition with an example
+
+REAL-WORLD USE
+Explain practical applications.
+
+Daily life: Where this appears in everyday situations
+Career/industry: How professionals use this knowledge
+
+QUICK Q&A
+Q: A common question about the topic
+A: A clear and simple answer
+
+KEY TAKEAWAYS
+Summarize the most important points.
+
+${safeText}
+`;
+
+        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+                "Content-Type": "application/json",
+                "HTTP-Referer": window.location.href,
+                "X-Title": "Smart Classroom AI"
+            },
+            body: JSON.stringify({
+                model: "stepfun/step-3.5-flash:free",
+                messages: [
+                    {
+                        role: "user",
+                        content: prompt
+                    }
+                ]
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            console.error("OpenRouter error:", data);
+            throw new Error(data.error?.message || "AI request failed");
+        }
+
+        if (!data.choices || !data.choices.length) {
+            throw new Error("No AI response returned");
+        }
+
+        const aiText = data.choices[0].message.content;
+
+        displayAIResponse(aiText);
+
+    } catch (err) {
+        console.error("AI Error:", err);
+        showModalError("AI Error: " + err.message);
+    }
+}
+    function displayAIResponse(text) {
+
+    document.getElementById('aiLoading').style.display = 'none';
+
+    const container = document.getElementById("aiResponse");
+    container.style.display = "block";
+
+    container.innerHTML = text
+        .replace(/## (.*)/g, "<h3>$1</h3>")
+        .replace(/\n/g, "<br>");
+}
+    
+    function showModalError(message) {
+        document.getElementById('aiLoading').style.display = 'none';
+        const responseDiv = document.getElementById('aiResponse');
+        responseDiv.style.display = 'block';
+        responseDiv.innerHTML = `<div class="ai-error">${message}</div>`;
+    }
     </script>
 </body>
 </html>

@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>PDF Library · Nebula</title>
+    <title>PDF Library</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Google Font: Inter (clean, modern) -->
+    <!-- Google Font: Inter (modern) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-    <!-- No external icons - using pure CSS for safety when JS might replace content -->
+    <!-- Font Awesome 6 (icons for clean premium look) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* ----- RESET & BASE (strict palette) ----- */
         * {
             margin: 0;
             padding: 0;
@@ -18,37 +20,137 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: radial-gradient(circle at 10% 20%, #0c0a2a, #190f40, #200f4a);
+            background: linear-gradient(145deg, #5f79ff 0%, #7a5cff 55%, #a16cff 100%);
             background-attachment: fixed;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            padding: 2rem 1.5rem;
-            color: #ffffff;
+            justify-content: center;
+            padding: 1.5rem;
+            margin: 0;
+            color: #1e1e2f;
             line-height: 1.5;
         }
 
-        /* Main container */
-        .premium-container {
-            max-width: 1000px;
+        /* ----- LAYOUT: left sidebar + main content (visual only) ----- */
+        .app-wrapper {
+            display: flex;
+            max-width: 1400px;
             width: 100%;
+            gap: 1.8rem;
+            align-items: stretch;
         }
 
-        /* Glass card effect */
-        .glass-card {
-            background: rgba(15, 18, 48, 0.6);
-            backdrop-filter: blur(18px) saturate(200%);
-            -webkit-backdrop-filter: blur(18px) saturate(200%);
-            border-radius: 3rem;
-            padding: 2.5rem 2.8rem;
-            box-shadow: 0 40px 70px -20px #030014, 0 0 0 1px rgba(160, 130, 255, 0.2) inset;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            transition: box-shadow 0.3s ease;
+        /* ---------- LEFT SIDEBAR (vertical menu) ---------- */
+        .sidebar {
+            width: 280px;
+            background: white;                    /* card background */
+            border-radius: 24px;
+            padding: 2rem 1.2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2), 0 0 0 1px #e3e3e3 inset;
+            border: 1px solid #e3e3e3;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Header section */
+        .sidebar-header {
+            padding: 0 0.5rem 1.8rem 0.5rem;
+            border-bottom: 1px solid #e3e3e3;
+            margin-bottom: 1.8rem;
+        }
+
+        .sidebar-header h3 {
+            font-weight: 600;
+            font-size: 1.4rem;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .sidebar-header h3 i {
+            font-size: 1.8rem;
+            color: #4c74ff;
+        }
+
+        /* menu items — now clickable with navigation */
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            flex: 1;
+        }
+
+        .sidebar-nav-item {
+            padding: 1rem 1.2rem;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #777;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            cursor: pointer;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+        }
+
+        .sidebar-nav-item i {
+            width: 1.8rem;
+            color: #777;
+            font-size: 1.25rem;
+            transition: color 0.2s;
+        }
+
+        .sidebar-nav-item:hover {
+            background: #f3f6fb;
+            border-color: #e3e3e3;
+            color: #1e293b;
+        }
+
+        .sidebar-nav-item:hover i {
+            color: #4c74ff;
+        }
+
+        .sidebar-nav-item.active {
+            background: linear-gradient(135deg, #4c74ff10, #8a52ff10);
+            border-left: 4px solid #4c74ff;
+            background: #f0f4ff;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .sidebar-nav-item.active i {
+            color: #4c74ff;
+        }
+
+        .sidebar-footer {
+            padding: 1.5rem 0.8rem 0.2rem;
+            border-top: 1px solid #e3e3e3;
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+            color: #777;
+        }
+
+        /* ---------- MAIN CONTENT (white card) ---------- */
+        .main-content {
+            flex: 1;
+            background: white;
+            border-radius: 28px;
+            padding: 2.2rem 2.5rem;
+            box-shadow: 0 30px 60px -15px rgba(58, 48, 94, 0.3), 0 0 0 1px #e3e3e3 inset;
+            border: 1px solid #e3e3e3;
+        }
+
+        /* header area */
         .header-section {
             display: flex;
             align-items: center;
@@ -57,188 +159,212 @@
             margin-bottom: 2rem;
         }
 
-        /* Back button styling */
         .back-btn {
-            background: rgba(25, 22, 60, 0.7);
-            backdrop-filter: blur(8px);
-            border: 1.5px solid rgba(200, 170, 255, 0.25);
-            color: #eeeaff;
+            background: white;
+            border: 1.5px solid #e3e3e3;
+            color: #777;
             font-weight: 500;
-            font-size: 1rem;
-            padding: 0.7rem 1.8rem;
-            border-radius: 3rem;
+            font-size: 0.95rem;
+            padding: 0.7rem 2rem 0.7rem 1.6rem;
+            border-radius: 40px;
             cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 12px 28px -10px #0b0820;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .back-btn i {
+            color: #4c74ff;
+            font-size: 0.9rem;
         }
 
         .back-btn:hover {
-            background: rgba(45, 35, 95, 0.8);
-            border-color: #bba6ff;
+            background: #f3f6fb;
+            border-color: #b3c0d9;
             transform: translateX(-2px);
         }
 
-        /* Title styling */
         .premium-title {
             font-weight: 700;
-            font-size: 2.4rem;
+            font-size: 2rem;
             letter-spacing: -0.02em;
-            background: linear-gradient(130deg, #ffffff, #e1d5ff);
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             flex: 1;
-            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .premium-title i {
+            font-size: 2rem;
+            color: #4c74ff;
         }
 
         /* PDF List container */
         #pdfList {
-            margin-top: 2rem;
+            margin-top: 1.5rem;
             display: flex;
             flex-direction: column;
             gap: 1rem;
         }
 
-        /* PDF item styling - targets elements created by JS */
-        .pdf-item {
-            background: rgba(25, 23, 60, 0.7) !important;
-            backdrop-filter: blur(8px) !important;
-            border: 1px solid rgba(200, 170, 255, 0.2) !important;
-            border-radius: 2rem !important;
+        /* PDF item styling - exactly the same elements, redesigned */
+        #pdfList > div, .pdf-item {
+            background: white !important;
+            border: 1px solid #e3e3e3 !important;
+            border-radius: 22px !important;
             padding: 1.5rem 2rem !important;
-            margin: 0 !important;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 15px 30px -12px #0d0825;
+            box-shadow: 0 8px 18px -8px rgba(0,0,0,0.05);
+            backdrop-filter: none !important;
+            color: #1e293b;
         }
 
-        .pdf-item:hover {
-            transform: translateY(-3px);
-            border-color: rgba(220, 190, 255, 0.5) !important;
-            box-shadow: 0 22px 35px -10px #3f28a0 !important;
-            background: rgba(40, 35, 90, 0.8) !important;
+        #pdfList > div:hover, .pdf-item:hover {
+            transform: translateY(-2px);
+            border-color: #b3c0d9 !important;
+            box-shadow: 0 16px 28px -12px rgba(76, 116, 255, 0.2) !important;
+            background: #f9fcff !important;
         }
 
-        .pdf-item strong {
-            color: white;
+        #pdfList > div strong, .pdf-item strong {
+            color: #1e293b;
             font-size: 1.2rem;
             font-weight: 600;
+            display: block;
+            margin-bottom: 0.4rem;
         }
 
-        .pdf-item small {
-            color: #c0b8ff;
+        #pdfList > div small, .pdf-item small {
+            color: #777;
             font-size: 0.9rem;
             display: block;
-            margin-top: 0.3rem;
         }
 
         /* Loading state */
         #pdfList:empty::before,
         #pdfList p:only-child {
-            background: rgba(25, 23, 60, 0.5);
-            backdrop-filter: blur(8px);
-            border-radius: 2rem;
+            background: #f3f6fb;
+            border-radius: 22px;
             padding: 3rem;
             text-align: center;
-            color: #cfc7ff;
-            font-size: 1.1rem;
-            border: 1px solid rgba(255,255,255,0.05);
+            color: #777;
+            border: 1px solid #e3e3e3;
+            font-size: 1rem;
         }
 
         /* Error container styling */
         #pdfList div[style*="color: red"] {
-            background: rgba(40, 20, 30, 0.7) !important;
-            backdrop-filter: blur(8px) !important;
-            border: 1px solid rgba(255, 100, 100, 0.3) !important;
-            border-radius: 2rem !important;
+            background: #fff2f0 !important;
+            border: 1px solid #ffb0b0 !important;
+            border-radius: 22px !important;
             padding: 2rem !important;
-            color: #ffb0b0 !important;
+            color: #b33c3c !important;
+            font-weight: 500;
         }
 
         #pdfList button {
-            background: rgba(45, 40, 90, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 3rem;
-            padding: 0.7rem 1.8rem;
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            border: none;
+            border-radius: 40px;
+            padding: 0.7rem 2rem;
             color: white;
             font-weight: 500;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+            font-family: 'Inter', sans-serif;
             margin-right: 0.8rem;
+            box-shadow: 0 6px 14px rgba(76, 116, 255, 0.25);
         }
 
         #pdfList button:hover {
-            background: rgba(70, 60, 140, 0.9);
-            transform: scale(1.02);
+            background: linear-gradient(135deg, #5f83ff, #9f63ff);
+            transform: translateY(-2px);
+            box-shadow: 0 14px 22px -8px #4c74ff;
         }
 
-        /* Test button styling (if present) */
-        button[onclick*="Test"] {
-            background: rgba(60, 55, 120, 0.8);
-            border: 1.5px dashed #9e8cff;
-            border-radius: 3rem;
-            padding: 0.7rem 2rem;
-            color: #e4dbff;
-            font-weight: 500;
-            cursor: pointer;
-            margin: 0 0 1.5rem 0;
-            transition: 0.2s;
-        }
-
-        button[onclick*="Test"]:hover {
-            background: rgba(80, 70, 160, 0.9);
-            border-color: #bba6ff;
-        }
-
-        /* Style for error page that JS might inject */
-        body > div[style*="padding: 40px; text-align: center;"] {
-            background: rgba(18, 16, 45, 0.8) !important;
-            backdrop-filter: blur(14px) !important;
-            border-radius: 3rem !important;
-            padding: 3rem !important;
-            box-shadow: 0 40px 70px -20px #0e002b !important;
-            border: 1px solid rgba(255,255,255,0.05) !important;
-            max-width: 600px !important;
-            margin: 2rem auto !important;
-            color: white !important;
-        }
-
-        body > div[style*="padding: 40px;"] h2 {
-            color: #ffbaba !important;
-            background: none !important;
-        }
-
-        body > div[style*="padding: 40px;"] button {
-            background: rgba(40, 35, 85, 0.8) !important;
-            border: 1px solid rgba(255,255,255,0.15) !important;
-            border-radius: 3rem !important;
-            padding: 0.8rem 2rem !important;
-            color: white !important;
-            cursor: pointer !important;
-        }
-
-        /* Responsive */
-        @media (max-width: 650px) {
-            .glass-card {
-                padding: 1.8rem 1.2rem;
-            }
-            .premium-title {
-                font-size: 2rem;
-            }
-            .header-section {
+        /* responsive */
+        @media (max-width: 800px) {
+            .app-wrapper {
                 flex-direction: column;
-                align-items: flex-start;
             }
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                flex-wrap: wrap;
+                padding: 1.2rem;
+            }
+            .sidebar-header {
+                width: 100%;
+                border-bottom: none;
+                padding-bottom: 0.8rem;
+            }
+            .sidebar-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 0.3rem;
+            }
+            .sidebar-nav-item {
+                flex: 1 0 auto;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 550px) {
+            body { padding: 0.8rem; }
+            .main-content { padding: 1.5rem; }
+        }
+
+        /* icons */
+        .fas, .far, .fab {
+            margin-right: 0.2rem;
         }
     </style>
 </head>
 <body>
-    <div class="premium-container">
-        <div class="glass-card">
-            <!-- Header with back button and title -->
+    <!-- layout wrapper: left sidebar + main content -->
+    <div class="app-wrapper">
+        <!-- LEFT SIDEBAR (now with working navigation) -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h3><i class="fas fa-graduation-cap"></i> Concept Bridge</h3>
+            </div>
+            <div class="sidebar-nav">
+                <!-- Each menu item now redirects to the correct page -->
+                <div class="sidebar-nav-item" onclick="window.location.href='assignment-list.html'">
+                    <i class="fas fa-tasks"></i> Assignments
+                </div>
+                <div class="sidebar-nav-item" onclick="window.location.href='quiz.html'">
+                    <i class="fas fa-puzzle-piece"></i> Quizzes
+                </div>
+                <div class="sidebar-nav-item" onclick="window.location.href='project-list.html'">
+                    <i class="fas fa-code"></i> Projects
+                </div>
+                <div class="sidebar-nav-item active" onclick="window.location.href='pdf-list.html'">
+                    <i class="fas fa-file-pdf"></i> PDFs
+                </div>
+                <div class="sidebar-nav-item" onclick="window.location.href='student-profile.html'">
+                    <i class="fas fa-user-circle"></i> Profile
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
             <div class="header-section">
-                <button class="back-btn" onclick="window.history.back()">← Back to Dashboard</button>
-                <h2 class="premium-title">Available PDFs for Your Batch</h2>
+                <button class="back-btn" onclick="window.history.back()">
+                    <i class="fas fa-arrow-left"></i> Dashboard
+                </button>
+                <h2 class="premium-title"><i class="fas fa-file-pdf"></i> Available PDFs</h2>
             </div>
 
             <!-- PDF List container - ID preserved -->

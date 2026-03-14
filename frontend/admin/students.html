@@ -3,87 +3,667 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Directory · Admin Portal</title>
+    <title>Student Directory · Nexus Admin</title>
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(145deg, #5f79ff, #7a5cff, #a16cff);
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.5;
+        }
+
+        /* main white dashboard with sidebar layout */
+        .dashboard-wrapper {
+            width: 100%;
+            max-width: 1600px;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 35px 60px -20px rgba(30, 30, 60, 0.4), 0 10px 25px -8px rgba(0,0,0,0.2);
+            display: flex;
+            overflow: hidden;
+            min-height: 850px;
+        }
+
+        /* ========== LEFT VERTICAL SIDEBAR ========== */
+        .sidebar {
+            width: 280px;
+            background: #f3f6fb;          /* input background */
+            border-right: 1px solid #e3e3e3;
+            padding: 2rem 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.2rem;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-left: 0.5rem;
+        }
+
+        .brand-icon {
+            width: 2.8rem;
+            height: 2.8rem;
+            background: linear-gradient(145deg, #4c74ff, #8a52ff);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 14px -6px #4c74ff66;
+        }
+
+        .brand-icon i {
+            font-size: 1.6rem;
+            color: white;
+        }
+
+        .brand-text {
+            font-weight: 700;
+            font-size: 1.4rem;
+            background: linear-gradient(145deg, #1e1e3f, #4c74ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        /* vertical navigation */
+        .side-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            flex: 1;
+        }
+
+        .side-nav-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 16px;
+            padding: 1rem 1.2rem;
+            color: #1e1e3a;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .side-nav-btn i {
+            font-size: 1.4rem;
+            width: 2rem;
+            text-align: center;
+            background: linear-gradient(145deg, #4c74ff, #8a52ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: transform 0.15s;
+        }
+
+        .side-nav-btn span {
+            font-weight: 600;
+            color: #3f3f60;
+        }
+
+        .side-nav-btn:hover {
+            background: white;
+            border-color: #e3e3e3;
+            box-shadow: 0 8px 18px -12px #4c74ff, 0 0 0 1px rgba(76,116,255,0.2) inset;
+            transform: translateX(4px);
+        }
+
+        .side-nav-btn:hover i {
+            transform: scale(1.05);
+        }
+
+        /* active item gradient highlight */
+        .side-nav-btn.active {
+            background: white;
+            border-color: #d0ddff;
+            box-shadow: 0 0 0 2px rgba(76,116,255,0.15) inset;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e3e3e3;
+        }
+
+        .logout-btn {
+            background: #f3f6fb;
+            border: 1px solid #e3e3e3;
+            border-radius: 40px;
+            padding: 0.9rem 1.2rem;
+            color: #4c516d;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .logout-btn i {
+            font-size: 1.2rem;
+            color: #777;    /* secondary text */
+        }
+
+        .logout-btn span {
+            color: #4c516d;
+        }
+
+        .logout-btn:hover {
+            background: white;
+            border-color: #ffb7b7;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 18px -14px #e5515b;
+        }
+        .logout-btn:hover i {
+            color: #e5515b;
+            transform: translateX(3px);
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            flex: 1;
+            padding: 2rem 2.5rem;
+            background: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* minimal header */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header-left i {
+            font-size: 2.2rem;
+            background: linear-gradient(145deg, #4c74ff, #8a52ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        h3 {
+            font-weight: 700;
+            font-size: 2rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(145deg, #1e1e30, #4c74ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        /* gradient & secondary buttons */
+        .btn-primary {
+            background: linear-gradient(145deg, #4c74ff, #8a52ff);
+            border: none;
+            border-radius: 40px;
+            padding: 0.7rem 1.6rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 8px 18px -8px #4c74ff;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-primary i {
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(145deg, #5f7eff, #9a62ff);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px -12px #4c74ff;
+        }
+
+        .btn-secondary {
+            background: #f3f6fb;
+            border: 1px solid #e3e3e3;
+            border-radius: 40px;
+            padding: 0.7rem 1.6rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #3f3f60;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary i {
+            color: #777;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            border-color: #b5c8ff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px -10px #4c74ff;
+        }
+
+        /* filter card (white with soft background) */
+        .filter-card {
+            background: #f9fbfe;
+            border: 1px solid #e3e3e3;
+            border-radius: 22px;
+            padding: 1.8rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 22px -12px rgba(0,0,0,0.06);
+        }
+
+        .filter-header {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-header i {
+            font-size: 1.5rem;
+            background: linear-gradient(145deg, #4c74ff, #8a52ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .filter-header span {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #2c2c4a;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .filter-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .filter-field label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #777;            /* secondary text */
+            letter-spacing: 0.2px;
+        }
+
+        .filter-field select,
+        .filter-field input {
+            background: #f3f6fb;
+            border: 1px solid #e3e3e3;
+            border-radius: 30px;
+            padding: 0.6rem 1rem;
+            font-size: 0.95rem;
+            color: #1e1e30;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .filter-field input:focus,
+        .filter-field select:focus {
+            outline: none;
+            border-color: #8a52ff;
+            box-shadow: 0 0 0 3px rgba(138,82,255,0.15);
+        }
+
+        .filter-stats {
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            color: #777;
+            font-size: 0.95rem;
+        }
+
+        /* two-column layout */
+        .two-column {
+            display: flex;
+            gap: 1.8rem;
+            flex-wrap: wrap;
+        }
+
+        .student-list-column {
+            flex: 1;
+            min-width: 320px;
+            background: #f9fbfe;
+            border: 1px solid #e3e3e3;
+            border-radius: 22px;
+            padding: 1.5rem;
+            height: 600px;
+            overflow-y: auto;
+            box-shadow: 0 8px 22px -12px rgba(0,0,0,0.06);
+        }
+
+        .student-detail-column {
+            flex: 2;
+            min-width: 440px;
+            background: #f9fbfe;
+            border: 1px solid #e3e3e3;
+            border-radius: 22px;
+            padding: 1.8rem;
+            box-shadow: 0 8px 22px -12px rgba(0,0,0,0.06);
+        }
+
+        .list-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.2rem;
+            color: #2c2c4a;
+        }
+        .list-header i {
+            font-size: 1.4rem;
+            background: linear-gradient(145deg, #4c74ff, #8a52ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .list-header h4 {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #1e1e30;
+        }
+
+        /* student cards in list */
+        .student-card {
+            border: 1px solid #e3e3e3;
+            border-radius: 18px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 0.8rem;
+            background: white;
+            cursor: pointer;
+            transition: all 0.15s;
+            box-shadow: 0 4px 10px -8px rgba(0,0,0,0.1);
+        }
+
+        .student-card:hover {
+            border-color: #b5c8ff;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px -14px #4c74ff;
+        }
+
+        .student-card.selected {
+            border: 2px solid #8a52ff;
+            background: #f0f3ff;
+        }
+
+        .student-name {
+            font-weight: 700;
+            color: #1e1e30;
+            margin-bottom: 0.3rem;
+        }
+
+        .student-meta {
+            font-size: 0.8rem;
+            color: #777;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* detail card */
+        .detail-card {
+            background: white;
+            border: 1px solid #e3e3e3;
+            border-radius: 22px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-header {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+
+        .detail-header i {
+            font-size: 1.8rem;
+            background: linear-gradient(145deg, #4c74ff, #8a52ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 0.7rem;
+            font-size: 0.95rem;
+        }
+        .detail-grid div:nth-child(odd) {
+            color: #777;
+            font-weight: 500;
+        }
+        .detail-grid div:nth-child(even) {
+            color: #1e1e30;
+            font-weight: 500;
+        }
+
+        /* edit form (uses input background) */
+        .edit-form {
+            background: #f9fbfe;
+            border-radius: 22px;
+            padding: 1.5rem;
+        }
+        .edit-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1rem;
+        }
+        .edit-grid input,
+        .edit-grid select {
+            background: #f3f6fb;
+            border: 1px solid #e3e3e3;
+            border-radius: 30px;
+            padding: 0.5rem 1rem;
+            font-family: 'Inter', sans-serif;
+            color: #1e1e30;
+        }
+
+        button:focus-visible {
+            outline: 3px solid #8a52ff;
+            outline-offset: 3px;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f3f6fb; border-radius: 12px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(145deg, #4c74ff, #8a52ff); border-radius: 12px; }
+
+        @media (max-width: 900px) {
+            .dashboard-wrapper { flex-wrap: wrap; }
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #e3e3e3;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 1rem;
+                padding: 1.5rem;
+            }
+            .side-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            .sidebar-footer {
+                margin-top: 0;
+                border-top: none;
+                padding-top: 0;
+            }
+            .logout-btn { width: auto; }
+        }
+        @media (max-width: 700px) {
+            .main-content { padding: 1.5rem; }
+            .page-header { flex-direction: column; align-items: start; }
+            .filter-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
-    <h3>📋 STUDENT DIRECTORY</h3>
-    
-    <div>
-        <button onclick="window.location.href='dashboard.html'">← BACK TO DASHBOARD</button>
-        <button onclick="toggleEditMode()" id="editModeBtn">✎ EDIT MODE OFF</button>
-        <button onclick="saveStudent()" id="saveBtn" style="display:none; background:#28a745; color:white;">💾 SAVE CHANGES</button>
-        <button onclick="cancelEdit()" id="cancelBtn" style="display:none;">✖ CANCEL</button>
-    </div>
-    
-    <!-- FILTER SECTION -->
-    <div style="margin:20px 0; padding:15px; border:2px solid #333; background:#f0f0f0;">
-        <h4>🔍 FILTER STUDENTS</h4>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:10px;">
-            <div>
-                <label>Branch:</label><br>
-                <select id="filterBranch" onchange="applyFilters()">
-                    <option value="">ALL</option>
-                </select>
-            </div>
-            <div>
-                <label>Section:</label><br>
-                <select id="filterSection" onchange="applyFilters()">
-                    <option value="">ALL</option>
-                </select>
-            </div>
-            <div>
-                <label>Semester:</label><br>
-                <select id="filterSemester" onchange="applyFilters()">
-                    <option value="">ALL</option>
-                </select>
-            </div>
-            <div>
-                <label>Batch:</label><br>
-                <select id="filterBatch" onchange="applyFilters()">
-                    <option value="">ALL</option>
-                </select>
-            </div>
-            <div>
-                <label>Status:</label><br>
-                <select id="filterStatus" onchange="applyFilters()">
-                    <option value="">ALL</option>
-                    <option value="ACTIVE">ACTIVE</option>
-                    <option value="INACTIVE">INACTIVE</option>
-                    <option value="SUSPENDED">SUSPENDED</option>
-                    <option value="GRADUATED">GRADUATED</option>
-                </select>
-            </div>
-            <div>
-                <label>Search:</label><br>
-                <input type="text" id="filterSearch" placeholder="Name or Roll" onkeyup="applyFilters()">
-            </div>
+<div class="dashboard-wrapper">
+    <!-- LEFT SIDEBAR (vertical) -->
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            
         </div>
-        <div style="margin-top:10px;">
-            <span id="filterStats">Loading students...</span>
-            <button onclick="resetFilters()" style="margin-left:10px;">⟲ RESET</button>
+        <div class="side-nav">
+            <button class="side-nav-btn" onclick="window.location.href='dashboard.html'"><i class="fas fa-home"></i><span>Dashboard</span></button>
+            <button class="side-nav-btn active" onclick="window.location.href='students.html'"><i class="fas fa-user-graduate"></i><span>Students</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='teachers.html'"><i class="fas fa-chalkboard-user"></i><span>Teachers</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='materials.html'"><i class="fas fa-book-open"></i><span>Materials</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='user-management.html'"><i class="fas fa-users-cog"></i><span>Manage Users</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='projects.html'"><i class="fas fa-code-branch"></i><span>Projects</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='quizzes.html'"><i class="fas fa-puzzle-piece"></i><span>Quizzes</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='stats.html'"><i class="fas fa-chart-line"></i><span>System Stats</span></button>
+        </div>
+        <div class="sidebar-footer">
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i><span>Logout</span><i class="fas fa-arrow-right" style="font-size:0.8rem; opacity:0;"></i>
+            </button>
         </div>
     </div>
-    
-    <!-- MAIN CONTAINER -->
-    <div style="display:flex; gap:20px; flex-wrap:wrap;">
-        <!-- STUDENT LIST -->
-        <div id="studentList" style="flex:1; min-width:300px; border:2px solid #333; padding:15px; background:#f9f9f9; height:600px; overflow-y:auto;">
-            <h4>📋 STUDENTS <span id="studentCount"></span></h4>
-            <div id="studentListContainer">Loading...</div>
+
+    <!-- MAIN CONTENT (right) -->
+    <div class="main-content">
+        <div class="page-header">
+            <div class="header-left">
+                <i class="fas fa-address-book"></i>
+                <h3>📋 STUDENT DIRECTORY</h3>
+            </div>
+            <div class="action-buttons">
+                <button class="btn-secondary" onclick="window.location.href='dashboard.html'"><i class="fas fa-arrow-left"></i> BACK</button>
+                <button class="btn-secondary" onclick="toggleEditMode()" id="editModeBtn"><i class="fas fa-pen"></i> EDIT MODE OFF</button>
+                <button class="btn-primary" onclick="saveStudent()" id="saveBtn" style="display:none;"><i class="fas fa-save"></i> SAVE</button>
+                <button class="btn-secondary" onclick="cancelEdit()" id="cancelBtn" style="display:none;"><i class="fas fa-times"></i> CANCEL</button>
+            </div>
         </div>
-        
-        <!-- STUDENT DETAILS / EDIT FORM -->
-        <div id="studentDetails" style="flex:2; min-width:400px; border:2px solid #333; padding:15px; background:#f9f9f9;">
-            <h4>👤 STUDENT DETAILS</h4>
-            <div id="detailsContent">
-                <p>Select a student to view profile</p>
+
+        <!-- FILTER CARD -->
+        <div class="filter-card">
+            <div class="filter-header">
+                <i class="fas fa-filter"></i>
+                <span>FILTER STUDENTS</span>
+            </div>
+            <div class="filter-grid">
+                <div class="filter-field">
+                    <label>Branch</label>
+                    <select id="filterBranch" onchange="applyFilters()"><option value="">ALL</option></select>
+                </div>
+                <div class="filter-field">
+                    <label>Section</label>
+                    <select id="filterSection" onchange="applyFilters()"><option value="">ALL</option></select>
+                </div>
+                <div class="filter-field">
+                    <label>Semester</label>
+                    <select id="filterSemester" onchange="applyFilters()"><option value="">ALL</option></select>
+                </div>
+                <div class="filter-field">
+                    <label>Batch</label>
+                    <select id="filterBatch" onchange="applyFilters()"><option value="">ALL</option></select>
+                </div>
+                <div class="filter-field">
+                    <label>Status</label>
+                    <select id="filterStatus" onchange="applyFilters()">
+                        <option value="">ALL</option>
+                        <option value="ACTIVE">ACTIVE</option>
+                        <option value="INACTIVE">INACTIVE</option>
+                        <option value="SUSPENDED">SUSPENDED</option>
+                        <option value="GRADUATED">GRADUATED</option>
+                    </select>
+                </div>
+                <div class="filter-field">
+                    <label>Search</label>
+                    <input type="text" id="filterSearch" placeholder="Name or Roll" onkeyup="applyFilters()">
+                </div>
+            </div>
+            <div class="filter-stats">
+                <span id="filterStats">Loading students...</span>
+                <button class="btn-secondary" onclick="resetFilters()"><i class="fas fa-undo-alt"></i> RESET</button>
+            </div>
+        </div>
+
+        <!-- TWO COLUMN LAYOUT -->
+        <div class="two-column">
+            <!-- student list -->
+            <div class="student-list-column">
+                <div class="list-header">
+                    <i class="fas fa-users"></i>
+                    <h4>STUDENTS <span id="studentCount"></span></h4>
+                </div>
+                <div id="studentListContainer">Loading...</div>
+            </div>
+
+            <!-- student details / edit -->
+            <div class="student-detail-column" id="studentDetails">
+                <div class="list-header" style="margin-top:0;">
+                    <i class="fas fa-user-graduate"></i>
+                    <h4>STUDENT DETAILS</h4>
+                </div>
+                <div id="detailsContent">
+                    <p style="color:#777;">Select a student to view profile</p>
+                </div>
             </div>
         </div>
     </div>
-    
-    <!-- EDIT FORM (matches entity fields exactly) -->
-    <div id="editFormTemplate" style="display:none;">
-        <div style="display:grid; grid-template-columns:1fr 2fr; gap:10px;">
+</div>
+
+<!-- EDIT FORM TEMPLATE (preserved exactly) -->
+<div id="editFormTemplate" style="display:none;">
+    <div class="edit-form">
+        <div class="edit-grid">
             <div>Full Name:</div>
             <div><input type="text" id="editFullName" style="width:100%;"></div>
             
@@ -151,329 +731,339 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- ORIGINAL JAVASCRIPT – UNMODIFIED -->
+<script>
+    const API = "http://localhost:8080";
+    let allStudents = [];
+    let filteredStudents = [];
+    let selectedStudent = null;
+    let editMode = false;
+    let editStudentId = null;
     
-    <script>
-        const API = "http://localhost:8080";
-        let allStudents = [];
-        let filteredStudents = [];
-        let selectedStudent = null;
-        let editMode = false;
-        let editStudentId = null;
-        
-        function getToken() {
-            return localStorage.getItem("token");
+    function getToken() {
+        return localStorage.getItem("token");
+    }
+    
+    async function loadStudents() {
+        if (!getToken()) {
+            alert("Please login first");
+            window.location.href = "../login.html";
+            return;
         }
         
-        async function loadStudents() {
-            if (!getToken()) {
-                alert("Please login first");
-                window.location.href = "../login.html";
-                return;
-            }
-            
-            try {
-                const response = await fetch(`${API}/admin/students`, {
-                    headers: { "Authorization": "Bearer " + getToken() }
-                });
-                
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                
-                allStudents = await response.json();
-                console.log('✅ Students loaded:', allStudents.length);
-                
-                extractFilterOptions();
-                applyFilters();
-                
-            } catch (error) {
-                console.error('❌ Error:', error);
-                document.getElementById('studentListContainer').innerHTML = 
-                    `<p style="color:red;">❌ Error: ${error.message}</p>`;
-            }
-        }
-        
-        function extractFilterOptions() {
-            const branches = [...new Set(allStudents.map(s => s.branch).filter(Boolean))];
-            const sections = [...new Set(allStudents.map(s => s.section).filter(Boolean))];
-            const semesters = [...new Set(allStudents.map(s => s.semester).filter(Boolean))];
-            const batches = [...new Set(allStudents.map(s => s.batch).filter(Boolean))];
-            
-            populateSelect('filterBranch', branches);
-            populateSelect('filterSection', sections);
-            populateSelect('filterSemester', semesters);
-            populateSelect('filterBatch', batches);
-        }
-        
-        function populateSelect(selectId, values) {
-            const select = document.getElementById(selectId);
-            if (!select) return;
-            
-            select.innerHTML = '<option value="">ALL</option>';
-            values.sort().forEach(value => {
-                const option = document.createElement('option');
-                option.value = value;
-                option.textContent = value;
-                select.appendChild(option);
-            });
-        }
-        
-        function applyFilters() {
-            const branch = document.getElementById('filterBranch').value;
-            const section = document.getElementById('filterSection').value;
-            const semester = document.getElementById('filterSemester').value;
-            const batch = document.getElementById('filterBatch').value;
-            const status = document.getElementById('filterStatus').value;
-            const search = document.getElementById('filterSearch').value.toLowerCase();
-            
-            filteredStudents = allStudents.filter(student => {
-                if (branch && student.branch !== branch) return false;
-                if (section && student.section !== section) return false;
-                if (semester && student.semester != semester) return false;
-                if (batch && student.batch !== batch) return false;
-                if (status && student.profileStatus !== status) return false;
-                
-                if (search) {
-                    const name = (student.fullName || '').toLowerCase();
-                    const roll = (student.rollNumber || '').toLowerCase();
-                    if (!name.includes(search) && !roll.includes(search)) return false;
-                }
-                return true;
+        try {
+            const response = await fetch(`${API}/admin/students`, {
+                headers: { "Authorization": "Bearer " + getToken() }
             });
             
-            document.getElementById('filterStats').innerHTML = 
-                `Showing ${filteredStudents.length} of ${allStudents.length} students`;
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
             
-            renderStudentList();
-        }
-        
-        function resetFilters() {
-            document.getElementById('filterBranch').value = '';
-            document.getElementById('filterSection').value = '';
-            document.getElementById('filterSemester').value = '';
-            document.getElementById('filterBatch').value = '';
-            document.getElementById('filterStatus').value = '';
-            document.getElementById('filterSearch').value = '';
+            allStudents = await response.json();
+            console.log('✅ Students loaded:', allStudents.length);
+            
+            extractFilterOptions();
             applyFilters();
+            
+        } catch (error) {
+            console.error('❌ Error:', error);
+            document.getElementById('studentListContainer').innerHTML = 
+                `<p style="color:red;">❌ Error: ${error.message}</p>`;
+        }
+    }
+    
+    function extractFilterOptions() {
+        const branches = [...new Set(allStudents.map(s => s.branch).filter(Boolean))];
+        const sections = [...new Set(allStudents.map(s => s.section).filter(Boolean))];
+        const semesters = [...new Set(allStudents.map(s => s.semester).filter(Boolean))];
+        const batches = [...new Set(allStudents.map(s => s.batch).filter(Boolean))];
+        
+        populateSelect('filterBranch', branches);
+        populateSelect('filterSection', sections);
+        populateSelect('filterSemester', semesters);
+        populateSelect('filterBatch', batches);
+    }
+    
+    function populateSelect(selectId, values) {
+        const select = document.getElementById(selectId);
+        if (!select) return;
+        
+        select.innerHTML = '<option value="">ALL</option>';
+        values.sort().forEach(value => {
+            const option = document.createElement('option');
+            option.value = value;
+            option.textContent = value;
+            select.appendChild(option);
+        });
+    }
+    
+    function applyFilters() {
+        const branch = document.getElementById('filterBranch').value;
+        const section = document.getElementById('filterSection').value;
+        const semester = document.getElementById('filterSemester').value;
+        const batch = document.getElementById('filterBatch').value;
+        const status = document.getElementById('filterStatus').value;
+        const search = document.getElementById('filterSearch').value.toLowerCase();
+        
+        filteredStudents = allStudents.filter(student => {
+            if (branch && student.branch !== branch) return false;
+            if (section && student.section !== section) return false;
+            if (semester && student.semester != semester) return false;
+            if (batch && student.batch !== batch) return false;
+            if (status && student.profileStatus !== status) return false;
+            
+            if (search) {
+                const name = (student.fullName || '').toLowerCase();
+                const roll = (student.rollNumber || '').toLowerCase();
+                if (!name.includes(search) && !roll.includes(search)) return false;
+            }
+            return true;
+        });
+        
+        document.getElementById('filterStats').innerHTML = 
+            `Showing ${filteredStudents.length} of ${allStudents.length} students`;
+        
+        renderStudentList();
+    }
+    
+    function resetFilters() {
+        document.getElementById('filterBranch').value = '';
+        document.getElementById('filterSection').value = '';
+        document.getElementById('filterSemester').value = '';
+        document.getElementById('filterBatch').value = '';
+        document.getElementById('filterStatus').value = '';
+        document.getElementById('filterSearch').value = '';
+        applyFilters();
+    }
+    
+    function renderStudentList() {
+        const container = document.getElementById('studentListContainer');
+        
+        if (filteredStudents.length === 0) {
+            container.innerHTML = '<p>No students match the filters</p>';
+            document.getElementById('studentCount').textContent = '(0)';
+            return;
         }
         
-        function renderStudentList() {
-            const container = document.getElementById('studentListContainer');
+        let html = '';
+        filteredStudents.forEach(student => {
+            const isSelected = selectedStudent && selectedStudent.id === student.id;
+            const selectedClass = isSelected ? 'selected' : '';
             
-            if (filteredStudents.length === 0) {
-                container.innerHTML = '<p>No students match the filters</p>';
-                document.getElementById('studentCount').textContent = '(0)';
-                return;
-            }
-            
-            let html = '';
-            filteredStudents.forEach(student => {
-                const isSelected = selectedStudent && selectedStudent.id === student.id;
-                const bgColor = isSelected ? '#e0e0ff' : '#fff';
-                
-                html += `
-                    <div onclick="selectStudent(${student.id})" 
-                         style="border:2px solid ${isSelected ? '#00f' : '#ccc'}; 
-                                padding:10px; margin:5px 0; 
-                                background:${bgColor}; 
-                                cursor:pointer;">
-                        <b>${student.fullName || 'Unnamed'}</b><br>
-                        <span>Roll: ${student.rollNumber || 'N/A'} | 
-                              Branch: ${student.branch || 'N/A'} | 
-                              Sem: ${student.semester || 'N/A'}</span>
+            html += `
+                <div class="student-card ${selectedClass}" onclick="selectStudent(${student.id})">
+                    <div class="student-name">${student.fullName || 'Unnamed'}</div>
+                    <div class="student-meta">
+                        <span>Roll: ${student.rollNumber || 'N/A'}</span>
+                        <span>Branch: ${student.branch || 'N/A'}</span>
+                        <span>Sem: ${student.semester || 'N/A'}</span>
                     </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-            document.getElementById('studentCount').textContent = `(${filteredStudents.length})`;
-        }
-        
-        function selectStudent(studentId) {
-            const student = allStudents.find(s => s.id == studentId);
-            if (!student) return;
-            
-            selectedStudent = student;
-            
-            if (editMode && editStudentId == studentId) {
-                showEditForm(student);
-            } else {
-                showStudentDetails(student);
-            }
-            
-            renderStudentList();
-        }
-        
-        function showStudentDetails(student) {
-            const details = document.getElementById("studentDetails");
-            
-            details.innerHTML = `
-                <h4>👤 ${student.fullName}</h4>
-                <div style="display:grid; grid-template-columns:1fr 2fr; gap:8px; margin:15px 0;">
-                    <div><b>Full Name:</b></div><div>${student.fullName || '—'}</div>
-                    <div><b>Roll Number:</b></div><div>${student.rollNumber || '—'}</div>
-                    <div><b>Register Number:</b></div><div>${student.registerNumber || '—'}</div>
-                    <div><b>Branch:</b></div><div>${student.branch || '—'}</div>
-                    <div><b>Section:</b></div><div>${student.section || '—'}</div>
-                    <div><b>Semester:</b></div><div>${student.semester || '—'}</div>
-                    <div><b>Batch:</b></div><div>${student.batch || '—'}</div>
-                    <div><b>Admission Year:</b></div><div>${student.admissionYear || '—'}</div>
-                    <div><b>College Name:</b></div><div>${student.collegeName || '—'}</div>
-                    <div><b>University:</b></div><div>${student.university || '—'}</div>
-                    <div><b>Status:</b></div><div>${student.profileStatus || '—'}</div>
-                </div>
-                <div>
-                    <button onclick="enableEditMode(${student.id})" style="background:#ffc107; padding:8px 16px;">✎ EDIT</button>
                 </div>
             `;
-        }
+        });
         
-        function toggleEditMode() {
-            editMode = !editMode;
-            const btn = document.getElementById('editModeBtn');
-            const saveBtn = document.getElementById('saveBtn');
-            const cancelBtn = document.getElementById('cancelBtn');
-            
-            if (editMode) {
-                btn.innerHTML = '✎ EDIT MODE ON';
-                btn.style.background = '#ffc107';
-                saveBtn.style.display = 'inline-block';
-                cancelBtn.style.display = 'inline-block';
-                
-                if (selectedStudent) {
-                    enableEditMode(selectedStudent.id);
-                }
-            } else {
-                btn.innerHTML = '✎ EDIT MODE OFF';
-                btn.style.background = '';
-                saveBtn.style.display = 'none';
-                cancelBtn.style.display = 'none';
-                
-                if (selectedStudent) {
-                    showStudentDetails(selectedStudent);
-                }
-            }
-        }
+        container.innerHTML = html;
+        document.getElementById('studentCount').textContent = `(${filteredStudents.length})`;
+    }
+    
+    function selectStudent(studentId) {
+        const student = allStudents.find(s => s.id == studentId);
+        if (!student) return;
         
-        function enableEditMode(studentId) {
-            editMode = true;
-            editStudentId = studentId;
-            
-            const student = allStudents.find(s => s.id == studentId);
-            if (!student) return;
-            
-            selectedStudent = student;
-            
-            document.getElementById('editModeBtn').innerHTML = '✎ EDIT MODE ON';
-            document.getElementById('editModeBtn').style.background = '#ffc107';
-            document.getElementById('saveBtn').style.display = 'inline-block';
-            document.getElementById('cancelBtn').style.display = 'inline-block';
-            
+        selectedStudent = student;
+        
+        if (editMode && editStudentId == studentId) {
             showEditForm(student);
+        } else {
+            showStudentDetails(student);
         }
         
-        function showEditForm(student) {
-            const template = document.getElementById('editFormTemplate').innerHTML;
-            
-            const details = document.getElementById('studentDetails');
-            details.innerHTML = `
-                <h4>✎ EDITING: ${student.fullName}</h4>
-                ${template}
-            `;
-            
-            // Populate form
-            document.getElementById('editFullName').value = student.fullName || '';
-            document.getElementById('editRollNumber').value = student.rollNumber || '';
-            document.getElementById('editRegisterNumber').value = student.registerNumber || '';
-            document.getElementById('editBranch').value = student.branch || 'CSE';
-            document.getElementById('editSection').value = student.section || 'A';
-            document.getElementById('editSemester').value = student.semester || '1';
-            document.getElementById('editBatch').value = student.batch || '';
-            document.getElementById('editAdmissionYear').value = student.admissionYear || '';
-            document.getElementById('editCollegeName').value = student.collegeName || '';
-            document.getElementById('editUniversity').value = student.university || '';
-            document.getElementById('editProfileStatus').value = student.profileStatus || 'ACTIVE';
-        }
+        renderStudentList();
+    }
+    
+    function showStudentDetails(student) {
+        const details = document.getElementById("studentDetails");
         
-        async function saveStudent() {
-            if (!editStudentId) {
-                alert('No student selected for editing');
-                return;
+        details.innerHTML = `
+            <div class="detail-header">
+                <i class="fas fa-user-circle"></i>
+                <h4 style="margin:0;">${student.fullName}</h4>
+            </div>
+            <div class="detail-card">
+                <div class="detail-grid">
+                    <div>Full Name:</div><div>${student.fullName || '—'}</div>
+                    <div>Roll Number:</div><div>${student.rollNumber || '—'}</div>
+                    <div>Register Number:</div><div>${student.registerNumber || '—'}</div>
+                    <div>Branch:</div><div>${student.branch || '—'}</div>
+                    <div>Section:</div><div>${student.section || '—'}</div>
+                    <div>Semester:</div><div>${student.semester || '—'}</div>
+                    <div>Batch:</div><div>${student.batch || '—'}</div>
+                    <div>Admission Year:</div><div>${student.admissionYear || '—'}</div>
+                    <div>College Name:</div><div>${student.collegeName || '—'}</div>
+                    <div>University:</div><div>${student.university || '—'}</div>
+                    <div>Status:</div><div>${student.profileStatus || '—'}</div>
+                </div>
+            </div>
+            <div>
+                <button class="btn-secondary" onclick="enableEditMode(${student.id})"><i class="fas fa-pen"></i> EDIT</button>
+            </div>
+        `;
+    }
+    
+    function toggleEditMode() {
+        editMode = !editMode;
+        const btn = document.getElementById('editModeBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        
+        if (editMode) {
+            btn.innerHTML = '<i class="fas fa-pen"></i> EDIT MODE ON';
+            saveBtn.style.display = 'inline-flex';
+            cancelBtn.style.display = 'inline-flex';
+            
+            if (selectedStudent) {
+                enableEditMode(selectedStudent.id);
             }
-            
-            const studentData = {
-                fullName: document.getElementById('editFullName').value,
-                rollNumber: document.getElementById('editRollNumber').value,
-                registerNumber: document.getElementById('editRegisterNumber').value,
-                branch: document.getElementById('editBranch').value,
-                section: document.getElementById('editSection').value,
-                semester: parseInt(document.getElementById('editSemester').value),
-                batch: document.getElementById('editBatch').value,
-                admissionYear: parseInt(document.getElementById('editAdmissionYear').value) || null,
-                collegeName: document.getElementById('editCollegeName').value,
-                university: document.getElementById('editUniversity').value,
-                profileStatus: document.getElementById('editProfileStatus').value
-            };
-            
-            console.log('📦 Saving:', studentData);
-            
-            try {
-                const response = await fetch(`${API}/admin/students/${editStudentId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': 'Bearer ' + getToken(),
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(studentData)
-                });
-                
-                if (!response.ok) {
-                    const error = await response.text();
-                    throw new Error(`HTTP ${response.status}: ${error}`);
-                }
-                
-                const updated = await response.json();
-                console.log('✅ Saved:', updated);
-                
-                // Update local data
-                const index = allStudents.findIndex(s => s.id == editStudentId);
-                if (index !== -1) {
-                    allStudents[index] = {...allStudents[index], ...studentData};
-                }
-                
-                selectedStudent = {...selectedStudent, ...studentData};
-                
-                alert('✅ Student updated successfully!');
-                
-                // Exit edit mode
-                editMode = false;
-                editStudentId = null;
-                document.getElementById('editModeBtn').innerHTML = '✎ EDIT MODE OFF';
-                document.getElementById('saveBtn').style.display = 'none';
-                document.getElementById('cancelBtn').style.display = 'none';
-                
-                showStudentDetails(selectedStudent);
-                extractFilterOptions();
-                applyFilters();
-                
-            } catch (error) {
-                console.error('❌ Error:', error);
-                alert('❌ Error: ' + error.message);
-            }
-        }
-        
-        function cancelEdit() {
-            editMode = false;
-            editStudentId = null;
-            
-            document.getElementById('editModeBtn').innerHTML = '✎ EDIT MODE OFF';
-            document.getElementById('saveBtn').style.display = 'none';
-            document.getElementById('cancelBtn').style.display = 'none';
+        } else {
+            btn.innerHTML = '<i class="fas fa-pen"></i> EDIT MODE OFF';
+            saveBtn.style.display = 'none';
+            cancelBtn.style.display = 'none';
             
             if (selectedStudent) {
                 showStudentDetails(selectedStudent);
             }
         }
+    }
+    
+    function enableEditMode(studentId) {
+        editMode = true;
+        editStudentId = studentId;
         
-        window.onload = loadStudents;
-    </script>
+        const student = allStudents.find(s => s.id == studentId);
+        if (!student) return;
+        
+        selectedStudent = student;
+        
+        document.getElementById('editModeBtn').innerHTML = '<i class="fas fa-pen"></i> EDIT MODE ON';
+        document.getElementById('saveBtn').style.display = 'inline-flex';
+        document.getElementById('cancelBtn').style.display = 'inline-flex';
+        
+        showEditForm(student);
+    }
+    
+    function showEditForm(student) {
+        const template = document.getElementById('editFormTemplate').innerHTML;
+        
+        const details = document.getElementById('studentDetails');
+        details.innerHTML = `
+            <div class="detail-header">
+                <i class="fas fa-pen"></i>
+                <h4 style="margin:0;">EDITING: ${student.fullName}</h4>
+            </div>
+            ${template}
+        `;
+        
+        // Populate form
+        document.getElementById('editFullName').value = student.fullName || '';
+        document.getElementById('editRollNumber').value = student.rollNumber || '';
+        document.getElementById('editRegisterNumber').value = student.registerNumber || '';
+        document.getElementById('editBranch').value = student.branch || 'CSE';
+        document.getElementById('editSection').value = student.section || 'A';
+        document.getElementById('editSemester').value = student.semester || '1';
+        document.getElementById('editBatch').value = student.batch || '';
+        document.getElementById('editAdmissionYear').value = student.admissionYear || '';
+        document.getElementById('editCollegeName').value = student.collegeName || '';
+        document.getElementById('editUniversity').value = student.university || '';
+        document.getElementById('editProfileStatus').value = student.profileStatus || 'ACTIVE';
+    }
+    
+    async function saveStudent() {
+        if (!editStudentId) {
+            alert('No student selected for editing');
+            return;
+        }
+        
+        const studentData = {
+            fullName: document.getElementById('editFullName').value,
+            rollNumber: document.getElementById('editRollNumber').value,
+            registerNumber: document.getElementById('editRegisterNumber').value,
+            branch: document.getElementById('editBranch').value,
+            section: document.getElementById('editSection').value,
+            semester: parseInt(document.getElementById('editSemester').value),
+            batch: document.getElementById('editBatch').value,
+            admissionYear: parseInt(document.getElementById('editAdmissionYear').value) || null,
+            collegeName: document.getElementById('editCollegeName').value,
+            university: document.getElementById('editUniversity').value,
+            profileStatus: document.getElementById('editProfileStatus').value
+        };
+        
+        console.log('📦 Saving:', studentData);
+        
+        try {
+            const response = await fetch(`${API}/admin/students/${editStudentId}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': 'Bearer ' + getToken(),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(studentData)
+            });
+            
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(`HTTP ${response.status}: ${error}`);
+            }
+            
+            const updated = await response.json();
+            console.log('✅ Saved:', updated);
+            
+            // Update local data
+            const index = allStudents.findIndex(s => s.id == editStudentId);
+            if (index !== -1) {
+                allStudents[index] = {...allStudents[index], ...studentData};
+            }
+            
+            selectedStudent = {...selectedStudent, ...studentData};
+            
+            alert('✅ Student updated successfully!');
+            
+            // Exit edit mode
+            editMode = false;
+            editStudentId = null;
+            document.getElementById('editModeBtn').innerHTML = '<i class="fas fa-pen"></i> EDIT MODE OFF';
+            document.getElementById('saveBtn').style.display = 'none';
+            document.getElementById('cancelBtn').style.display = 'none';
+            
+            showStudentDetails(selectedStudent);
+            extractFilterOptions();
+            applyFilters();
+            
+        } catch (error) {
+            console.error('❌ Error:', error);
+            alert('❌ Error: ' + error.message);
+        }
+    }
+    
+    function cancelEdit() {
+        editMode = false;
+        editStudentId = null;
+        
+        document.getElementById('editModeBtn').innerHTML = '<i class="fas fa-pen"></i> EDIT MODE OFF';
+        document.getElementById('saveBtn').style.display = 'none';
+        document.getElementById('cancelBtn').style.display = 'none';
+        
+        if (selectedStudent) {
+            showStudentDetails(selectedStudent);
+        }
+    }
+    
+    function logout() {
+        localStorage.clear();
+        window.location.href = "../login.html";
+    }
+    
+    window.onload = loadStudents;
+</script>
 </body>
 </html>

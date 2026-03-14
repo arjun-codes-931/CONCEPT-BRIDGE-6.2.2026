@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <style>
 * {
@@ -18,221 +18,323 @@
 body {
   font-family: 'Inter', sans-serif;
   min-height: 100vh;
-  background: radial-gradient(ellipse at top right, #1e1a4a, #0a0a1a);
+  background: linear-gradient(145deg, #5f79ff, #7a5cff, #a16cff);
   background-attachment: fixed;
-  padding: 2rem;
-  position: relative;
+  padding: 1.5rem;
   display: flex;
+  align-items: center;
   justify-content: center;
+  line-height: 1.5;
 }
 
-body::before {
-  content: '';
-  position: absolute;
-  top: -20%;
-  left: -10%;
-  width: 70%;
-  height: 70%;
-  background: radial-gradient(circle, rgba(0, 150, 255, 0.2) 0%, transparent 70%);
-  border-radius: 50%;
-  filter: blur(100px);
-  z-index: 0;
-}
-
-body::after {
-  content: '';
-  position: absolute;
-  bottom: -10%;
-  right: -5%;
-  width: 60%;
-  height: 60%;
-  background: radial-gradient(circle, rgba(150, 0, 255, 0.2) 0%, transparent 70%);
-  border-radius: 50%;
-  filter: blur(120px);
-  z-index: 0;
-}
-
-.container {
+/* main white dashboard with sidebar layout */
+.dashboard-wrapper {
   width: 100%;
-  max-width: 1000px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 10;
+  max-width: 1400px;
+  background: white;
+  border-radius: 28px;
+  box-shadow: 0 35px 60px -20px rgba(30, 30, 60, 0.4), 0 10px 25px -8px rgba(0,0,0,0.2);
+  display: flex;
+  overflow: hidden;
+  min-height: 750px;
 }
 
-.dashboard {
-  background: rgba(18, 22, 40, 0.7);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border-radius: 2rem;
-  padding: 2rem;
-  box-shadow: 
-    0 30px 60px -15px rgba(0, 0, 0, 0.6),
-    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
-    0 0 40px 0 rgba(88, 28, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+/* ========== LEFT VERTICAL SIDEBAR ========== */
+.sidebar {
+  width: 280px;
+  background: #f3f6fb;          /* input background */
+  border-right: 1px solid #e3e3e3;
+  padding: 2rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.2rem;
 }
 
-.header {
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-left: 0.5rem;
+}
+
+.brand-icon {
+  width: 2.8rem;
+  height: 2.8rem;
+  background: linear-gradient(145deg, #4c74ff, #8a52ff);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 14px -6px #4c74ff66;
+}
+
+.brand-icon i {
+  font-size: 1.6rem;
+  color: white;
+}
+
+.brand-text {
+  font-weight: 700;
+  font-size: 1.4rem;
+  background: linear-gradient(145deg, #1e1e3f, #4c74ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.02em;
+}
+
+/* vertical navigation */
+.side-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  flex: 1;
+}
+
+.side-nav-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  padding: 1rem 1.2rem;
+  color: #1e1e3a;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  text-align: left;
+  font-family: 'Inter', sans-serif;
+}
+
+.side-nav-btn i {
+  font-size: 1.4rem;
+  width: 2rem;
+  text-align: center;
+  background: linear-gradient(145deg, #4c74ff, #8a52ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: transform 0.15s;
+}
+
+.side-nav-btn span {
+  font-weight: 600;
+  color: #3f3f60;
+}
+
+.side-nav-btn:hover {
+  background: white;
+  border-color: #e3e3e3;
+  box-shadow: 0 8px 18px -12px #4c74ff, 0 0 0 1px rgba(76,116,255,0.2) inset;
+  transform: translateX(4px);
+}
+
+.side-nav-btn:hover i {
+  transform: scale(1.05);
+}
+
+/* active item gradient highlight */
+.side-nav-btn.active {
+  background: white;
+  border-color: #d0ddff;
+  box-shadow: 0 0 0 2px rgba(76,116,255,0.15) inset;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e3e3e3;
+}
+
+.logout-btn {
+  background: #f3f6fb;
+  border: 1px solid #e3e3e3;
+  border-radius: 40px;
+  padding: 0.9rem 1.2rem;
+  color: #4c516d;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+}
+
+.logout-btn i {
+  font-size: 1.2rem;
+  color: #777;    /* secondary text */
+}
+
+.logout-btn span {
+  color: #4c516d;
+}
+
+.logout-btn:hover {
+  background: white;
+  border-color: #ffb7b7;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 18px -14px #e5515b;
+}
+.logout-btn:hover i {
+  color: #e5515b;
+  transform: translateX(3px);
+}
+
+/* ========== MAIN CONTENT ========== */
+.main-content {
+  flex: 1;
+  padding: 2rem 2.5rem;
+  background: white;
+  display: flex;
+  flex-direction: column;
+}
+
+/* minimal header */
+.page-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
   margin-bottom: 2rem;
   flex-wrap: wrap;
-  gap: 1rem;
 }
 
 .header-left {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
-.header-icon {
-  width: 3rem;
-  height: 3rem;
-  background: linear-gradient(135deg, #3b48e0, #8a2be2);
-  border-radius: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 8px 16px -4px rgba(59, 72, 224, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.header-icon i {
-  font-size: 1.5rem;
-  color: white;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+.header-left i {
+  font-size: 2.2rem;
+  background: linear-gradient(145deg, #4c74ff, #8a52ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 h2 {
-  color: white;
-  font-weight: 600;
-  font-size: 1.8rem;
+  font-weight: 700;
+  font-size: 2rem;
   letter-spacing: -0.02em;
-  background: linear-gradient(135deg, #ffffff, #d4d0ff);
+  background: linear-gradient(145deg, #1e1e30, #4c74ff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .header-actions {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.8rem;
   flex-wrap: wrap;
 }
 
-.btn {
-  padding: 0.75rem 1.5rem;
-  border-radius: 2rem;
+/* gradient buttons */
+.btn-primary {
+  background: linear-gradient(145deg, #4c74ff, #8a52ff);
+  border: none;
+  border-radius: 40px;
+  padding: 0.7rem 1.6rem;
+  font-weight: 600;
   font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  color: white;
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  font-family: 'Inter', sans-serif;
-  background: rgba(255, 255, 255, 0.03);
-  color: white;
-  backdrop-filter: blur(4px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 8px 18px -8px #4c74ff;
+  border: 1px solid rgba(255,255,255,0.2);
 }
 
-.btn i {
-  font-size: 0.9rem;
-  transition: transform 0.2s ease;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #3b48e0, #8a2be2);
-  border: none;
-  box-shadow: 0 8px 16px -8px rgba(88, 28, 255, 0.6);
+.btn-primary i {
   color: white;
-  font-weight: 600;
-  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .btn-primary:hover {
+  background: linear-gradient(145deg, #5f7eff, #9a62ff);
   transform: translateY(-2px);
-  box-shadow: 0 12px 24px -8px rgba(88, 28, 255, 0.8);
-  background: linear-gradient(135deg, #4f5cf0, #9b3cf2);
+  box-shadow: 0 15px 25px -12px #4c74ff;
 }
 
-.btn-primary:hover i {
-  transform: rotate(180deg);
+.btn-secondary {
+  background: #f3f6fb;
+  border: 1px solid #e3e3e3;
+  border-radius: 40px;
+  padding: 0.7rem 1.6rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #3f3f60;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.btn-outline {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.btn-secondary i {
+  color: #777;
 }
 
-.btn-outline:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: translateX(-4px);
+.btn-secondary:hover {
+  background: white;
+  border-color: #b5c8ff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px -10px #4c74ff;
 }
 
-.btn-outline:hover i {
-  transform: translateX(-4px);
-}
-
+/* section header */
 .section-header {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin: 2rem 0 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .section-header i {
-  font-size: 1.5rem;
-  color: #7b5eff;
-  background: rgba(123, 94, 255, 0.1);
-  padding: 0.5rem;
-  border-radius: 0.8rem;
+  font-size: 1.6rem;
+  background: linear-gradient(145deg, #4c74ff, #8a52ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 h3 {
-  color: white;
-  font-weight: 600;
-  font-size: 1.4rem;
-  letter-spacing: -0.01em;
-  background: linear-gradient(135deg, #ffffff, #c0b8ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #1e1e30;
 }
 
+/* quiz grid (list) */
 .quiz-grid {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.2rem;
 }
 
+/* quiz card (white card with soft bg) */
 .quiz-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 1.5rem;
-  padding: 1.5rem;
-  transition: all 0.25s ease;
-  backdrop-filter: blur(4px);
-  box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.3);
+  background: #f9fbfe;
+  border: 1px solid #e3e3e3;
+  border-radius: 22px;
+  padding: 1.5rem 1.8rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 6px 14px -10px rgba(0,0,0,0.08);
 }
 
 .quiz-card:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: #b5c8ff;
+  box-shadow: 0 12px 24px -14px #4c74ff;
   transform: translateY(-2px);
-  box-shadow: 
-    0 20px 30px -12px rgba(88, 28, 255, 0.4),
-    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
 }
 
 .quiz-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   margin-bottom: 1rem;
   flex-wrap: wrap;
@@ -249,13 +351,12 @@ h3 {
 .quiz-icon {
   width: 2.5rem;
   height: 2.5rem;
-  background: linear-gradient(135deg, #3b48e0, #8a2be2);
-  border-radius: 0.8rem;
+  background: linear-gradient(145deg, #4c74ff, #8a52ff);
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6px 12px -4px rgba(59, 72, 224, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 6px 12px -6px #4c74ff;
 }
 
 .quiz-icon i {
@@ -264,66 +365,69 @@ h3 {
 }
 
 .quiz-title {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 1.2rem;
-  color: white;
-  letter-spacing: -0.01em;
+  color: #1e1e30;
 }
 
 .quiz-badge {
-  background: rgba(123, 94, 255, 0.2);
-  border: 1px solid rgba(123, 94, 255, 0.3);
-  border-radius: 2rem;
+  background: #f3f6fb;
+  border: 1px solid #e3e3e3;
+  border-radius: 30px;
   padding: 0.25rem 1rem;
   font-size: 0.8rem;
-  color: #b4a6ff;
-  font-weight: 500;
+  font-weight: 600;
+  color: #4c74ff;
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.4rem;
 }
 
 .quiz-details-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1rem;
-  margin: 1rem 0;
+  margin: 1rem 0 1.2rem;
 }
 
 .detail-item {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: #3f3f60;
   font-size: 0.95rem;
 }
 
 .detail-item i {
   width: 1.5rem;
-  color: #7b5eff;
-  font-size: 0.9rem;
+  background: linear-gradient(145deg, #4c74ff, #8a52ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: 1rem;
 }
 
 .detail-item strong {
-  color: white;
-  font-weight: 600;
+  font-weight: 700;
+  color: #1e1e30;
   margin-right: 0.3rem;
 }
 
 .quiz-actions {
   display: flex;
   justify-content: flex-end;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
+/* delete button (secondary style) */
 .btn-delete {
-  background: rgba(255, 70, 85, 0.1);
-  border: 1px solid rgba(255, 70, 85, 0.3);
-  border-radius: 2rem;
+  background: #f3f6fb;
+  border: 1px solid #e3e3e3;
+  border-radius: 30px;
   padding: 0.6rem 1.5rem;
-  color: #ff8a9f;
+  color: #4c516d;
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   display: inline-flex;
@@ -333,54 +437,57 @@ h3 {
 }
 
 .btn-delete i {
+  color: #777;
   font-size: 0.9rem;
 }
 
 .btn-delete:hover {
-  background: rgba(255, 70, 85, 0.2);
-  border-color: rgba(255, 70, 85, 0.5);
-  color: #ffb0c0;
+  background: white;
+  border-color: #ff6b6b;
+  color: #d14545;
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px -8px rgba(255, 70, 85, 0.4);
+  box-shadow: 0 10px 16px -12px #d14545;
 }
-
 .btn-delete:hover i {
+  color: #d14545;
   animation: shake 0.3s ease;
 }
 
 @keyframes shake {
   0%, 100% { transform: rotate(0); }
-  25% { transform: rotate(10deg); }
-  75% { transform: rotate(-10deg); }
+  25% { transform: rotate(8deg); }
+  75% { transform: rotate(-8deg); }
 }
 
 .empty-state {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px dashed rgba(255, 255, 255, 0.1);
-  border-radius: 1.5rem;
+  background: #f9fbfe;
+  border: 1px dashed #e3e3e3;
+  border-radius: 22px;
   padding: 3rem 2rem;
   text-align: center;
-  color: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(4px);
+  color: #777;
 }
 
 .empty-state i {
   font-size: 3rem;
   margin-bottom: 1rem;
-  color: rgba(123, 94, 255, 0.3);
+  background: linear-gradient(145deg, #4c74ff, #8a52ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .empty-state p {
   font-size: 1.1rem;
+  color: #3f3f60;
 }
 
 .loading-state {
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 1.5rem;
+  background: #f9fbfe;
+  border-radius: 22px;
   padding: 3rem;
   text-align: center;
-  color: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(4px);
+  color: #777;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -389,7 +496,10 @@ h3 {
 
 .loading-state i {
   animation: spin 1s linear infinite;
-  color: #7b5eff;
+  background: linear-gradient(145deg, #4c74ff, #8a52ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 @keyframes spin {
@@ -401,111 +511,118 @@ hr {
   display: none;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  body {
-    padding: 1rem;
+/* responsive */
+@media (max-width: 900px) {
+  .dashboard-wrapper {
+    flex-wrap: wrap;
   }
-  
-  .dashboard {
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #e3e3e3;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
     padding: 1.5rem;
   }
-  
-  h2 {
-    font-size: 1.5rem;
+  .side-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
-  
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
+  .sidebar-footer {
+    margin-top: 0;
+    border-top: none;
+    padding-top: 0;
   }
-  
-  .header-actions {
-    width: 100%;
+  .logout-btn {
+    width: auto;
+    padding: 0.8rem 1.8rem;
   }
-  
-  .btn {
-    flex: 1;
-    justify-content: center;
-  }
-  
-  .quiz-details-grid {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
+}
+
+@media (max-width: 700px) {
+  body { padding: 1rem; }
+  .main-content { padding: 1.5rem; }
+  .page-header { flex-direction: column; align-items: start; }
+  .header-actions { width: 100%; }
+  .btn-primary, .btn-secondary { flex: 1; justify-content: center; }
+  .quiz-details-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
-  .quiz-header {
-    flex-direction: column;
-  }
-  
-  .quiz-actions {
-    justify-content: stretch;
-  }
-  
-  .btn-delete {
-    width: 100%;
-    justify-content: center;
-  }
+  .quiz-header { flex-direction: column; }
+  .quiz-actions { justify-content: stretch; }
+  .btn-delete { width: 100%; justify-content: center; }
 }
 
-/* Focus styles */
 button:focus-visible {
-  outline: 2px solid #8a2be2;
-  outline-offset: 2px;
+  outline: 3px solid #8a52ff;
+  outline-offset: 3px;
 }
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #3b48e0, #8a2be2);
-  border-radius: 10px;
-}
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #f3f6fb; border-radius: 12px; }
+::-webkit-scrollbar-thumb { background: linear-gradient(145deg, #4c74ff, #8a52ff); border-radius: 12px; }
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="dashboard">
-    <div class="header">
-      <div class="header-left">
-        <div class="header-icon">
-          <i class="fas fa-puzzle-piece"></i>
+<div class="dashboard-wrapper">
+    <!-- LEFT SIDEBAR (vertical) -->
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">
+                <i class="fas fa-crown"></i>
+            </div>
+            <span class="brand-text">Nexus</span>
         </div>
-        <h2>Quiz Management</h2>
-      </div>
-      <div class="header-actions">
-        <button class="btn btn-outline" onclick="goDashboard()">
-          <i class="fas fa-arrow-left"></i>
-          <span>Dashboard</span>
-        </button>
-        <button class="btn btn-primary" onclick="loadQuizzes()">
-          <i class="fas fa-sync-alt"></i>
-          <span>Refresh</span>
-        </button>
-      </div>
+        <div class="side-nav">
+            <button class="side-nav-btn" onclick="window.location.href='dashboard.html'"><i class="fas fa-home"></i><span>Dashboard</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='students.html'"><i class="fas fa-user-graduate"></i><span>Students</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='teachers.html'"><i class="fas fa-chalkboard-user"></i><span>Teachers</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='materials.html'"><i class="fas fa-book-open"></i><span>Materials</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='user-management.html'"><i class="fas fa-users-cog"></i><span>Manage Users</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='projects.html'"><i class="fas fa-code-branch"></i><span>Projects</span></button>
+            <button class="side-nav-btn active" onclick="window.location.href='quizzes.html'"><i class="fas fa-puzzle-piece"></i><span>Quizzes</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='stats.html'"><i class="fas fa-chart-line"></i><span>System Stats</span></button>
+        </div>
+        <div class="sidebar-footer">
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i><span>Logout</span><i class="fas fa-arrow-right" style="font-size:0.8rem; opacity:0;"></i>
+            </button>
+        </div>
     </div>
 
-    <div class="section-header">
-      <i class="fas fa-layer-group"></i>
-      <h3>All Quizzes</h3>
+    <!-- MAIN CONTENT (right) -->
+    <div class="main-content">
+        <div class="page-header">
+            <div class="header-left">
+                <i class="fas fa-puzzle-piece"></i>
+                <h2>Quiz Management</h2>
+            </div>
+            <div class="header-actions">
+                <button class="btn-secondary" onclick="goDashboard()">
+                    <i class="fas fa-arrow-left"></i> Dashboard
+                </button>
+                <button class="btn-primary" onclick="loadQuizzes()">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <i class="fas fa-layer-group"></i>
+            <h3>All Quizzes</h3>
+        </div>
+
+        <div id="quizList" class="quiz-grid">Loading quizzes...</div>
     </div>
-    
-    <div id="quizList" class="quiz-grid">Loading quizzes...</div>
-  </div>
 </div>
 
 <hr style="display: none;">
 <div id="questionArea" style="display: none;"></div>
 
+<!-- ORIGINAL JAVASCRIPT – UNMODIFIED -->
 <script>
 const API = "http://localhost:8080";
 const token = localStorage.getItem("token");
@@ -626,7 +743,12 @@ function goDashboard(){
 }
 
 loadQuizzes();
-</script>
 
+// logout helper (used in sidebar)
+function logout() {
+    localStorage.clear();
+    window.location.href = "../login.html";
+}
+</script>
 </body>
 </html>

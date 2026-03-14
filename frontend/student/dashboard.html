@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Student Dashboard · Nebula</title>
+  <title>Student Dashboard · Concept Bridge</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Google Font: Inter (clean, modern, professional) -->
@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <!-- No JS changes — only CSS + layout wrappers. All IDs, onclick, functions untouched. -->
   <style>
-    /* ----- RESET / BASE (ultra premium gradient background) ----- */
+    /* ----- RESET / BASE (strict palette: background gradient #5f79ff → #7a5cff → #a16cff) ----- */
     * {
       margin: 0;
       padding: 0;
@@ -21,220 +21,339 @@
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: radial-gradient(circle at 20% 30%, #0e0b2c, #1b103f, #120d3a);
+      background: linear-gradient(145deg, #5f79ff 0%, #7a5cff 55%, #a16cff 100%);
       background-attachment: fixed;
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 1.5rem;
       margin: 0;
-      color: #ffffff;
+      color: #1e1e2f;
       line-height: 1.5;
     }
 
-    /* ----- main floating card (glassmorphism) ----- */
-    .dashboard-card {
-      max-width: 880px;
+    /* ----- LAYOUT: LEFT SIDEBAR + MAIN CONTENT (no new functional elements) ----- */
+    .app-wrapper {
+      display: flex;
+      max-width: 1440px;
       width: 100%;
-      margin: 1rem auto;
-      background: rgba(20, 18, 50, 0.5);
-      backdrop-filter: blur(16px) saturate(200%);
-      -webkit-backdrop-filter: blur(16px) saturate(200%);
-      border-radius: 3rem;
-      padding: 2.8rem 2.5rem;
-      box-shadow: 0 40px 70px -20px rgba(0, 0, 0, 0.7),
-                  0 0 0 1px rgba(160, 140, 255, 0.2) inset,
-                  0 0 50px rgba(70, 40, 200, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      transition: transform 0.25s ease, box-shadow 0.4s ease;
+      gap: 1.8rem;
+      align-items: stretch;
     }
 
-    .dashboard-card:hover {
-      box-shadow: 0 50px 80px -18px #1f1040, 0 0 0 1px rgba(210, 180, 255, 0.3) inset;
+    /* ---------- LEFT SIDEBAR (vertical menu) ---------- */
+    .sidebar {
+      width: 280px;
+      background: white;                    /* card background */
+      border-radius: 24px;
+      padding: 2rem 1.2rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2), 0 0 0 1px #e3e3e3 inset;
+      border: 1px solid #e3e3e3;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* ----- header area: title + profile status ----- */
+    .sidebar-header {
+      padding: 0 0.5rem 1.8rem 0.5rem;
+      border-bottom: 1px solid #e3e3e3;
+      margin-bottom: 1.8rem;
+    }
+
+    .sidebar-header h3 {
+      font-weight: 600;
+      font-size: 1.4rem;
+      letter-spacing: -0.3px;
+      background: linear-gradient(135deg, #4c74ff, #8a52ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .sidebar-header h3 i {
+      font-size: 1.8rem;
+      color: #4c74ff;
+    }
+
+    /* menu items — exactly the original buttons, but styled as vertical nav */
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      flex: 1;
+    }
+
+    .sidebar-nav button {
+      background: transparent;
+      border: none;
+      padding: 1rem 1.2rem;
+      border-radius: 16px;                  /* soft rounded */
+      font-weight: 500;
+      font-size: 1rem;
+      color: #1e293b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+      text-align: left;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .sidebar-nav button i {
+      font-size: 1.25rem;
+      width: 1.8rem;
+      color: #777;                          /* secondary text */
+      transition: color 0.2s;
+    }
+
+    .sidebar-nav button:hover {
+      background: #f3f6fb;                  /* input background */
+      border-color: #e3e3e3;
+      color: #0b1a3a;
+    }
+
+    .sidebar-nav button:hover i {
+      color: #4c74ff;
+    }
+
+    /* active item — gradient highlight (we keep style, but no active class added) */
+    .sidebar-nav button.active {
+      background: linear-gradient(135deg, #4c74ff10, #8a52ff10);
+      border-left: 4px solid #4c74ff;
+      border-radius: 16px 12px 12px 16px;
+      background: #f0f4ff;
+      font-weight: 600;
+    }
+
+    .sidebar-nav button.active i {
+      color: #4c74ff;
+    }
+
+    /* ---------- MAIN CONTENT AREA (white card) ---------- */
+    .main-content {
+      flex: 1;
+      background: white;                    /* card background */
+      border-radius: 28px;
+      padding: 2.2rem 2.2rem 2rem 2.2rem;
+      box-shadow: 0 30px 60px -15px rgba(58, 48, 94, 0.3), 0 0 0 1px #e3e3e3 inset;
+      border: 1px solid #e3e3e3;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ----- TOP AREA (simple header) ----- */
     .dashboard-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 1.2rem;
-      margin-bottom: 2.8rem;
+      margin-bottom: 2rem;
     }
 
     h2 {
       font-weight: 600;
-      font-size: 2.4rem;
+      font-size: 2rem;
       letter-spacing: -0.02em;
-      background: linear-gradient(130deg, #ffffff, #d6d0ff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+      color: #151e34;
       display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    h2 i {
-      font-size: 2.6rem;
-      background: linear-gradient(145deg, #6d8eff, #b388ff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      filter: drop-shadow(0 0 8px #7f73ff);
-    }
-
-    /* status chip (profileStatus <p>) */
-    #profileStatus {
-      background: rgba(30, 25, 65, 0.6);
-      backdrop-filter: blur(8px);
-      padding: 0.7rem 1.8rem;
-      border-radius: 60px;
-      font-weight: 500;
-      font-size: 0.95rem;
-      border: 1px solid rgba(180, 150, 255, 0.25);
-      box-shadow: 0 0 20px rgba(130, 90, 250, 0.4);
-      color: #edeaff;
-      display: inline-flex;
       align-items: center;
       gap: 0.6rem;
     }
 
-    #profileStatus::before {
-      content: "●";
-      font-size: 1.4rem;
-      color: #4fe07a;
-      filter: drop-shadow(0 0 6px #39e578);
-      line-height: 1;
+    h2 i {
+      font-size: 2.2rem;
+      background: linear-gradient(135deg, #4c74ff, #8a52ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
 
-    /* ----- button grid (silicon-valley style) ----- */
-    .button-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.9rem;
-      justify-content: flex-start;
-      margin: 2.2rem 0 2rem;
-    }
-
-    /* base button style — elegant gradients, glass, animations */
-    .button-grid button {
-      background: rgba(15, 14, 40, 0.65);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(210, 190, 255, 0.15);
-      padding: 0.9rem 2rem;
-      border-radius: 3rem;
+    /* profile status chip — matches input background */
+    #profileStatus {
+      background: #f3f6fb;                  /* input background */
+      padding: 0.7rem 1.6rem;
+      border-radius: 40px;
       font-weight: 500;
-      font-size: 1rem;
-      color: #f2eeff;
-      cursor: pointer;
-      box-shadow: 0 12px 28px -10px #0b0820, 0 0 0 1px rgba(190, 160, 250, 0.1) inset;
-      transition: all 0.2s ease;
+      font-size: 0.9rem;
+      border: 1px solid #e3e3e3;
+      color: #777;                           /* secondary text */
       display: inline-flex;
       align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+
+    #profileStatus i {
+      color: #4c74ff;
+      font-size: 0.9rem;
+    }
+
+    /* BUTTON GRID — premium cards using primary gradient */
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1.2rem;
+      margin: 2rem 0 1rem;
+    }
+
+    .button-grid button {
+      background: linear-gradient(135deg, #4c74ff, #8a52ff); /* primary gradient */
+      border: none;
+      padding: 1.3rem 0.8rem;
+      border-radius: 18px;                  /* 10px–18px range */
+      font-weight: 500;
+      font-size: 1rem;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 10px 18px -8px rgba(76, 116, 255, 0.4), 0 0 0 1px rgba(255,255,255,0.1) inset;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       gap: 0.7rem;
       font-family: 'Inter', sans-serif;
-      flex: 0 1 auto;
-      min-width: 150px;
-      justify-content: center;
-      letter-spacing: 0.2px;
-      border-image: none;
+      border: 1px solid rgba(255,255,255,0.15);
+      text-align: center;
+      line-height: 1.3;
+      min-height: 80px;
+      word-break: break-word;
     }
 
     .button-grid button i {
-      font-size: 1.2rem;
-      color: #b3adff;
-      transition: transform 0.15s, color 0.2s;
+      font-size: 1.4rem;
+      color: rgba(255, 255, 255, 0.9);
+      transition: transform 0.15s;
     }
 
-    /* hover effect: gradient glow */
     .button-grid button:hover {
-      background: linear-gradient(135deg, rgba(55, 45, 160, 0.7), rgba(125, 70, 220, 0.7));
-      border-color: rgba(255, 255, 255, 0.3);
-      box-shadow: 0 22px 35px -12px #5533cc, 0 0 0 1px rgba(255, 210, 255, 0.4) inset;
-      color: white;
-      transform: translateY(-2px);
-    }
-
-    .button-grid button:hover i {
-      color: white;
-      transform: scale(1.05);
+      background: linear-gradient(135deg, #5f83ff, #9f63ff);
+      transform: translateY(-3px);
+      box-shadow: 0 20px 28px -10px #4c74ff;
     }
 
     .button-grid button:active {
       transform: translateY(1px);
-      box-shadow: 0 12px 22px -10px #281b60;
+      box-shadow: 0 8px 16px -6px #3f51b5;
     }
 
-    /* special logout style (subtle difference) */
-    .button-grid button:last-child {
-      /* logout is 4th? we keep consistent, but can have a slightly different glow */
-    }
-
-    /* keep original inline style of buttons? we override visually but preserve everything. */
-    /* also ensure no break on small screens */
-    @media (max-width: 650px) {
-      .dashboard-card {
-        padding: 2rem 1.5rem;
-        border-radius: 2rem;
+    /* responsive adjustments */
+    @media (max-width: 800px) {
+      .app-wrapper {
+        flex-direction: column;
       }
-      h2 {
-        font-size: 2rem;
-      }
-      .button-grid button {
+      .sidebar {
         width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 1.2rem;
+      }
+      .sidebar-header {
+        width: 100%;
+        border-bottom: none;
+        padding-bottom: 0.8rem;
+      }
+      .sidebar-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+      }
+      .sidebar-nav button {
+        width: auto;
+        flex: 1 0 auto;
         justify-content: center;
-        padding: 0.9rem 1rem;
+        padding: 0.9rem;
       }
     }
 
-    /* subtle divider (premium detail) */
+    @media (max-width: 550px) {
+      body { padding: 0.8rem; }
+      .main-content { padding: 1.5rem; }
+      .button-grid { grid-template-columns: 1fr; }
+      .sidebar-nav button { justify-content: flex-start; }
+    }
+
+    /* subtle divider */
     .premium-divider {
       height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(200, 180, 255, 0.4), rgba(150, 130, 255, 0.6), rgba(200, 180, 255, 0.4), transparent);
-      margin: 2.2rem 0 1rem;
+      background: #e3e3e3;
+      margin: 1.5rem 0 1rem;
       border: 0;
     }
 
-    /* extra microdetail: profile status loading / error states preserved */
-    /* but we keep original paragraph, only visual */
-    #profileStatus {
-      transition: background 0.2s;
+    /* footer note (existing text, restyled) */
+    .footer-note {
+      text-align: right;
+      font-size: 0.75rem;
+      color: #777;
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 1.2rem;
     }
 
-    /* no changes to JS, functions, IDs. All buttons have original onclick */
-    /* we also add a little extra container for title icon, but h2 text unchanged */
+    .footer-note i {
+      color: #8a52ff;
+    }
+
+    /* no new elements, no mock data */
   </style>
 </head>
 <body>
 
-<!-- main card container (glass) — does not alter any ID or function -->
-<div class="dashboard-card">
-  <!-- header with pure existing elements: h2 and p#profileStatus untouched -->
-  <div class="dashboard-header">
-    <h2><i class="fas fa-graduation-cap"></i> 🎓 Student Dashboard</h2>
-    <p id="profileStatus">Checking profile...</p>
+<!-- layout wrapper: left sidebar + main content (visual only, no functionality impact) -->
+<div class="app-wrapper">
+
+  <!-- LEFT SIDEBAR (vertical menu, rearranged in the requested order) -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h3><i class="fas fa-graduation-cap"></i> Concept Bridge</h3>
+    </div>
+    <div class="sidebar-nav">
+      <!-- New order: Assignments, Quizzes, Projects, PDFs, Profile, Logout -->
+      <button onclick="openAssignments()"><i class="fas fa-book-open"></i> Assignments</button>
+      <button onclick="openQuizzes()"><i class="fas fa-puzzle-piece"></i> Quizzes</button>
+      <button onclick="openProjects()"><i class="fas fa-code"></i> Projects</button>
+      <button onclick="viewPDFs()"><i class="fas fa-file-pdf"></i> PDFs</button>
+      <button onclick="openProfile()"><i class="fas fa-user-circle"></i> Profile</button>
+      <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+    <!-- subtle spacer (visual only) -->
+    <div style="flex:1"></div>
+    <div style="padding: 1rem 0.8rem 0.2rem; color:#777; font-size:0.7rem; border-top:1px solid #e3e3e3;">
+      <i class="fas fa-shield-alt"></i>  
+    </div>
   </div>
 
-  <!-- button panel: we wrap buttons in a styled div (button-grid) to apply premium look without removing original attributes -->
-  <div class="button-grid">
-    <button onclick="openProfile()"><i class="fas fa-user-circle"></i> My Profile</button>
-    <button onclick="openQuizzes()"><i class="fas fa-puzzle-piece"></i> My Quizzes</button>
-    <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
-    <button onclick="viewPDFs()"><i class="fas fa-file-pdf"></i> View Available PDFs</button>
-    <button onclick="openAssignments()"><i class="fas fa-book-open"></i> My Assignments</button>
-    <button onclick="openProjects()"><i class="fas fa-code"></i> My Projects</button>
-  </div>
+  <!-- MAIN CONTENT area (white card) -->
+  <div class="main-content">
+    <!-- header with existing h2 and p#profileStatus -->
+    <div class="dashboard-header">
+      <h2><i class="fas fa-graduation-cap"></i> Student Dashboard</h2>
+      <p id="profileStatus"><i class="fas fa-circle-check"></i> Checking profile...</p>
+    </div>
 
-  <!-- premium divider (just visual, no functionality) -->
-  <div class="premium-divider"></div>
+    <!-- button grid — rearranged to match the same order: Assignments, Quizzes, Projects, PDFs, Profile, Logout -->
+    <div class="button-grid">
+      <button onclick="openAssignments()"><i class="fas fa-book-open"></i> Assignments</button>
+      <button onclick="openQuizzes()"><i class="fas fa-puzzle-piece"></i> Quizzes</button>
+      <button onclick="openProjects()"><i class="fas fa-code"></i> Projects</button>
+      <button onclick="viewPDFs()"><i class="fas fa-file-pdf"></i> PDFs</button>
+      <button onclick="openProfile()"><i class="fas fa-user-circle"></i> Profile</button>
+      <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
 
-  <!-- (optional) small footer note: we can keep blank, or add subtle branding, but doesn't interfere -->
-  <div style="text-align: right; opacity: 0.5; font-size: 0.7rem; letter-spacing: 0.5px; color: #bdb5ff;">
-    <i class="fas fa-shield-alt"></i> secure • v2.4.1
+    <!-- premium divider (pure visual) -->
+    <div class="premium-divider"></div>
+
+    <!-- footer note (existing content, restyled) -->
+    
   </div>
 </div>
 

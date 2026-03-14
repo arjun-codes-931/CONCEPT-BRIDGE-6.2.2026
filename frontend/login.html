@@ -209,6 +209,7 @@
       font-size: 0.9rem;
       border-top: 1px solid #e3e3e3;
       padding-top: 1.5rem;
+      position: relative; /* for tooltip positioning */
     }
 
     .card-footer a {
@@ -285,6 +286,100 @@
 
     /* preserve all original functionality */
     /* no JavaScript modified, no elements removed/renamed */
+    
+    /* ===== FUN UI ANIMATIONS / EMOJI / HELP TOOLTIP START ===== */
+
+    /* Emoji reaction container */
+    .emoji-reaction {
+      text-align: center;
+      margin: -1rem 0 1.5rem 0;
+      min-height: 3.5rem;
+      font-size: 2rem;
+      line-height: 1.3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .reaction-box {
+      background: #f0f3fe;
+      border-radius: 40px;
+      padding: 0.4rem 1.2rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #1e293b;
+      border: 1px solid rgba(76, 116, 255, 0.2);
+      opacity: 0;
+      transform: scale(0.9);
+      transition: opacity 0.3s ease, transform 0.2s ease;
+    }
+
+    .reaction-box.show-reaction {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .reaction-emoji {
+      font-size: 1.8rem;
+      line-height: 1;
+    }
+
+    .reaction-message {
+      font-family: 'Inter', sans-serif;
+      white-space: nowrap;
+    }
+
+    /* Help tooltip (pop message) */
+    .help-tooltip {
+      position: absolute;
+      background: #1e293b;
+      color: #f8fafc;
+      font-size: 0.85rem;
+      padding: 0.6rem 1rem;
+      border-radius: 24px;
+      box-shadow: 0 10px 20px -8px rgba(0,0,0,0.4);
+      white-space: nowrap;
+      z-index: 30;
+      pointer-events: none;
+      opacity: 0;
+      transform: scale(0.8) translateY(10px);
+      transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      bottom: 100%; /* position above the link */
+      left: 50%;
+      transform-origin: bottom center;
+      margin-bottom: 8px;
+    }
+
+    .help-tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -6px;
+      border-width: 6px;
+      border-style: solid;
+      border-color: #1e293b transparent transparent transparent;
+    }
+
+    .help-tooltip.show-tooltip {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+
+    /* Ensure footer link container has relative positioning for tooltip */
+    .card-footer {
+      position: relative;
+    }
+
+    /* ===== FUN UI ANIMATIONS / EMOJI / HELP TOOLTIP END ===== */
+
   </style>
 </head>
 <body>
@@ -300,6 +395,10 @@
       <p>Sign in to your academic dashboard</p>
     </div>
 
+    <!-- ===== EMOJI REACTION SYSTEM START ===== -->
+    <div class="emoji-reaction" id="emojiReactionContainer"></div>
+    <!-- ===== EMOJI REACTION SYSTEM END ===== -->
+
     <!-- username field with icon -->
     <div class="input-group">
       <i class="fas fa-user input-icon"></i>
@@ -313,23 +412,131 @@
     </div>
 
     <!-- subtle hint (purely visual) -->
-    <div class="hint-pw">
-      <i class="fas fa-info-circle"></i> <span>minimum 6 characters</span>
-    </div>
+    
 
     <!-- original login button (ID preserved) -->
     <button id="loginBtn">
       <span>Sign in</span> <i class="fas fa-arrow-right"></i>
     </button>
 
-    <!-- footer links – no functionality attached -->
-    <div class="card-footer">
-      <a href="#"><i class="far fa-circle-question"></i> Need help signing in?</a>
+    <!-- footer links – with added tooltip for help -->
+    <div class="card-footer" id="helpLinkContainer">
+      <a href="#" id="helpLink"><i class="far fa-circle-question"></i> Need help signing in?</a>
+      <!-- HELP TOOLTIP START -->
+      <span class="help-tooltip" id="helpTooltip">Use the username and password given by your teacher.</span>
+      <!-- HELP TOOLTIP END -->
     </div>
 
   </div>
 
   <!-- original script (preserved path, same functionality) -->
   <script src="js/auth.js"></script>
+
+  <!-- ===== ALL NEW INTERACTIONS START ===== -->
+  <script>
+    (function() {
+      // ---------- 1. SUPPRESS ALERT, USE EMOJI ----------
+      const container = document.getElementById('emojiReactionContainer');
+      const usernameInput = document.getElementById('username');
+      const passwordInput = document.getElementById('password');
+      const loginBtn = document.getElementById('loginBtn');
+
+      // Store original alert and override
+      const originalAlert = window.alert;
+      window.alert = function() {
+        console.log('Alert suppressed:', arguments[0]);
+      };
+
+      function showEmoji(emoji, message) {
+        if (!container) return;
+
+        container.innerHTML = '';
+
+        const box = document.createElement('div');
+        box.className = 'reaction-box';
+
+        const emojiSpan = document.createElement('span');
+        emojiSpan.className = 'reaction-emoji';
+        emojiSpan.textContent = emoji;
+
+        const msgSpan = document.createElement('span');
+        msgSpan.className = 'reaction-message';
+        msgSpan.textContent = message;
+
+        box.appendChild(emojiSpan);
+        box.appendChild(msgSpan);
+        container.appendChild(box);
+
+        box.offsetHeight; // force reflow
+        box.classList.add('show-reaction');
+
+        setTimeout(() => {
+          box.classList.remove('show-reaction');
+          setTimeout(() => {
+            if (container.firstChild === box) {
+              container.innerHTML = '';
+            }
+          }, 350);
+        }, 2000);
+      }
+
+      function getReactionForAttempt() {
+        const username = usernameInput ? usernameInput.value.trim() : '';
+        const password = passwordInput ? passwordInput.value : '';
+
+        if (username === '' || password === '') {
+          return { emoji: '😕', message: 'Please fill in all fields' };
+        }
+
+        // Simple demo rules — original auth untouched
+        if (username === 'student' && password === 'demo') {
+          return { emoji: '😄', message: 'Welcome back!' };
+        }
+        
+        return { emoji: '😠', message: 'Invalid credentials' };
+      }
+
+      if (loginBtn) {
+        loginBtn.addEventListener('click', function(e) {
+          const reaction = getReactionForAttempt();
+          showEmoji(reaction.emoji, reaction.message);
+        });
+      }
+
+      // ---------- 2. HELP LINK POP MESSAGE (NO ALERT) ----------
+      const helpLink = document.getElementById('helpLink');
+      const helpTooltip = document.getElementById('helpTooltip');
+
+      if (helpLink && helpTooltip) {
+        helpLink.addEventListener('click', function(e) {
+          e.preventDefault();  // prevent any hash jump
+          // Toggle tooltip visibility with smooth pop
+          helpTooltip.classList.toggle('show-tooltip');
+
+          // Optional: auto-hide after 3 seconds to keep it playful
+          if (helpTooltip.classList.contains('show-tooltip')) {
+            setTimeout(() => {
+              helpTooltip.classList.remove('show-tooltip');
+            }, 3000);
+          }
+        });
+      }
+
+      // ---------- 3. ADDITIONAL PLAYFUL GRAD CAP TILT (password focus) ----------
+      const passwordField = document.getElementById('password');
+      const gradIcon = document.querySelector('.brand-icon');
+      if (passwordField && gradIcon) {
+        passwordField.addEventListener('focus', function() {
+          gradIcon.style.transition = 'transform 0.25s ease';
+          gradIcon.style.transform = 'rotate(-8deg) scale(1.05)';
+        });
+        passwordField.addEventListener('blur', function() {
+          gradIcon.style.transform = 'rotate(0deg) scale(1)';
+        });
+      }
+
+    })();
+  </script>
+  <!-- ===== ALL NEW INTERACTIONS END ===== -->
 </body>
 </html>

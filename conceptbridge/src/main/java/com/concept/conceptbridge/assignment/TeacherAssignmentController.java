@@ -3,7 +3,8 @@ package com.concept.conceptbridge.assignment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +14,7 @@ public class TeacherAssignmentController {
 
     @Autowired
     private TeacherAssignmentService teacherAssignmentService;
-
+    private static final Logger logger = LoggerFactory.getLogger(TeacherAssignmentController.class);
     // GET all assignments by teacher
     @GetMapping
     public ResponseEntity<List<Assignment>> getAssignments(
@@ -23,9 +24,19 @@ public class TeacherAssignmentController {
     }
 
     // CREATE new assignment
+//    @PostMapping
+//    public ResponseEntity<Assignment> createAssignment(
+//            @RequestBody Assignment assignment) {
+//        Assignment created = teacherAssignmentService.createAssignment(assignment);
+//        return ResponseEntity.ok(created);
+//    }
+
+    // CREATE new assignment
     @PostMapping
     public ResponseEntity<Assignment> createAssignment(
             @RequestBody Assignment assignment) {
+        logger.info("Creating assignment: {} for teacher: {}",
+                assignment.getTitle(), assignment.getCreatedBy());
         Assignment created = teacherAssignmentService.createAssignment(assignment);
         return ResponseEntity.ok(created);
     }

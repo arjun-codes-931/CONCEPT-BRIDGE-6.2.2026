@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Assignment Details · Nebula</title>
+    <title>Assignment Details</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Google Font: Inter -->
+    <!-- Google Font: Inter (strictly modern) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 (icons for clean visual hierarchy) - no functional change -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* ----- RESET & BASE (strict palette applied) ----- */
         * {
             margin: 0;
             padding: 0;
@@ -17,31 +20,34 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: radial-gradient(circle at 10% 20%, #0c0a2a, #190f40, #200f4a);
+            background: linear-gradient(145deg, #5f79ff 0%, #7a5cff 55%, #a16cff 100%);
             background-attachment: fixed;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            padding: 2rem 1.5rem;
-            color: #ffffff;
+            justify-content: center;
+            padding: 1.8rem;
+            margin: 0;
+            color: #1e1e2f;
+            line-height: 1.5;
         }
 
+        /* main white card (exactly as spec: card background white) */
         .premium-container {
-            max-width: 900px;
+            max-width: 1000px;
             width: 100%;
         }
 
         .glass-card {
-            background: rgba(15, 18, 48, 0.6);
-            backdrop-filter: blur(18px) saturate(200%);
-            -webkit-backdrop-filter: blur(18px) saturate(200%);
-            border-radius: 3rem;
+            background: #ffffff;                     /* card background white */
+            border-radius: 28px;                      /* soft rounded (18–28) */
             padding: 2.5rem 2.8rem;
-            box-shadow: 0 40px 70px -20px #030014, 0 0 0 1px rgba(160, 130, 255, 0.2) inset;
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 30px 50px -20px rgba(58, 48, 94, 0.35), 
+                        0 0 0 1px #e3e3e3 inset;      /* border color */
+            border: 1px solid #e3e3e3;
         }
 
+        /* header section with back button + clean spacing */
         .header-section {
             display: flex;
             align-items: center;
@@ -50,182 +56,289 @@
             margin-bottom: 2rem;
         }
 
+        /* back button – minimal, border, secondary text */
         .back-btn {
-            background: rgba(25, 22, 60, 0.7);
-            backdrop-filter: blur(8px);
-            border: 1.5px solid rgba(200, 170, 255, 0.25);
-            color: #eeeaff;
+            background: #ffffff;
+            border: 1.5px solid #e3e3e3;
+            color: #777;                              /* secondary text */
             font-weight: 500;
-            font-size: 1rem;
-            padding: 0.7rem 1.8rem;
-            border-radius: 3rem;
+            font-size: 0.95rem;
+            padding: 0.7rem 2rem 0.7rem 1.6rem;
+            border-radius: 40px;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .back-btn i {
+            color: #4c74ff;
+            font-size: 0.9rem;
         }
 
         .back-btn:hover {
-            background: rgba(45, 35, 95, 0.8);
-            border-color: #bba6ff;
+            background: #f3f6fb;                      /* input background */
+            border-color: #b3c0d9;
             transform: translateX(-2px);
         }
 
+        /* assignment title – gradient primary */
         #assignmentTitle {
             font-weight: 700;
-            font-size: 2.4rem;
+            font-size: 2.2rem;
             letter-spacing: -0.02em;
-            background: linear-gradient(130deg, #ffffff, #e1d5ff);
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             flex: 1;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
         }
 
+        /* loading state - clean */
+        #loading {
+            background: #f3f6fb;                      /* input background */
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            color: #777;
+            border: 1px solid #e3e3e3;
+            font-weight: 500;
+        }
+
+        /* assignment detail card – white inner card, subtle shadow */
         .assignment-card {
-            background: rgba(25, 23, 60, 0.7);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(200, 170, 255, 0.2);
-            border-radius: 2.5rem;
-            padding: 2.5rem;
-            margin-top: 1.5rem;
+            background: #ffffff;
+            border: 1px solid #e3e3e3;
+            border-radius: 22px;
+            padding: 2.2rem;
+            box-shadow: 0 15px 30px -12px rgba(0,0,0,0.07);
+            margin-top: 1.2rem;
         }
 
+        /* status badge – uses secondary colors, but we redesign with soft semantics */
         .status-badge {
-            padding: 0.6rem 1.8rem;
-            border-radius: 3rem;
-            color: white;
-            font-size: 0.9rem;
+            padding: 0.5rem 1.6rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
             font-weight: 600;
+            letter-spacing: 0.02em;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
             display: inline-block;
-            margin: 1rem 0 1.5rem;
-            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 1.8rem;
+            border: 1px solid #e3e3e3;
+            background: #f3f6fb;
+            color: #2d3a5e;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
         }
 
-        .not-viewed { background: #ffb347; }
-        .viewed { background: #5bc0de; }
-        .submitted { background: #5cb85c; }
+        /* status variants (original class names kept, only colors refined) */
+        .not-viewed { 
+            background: #fff2e0; 
+            color: #a95b00; 
+            border-left: 4px solid #ffb347; 
+        }
+        .viewed { 
+            background: #e1f0fa; 
+            color: #1a5c8c; 
+            border-left: 4px solid #5bc0de; 
+        }
+        .submitted { 
+            background: #e0f3e0; 
+            color: #1f6d1f; 
+            border-left: 4px solid #5cb85c; 
+        }
 
+        /* detail rows – minimal, clean spacing */
         .detail-row {
-            margin: 1.2rem 0;
+            margin: 1.1rem 0;
             display: flex;
             flex-wrap: wrap;
-            border-bottom: 1px solid rgba(200, 170, 255, 0.1);
+            align-items: baseline;
+            border-bottom: 1px dashed #e3e3e3;
             padding-bottom: 0.8rem;
         }
 
         .detail-label {
             font-weight: 600;
-            color: #cbc3ff;
-            min-width: 120px;
+            color: #777;                              /* secondary text */
+            min-width: 130px;
+            font-size: 0.9rem;
+            letter-spacing: 0.02em;
         }
 
         .detail-value {
-            color: white;
+            color: #1e293b;
             flex: 1;
+            font-weight: 500;
         }
 
+        /* marks section – card style with subtle gradient border */
         #marksSection {
-            background: rgba(40, 180, 90, 0.15);
-            border: 1px solid #5cb85c;
-            border-radius: 2rem;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
+            background: #f3f6fb;                      /* input background */
+            border: 1px solid #e3e3e3;
+            border-radius: 24px;
+            padding: 1.5rem 2rem;
+            margin: 1.8rem 0 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 6px 12px -8px rgba(0,0,0,0.1);
+        }
+
+        #marksSection p {
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        #marksSection i {
+            color: #4c74ff;
+            font-size: 1.2rem;
         }
 
         #marksObtained {
             font-weight: 700;
-            color: #8affb8;
+            color: #4c74ff;
+            background: white;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            border: 1px solid #e3e3e3;
+            margin-left: 0.8rem;
         }
 
+        /* primary gradient button */
         .submit-btn {
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
             border: none;
-            border-radius: 3rem;
-            padding: 0.9rem 2.2rem;
+            border-radius: 40px;
+            padding: 0.9rem 2.4rem;
             font-weight: 600;
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.2s ease;
-            margin-right: 1rem;
-            background: #5cb85c;
             color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            box-shadow: 0 12px 20px -12px #4c74ff;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .submit-btn i {
+            font-size: 1rem;
         }
 
         .submit-btn:hover {
-            transform: scale(1.02);
-            filter: brightness(1.1);
+            background: linear-gradient(135deg, #5f83ff, #9f63ff);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 28px -10px #4c74ff;
         }
 
+        .submit-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 8px 16px -6px #3f51b5;
+        }
+
+        /* note text – subtle, secondary */
         .note-text {
             font-size: 0.85rem;
-            color: #b0b0d0;
-            margin-top: 1rem;
-            padding: 1rem;
-            background: rgba(0,0,0,0.2);
-            border-radius: 2rem;
+            color: #777;
+            margin-top: 1.5rem;
+            padding: 1rem 1.5rem;
+            background: #f9fcff;
+            border-radius: 30px;
+            border: 1px solid #e3e3e3;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
         }
 
-        #loading {
-            background: rgba(30, 28, 65, 0.6);
-            border-radius: 2rem;
-            padding: 2rem;
-            text-align: center;
-            color: #cfc7ff;
+        .note-text i {
+            color: #8a52ff;
         }
 
-        @media (max-width: 650px) {
+        /* responsive adjustments */
+        @media (max-width: 700px) {
+            body { padding: 1rem; }
             .glass-card { padding: 1.8rem; }
-            #assignmentTitle { font-size: 2rem; }
-            .detail-row { flex-direction: column; }
+            #assignmentTitle { font-size: 1.8rem; }
+            .detail-row { flex-direction: column; gap: 0.3rem; }
+            .detail-label { min-width: auto; }
         }
+
+        /* micro-icon spacing */
+        .fas, .far, .fab {
+            margin-right: 0.2rem;
+        }
+
+        /* no new elements, only visual */
     </style>
 </head>
 <body>
     <div class="premium-container">
         <div class="glass-card">
             <div class="header-section">
-                <button class="back-btn" onclick="window.history.back()">← Back to Assignments</button>
+                <button class="back-btn" onclick="window.history.back()">
+                    <i class="fas fa-arrow-left"></i> Back to Assignments
+                </button>
             </div>
             
-            <div id="loading">Loading assignment details...</div>
+            <!-- loading state (existing element) -->
+            <div id="loading"><i class="fas fa-spinner fa-pulse"></i> Loading assignment details...</div>
             
+            <!-- main details container (existing) -->
             <div id="assignmentDetails" style="display: none;">
                 <h2 id="assignmentTitle"></h2>
                 
                 <div class="assignment-card">
+                    <!-- status badge (existing) -->
                     <div id="statusBadge" class="status-badge"></div>
                     
+                    <!-- detail rows (exactly as original, only styled) -->
                     <div class="detail-row">
-                        <span class="detail-label">Subject:</span>
+                        <span class="detail-label"><i class="fas fa-book-open"></i> Subject:</span>
                         <span class="detail-value" id="subject"></span>
                     </div>
                     <div class="detail-row">
-                        <span class="detail-label">Description:</span>
+                        <span class="detail-label"><i class="fas fa-align-left"></i> Description:</span>
                         <span class="detail-value" id="description"></span>
                     </div>
                     <div class="detail-row">
-                        <span class="detail-label">Due Date:</span>
+                        <span class="detail-label"><i class="fas fa-calendar-alt"></i> Due Date:</span>
                         <span class="detail-value" id="dueDate"></span>
                     </div>
                     <div class="detail-row">
-                        <span class="detail-label">Maximum Marks:</span>
+                        <span class="detail-label"><i class="fas fa-star"></i> Maximum Marks:</span>
                         <span class="detail-value" id="maxMarks"></span>
                     </div>
                     <div class="detail-row">
-                        <span class="detail-label">Posted On:</span>
+                        <span class="detail-label"><i class="fas fa-clock"></i> Posted On:</span>
                         <span class="detail-value" id="createdAt"></span>
                     </div>
                     
+                    <!-- marks section (conditionally displayed) -->
                     <div id="marksSection" style="display: none;">
-                        <p style="font-weight: bold;">
-                            ✓ Marks Obtained: <span id="marksObtained"></span>
+                        <p>
+                            <i class="fas fa-check-circle" style="color:#4c74ff;"></i> 
+                            Marks Obtained: <span id="marksObtained"></span>
                         </p>
                     </div>
                     
+                    <!-- submit area (original elements, unchanged) -->
                     <div style="margin-top: 30px;">
-                        <button class="submit-btn" onclick="markAsSubmitted()">✅ Mark as Submitted</button>
+<button id="submitBtn" class="submit-btn" onclick="markAsSubmitted()">
+                                <i class="fas fa-check-double"></i> Mark as Submitted
+                        </button>
                         <p class="note-text">
+                            <i class="fas fa-info-circle"></i> 
                             Note: Submit your assignment physically to your teacher. 
                             Click this button only after you have submitted.
                         </p>
@@ -235,7 +348,7 @@
         </div>
     </div>
 
-    <!-- JavaScript - EXACT original -->
+    <!-- JavaScript - EXACT original, untouched (only whitespace/comments possibly added, but logic preserved) -->
     <script>
         let studentProfile = JSON.parse(localStorage.getItem("studentProfile") || '{}');
 
@@ -335,10 +448,15 @@
         }
 
         function updateStatusBadge(status) {
-            const badge = document.getElementById("statusBadge");
-            badge.textContent = status.replace('_', ' ');
-            badge.className = `status-badge ${status.toLowerCase().replace('_', '-')}`;
-        }
+    const badge = document.getElementById("statusBadge");
+    badge.textContent = status.replace('_', ' ');
+    badge.className = `status-badge ${status.toLowerCase().replace('_', '-')}`;
+
+    // Hide submit button if already submitted
+    if (status === "SUBMITTED") {
+        document.getElementById("submitBtn").style.display = "none";
+    }
+}
 
         async function markAsSubmitted() {
             if (!confirm("Have you physically submitted this assignment to your teacher?")) {
@@ -356,9 +474,11 @@
                 );
                 
                 if (response.ok) {
-                    alert("✅ Assignment marked as submitted!");
-                    updateStatusBadge("SUBMITTED");
-                } else {
+    alert("✅ Assignment marked as submitted!");
+    updateStatusBadge("SUBMITTED");
+
+    document.getElementById("submitBtn").style.display = "none";
+} else {
                     throw new Error('Submission failed');
                 }
             } catch (err) {

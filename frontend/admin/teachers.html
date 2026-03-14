@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin · Teacher Management | Premium</title>
-    <!-- Google Fonts: Inter for clean, modern typography -->
+    <title>Admin · Teacher Management | Nexus</title>
+    <!-- Google Fonts Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-    <!-- Font Awesome 5 (free) for elegant icons -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -19,226 +19,435 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: radial-gradient(circle at 80% 20%, #0f1b42, #0b0f2a 60%, #1e103b 100%);
+            background: linear-gradient(145deg, #5f79ff, #7a5cff, #a16cff);
+            background-attachment: fixed;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            padding: 2rem 1.5rem;
+            justify-content: center;
+            padding: 1.5rem;
             line-height: 1.5;
-            color: #eef3ff;
         }
 
-        /* Main floating card — glassmorphism with deep blur */
-        .premium-container {
-            max-width: 1400px;
+        /* main white dashboard with sidebar layout */
+        .dashboard-wrapper {
             width: 100%;
-            background: rgba(8, 14, 33, 0.45);
-            backdrop-filter: blur(20px) saturate(200%);
-            -webkit-backdrop-filter: blur(20px) saturate(200%);
-            border-radius: 2.8rem;
-            padding: 2.5rem 2.5rem;
-            box-shadow: 0 40px 70px -20px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            max-width: 1600px;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 35px 60px -20px rgba(30, 30, 60, 0.4), 0 10px 25px -8px rgba(0,0,0,0.2);
+            display: flex;
+            overflow: hidden;
+            min-height: 800px;
         }
 
-        /* Top bar — keeps original class */
-        .topbar {
-            margin-bottom: 2.5rem;
+        /* ========== LEFT VERTICAL SIDEBAR ========== */
+        .sidebar {
+            width: 280px;
+            background: #f3f6fb;          /* input background */
+            border-right: 1px solid #e3e3e3;
+            padding: 2rem 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.2rem;
+        }
+
+        .sidebar-brand {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
-            flex-wrap: wrap;
+            gap: 0.75rem;
+            padding-left: 0.5rem;
         }
 
-        /* Back button (preserve inline onclick) */
-        .topbar button {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            padding: 0.8rem 2rem 0.8rem 1.8rem;
-            border-radius: 3rem;
+        .brand-icon {
+            width: 2.8rem;
+            height: 2.8rem;
+            background: linear-gradient(145deg, #4c74ff, #8a52ff);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 14px -6px #4c74ff66;
+        }
+
+        .brand-icon i {
+            font-size: 1.6rem;
+            color: white;
+        }
+
+        .brand-text {
+            font-weight: 700;
+            font-size: 1.4rem;
+            background: linear-gradient(145deg, #1e1e3f, #4c74ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        /* vertical navigation */
+        .side-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            flex: 1;
+        }
+
+        .side-nav-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 16px;
+            padding: 1rem 1.2rem;
+            color: #1e1e3a;
             font-size: 1rem;
             font-weight: 500;
-            color: white;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.7rem;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-            letter-spacing: 0.01em;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+            text-align: left;
             font-family: 'Inter', sans-serif;
         }
 
-        .topbar button i {
-            font-size: 0.9rem;
-            color: #b2cbff;
+        .side-nav-btn i {
+            font-size: 1.4rem;
+            width: 2rem;
+            text-align: center;
+            background: linear-gradient(145deg, #4c74ff, #8a52ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: transform 0.15s;
         }
 
-        .topbar button:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.4);
-            transform: translateY(-2px);
-            box-shadow: 0 16px 28px rgba(0, 10, 40, 0.6);
-        }
-
-        .topbar button:active {
-            transform: translateY(2px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-        }
-
-        /* heading with gradient */
-        .topbar h2 {
-            font-size: 2rem;
+        .side-nav-btn span {
             font-weight: 600;
-            letter-spacing: -0.02em;
-            background: linear-gradient(145deg, #ffffff, #c5d3ff, #d2bbff);
+            color: #3f3f60;
+        }
+
+        .side-nav-btn:hover {
+            background: white;
+            border-color: #e3e3e3;
+            box-shadow: 0 8px 18px -12px #4c74ff, 0 0 0 1px rgba(76,116,255,0.2) inset;
+            transform: translateX(4px);
+        }
+
+        .side-nav-btn:hover i {
+            transform: scale(1.05);
+        }
+
+        /* active item gradient highlight */
+        .side-nav-btn.active {
+            background: white;
+            border-color: #d0ddff;
+            box-shadow: 0 0 0 2px rgba(76,116,255,0.15) inset;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e3e3e3;
+        }
+
+        .logout-btn {
+            background: #f3f6fb;
+            border: 1px solid #e3e3e3;
+            border-radius: 40px;
+            padding: 0.9rem 1.2rem;
+            color: #4c516d;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .logout-btn i {
+            font-size: 1.2rem;
+            color: #777;    /* secondary text */
+        }
+
+        .logout-btn span {
+            color: #4c516d;
+        }
+
+        .logout-btn:hover {
+            background: white;
+            border-color: #ffb7b7;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 18px -14px #e5515b;
+        }
+        .logout-btn:hover i {
+            color: #e5515b;
+            transform: translateX(3px);
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            flex: 1;
+            padding: 2rem 2.5rem;
+            background: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* minimal header (top area) */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header-left i {
+            font-size: 2.2rem;
+            background: linear-gradient(145deg, #4c74ff, #8a52ff);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin: 0;
         }
 
-        /* Table wrapper — floating card with rounded corners */
-        .table-wrapper {
-            background: rgba(18, 24, 55, 0.4);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border-radius: 2.2rem;
-            padding: 0.2rem 0;   /* allow inner scroll */
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 30px 50px -20px #01000e, 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+        h2 {
+            font-weight: 700;
+            font-size: 2rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(145deg, #1e1e30, #4c74ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-outline {
+            background: #f3f6fb;
+            border: 1px solid #e3e3e3;
+            border-radius: 40px;
+            padding: 0.7rem 1.6rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #3f3f60;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-outline i {
+            color: #777;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            border-color: #b5c8ff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px -10px #4c74ff;
+        }
+
+        /* card for table */
+        .table-card {
+            background: #f9fbfe;
+            border: 1px solid #e3e3e3;
+            border-radius: 24px;
+            padding: 1.5rem 0 0.5rem 0;
+            box-shadow: 0 8px 22px -12px rgba(0,0,0,0.06);
             overflow-x: auto;
         }
 
         table {
             width: 100%;
             border-collapse: separate;
-            border-spacing: 0 0.5rem;
+            border-spacing: 0 0.8rem;
             min-width: 900px;
-            padding: 0.2rem 1.2rem;
+            padding: 0 1.2rem;
         }
 
         th {
             text-align: left;
-            padding: 1.2rem 0.8rem 0.8rem 0.8rem;
+            padding: 0.8rem 0.8rem 1rem 0.8rem;
             font-weight: 600;
             font-size: 0.85rem;
             text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: #bacfff;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            letter-spacing: 0.5px;
+            color: #777;                 /* secondary text */
+            border-bottom: 1px solid #e3e3e3;
             background: transparent;
         }
 
         td {
-            padding: 1rem 0.8rem;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            border-radius: 1.2rem;
-            color: rgba(255, 255, 255, 0.9);
+            padding: 1.2rem 0.8rem;
+            background: white;
+            border: 1px solid #e3e3e3;
+            border-radius: 18px;
+            color: #1e1e30;
             font-size: 0.95rem;
-            backdrop-filter: blur(4px);
+            box-shadow: 0 4px 10px -8px rgba(0,0,0,0.1);
+            transition: all 0.15s;
         }
 
-        /* make first column slightly softer */
-        td:first-child {
-            font-weight: 500;
-            color: #dbe4ff;
+        tr:hover td {
+            background: #f3f6fb;
+            border-color: #b5c8ff;
+            box-shadow: 0 8px 18px -14px #4c74ff;
         }
 
-        /* action buttons with premium gradients */
-        .viewBtn, .deleteBtn {
+        /* action buttons (gradient primary for view, secondary for delete) */
+        .action-btn {
             border: none;
-            padding: 0.5rem 1.4rem;
-            border-radius: 2rem;
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
             font-size: 0.85rem;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
             font-family: 'Inter', sans-serif;
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            margin-right: 0.4rem;
+            border: 1px solid transparent;
         }
 
-        .viewBtn {
-            background: linear-gradient(145deg, #1f3a9e, #5f4bcb);
+        .view-btn {
+            background: linear-gradient(145deg, #4c74ff, #8a52ff);
             color: white;
+            box-shadow: 0 6px 12px -6px #4c74ff;
+            margin-right: 0.5rem;
         }
 
-        .viewBtn:hover {
-            background: linear-gradient(145deg, #2a48c5, #735de0);
+        .view-btn:hover {
+            background: linear-gradient(145deg, #5f7eff, #9a62ff);
             transform: translateY(-2px);
-            box-shadow: 0 12px 22px -6px #1e2580;
-            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 12px 18px -10px #4c74ff;
         }
 
-        .deleteBtn {
-            background: linear-gradient(145deg, #aa2745, #c24b6b);
-            color: white;
+        .delete-btn {
+            background: #f3f6fb;
+            border: 1px solid #e3e3e3;
+            color: #4c516d;
         }
 
-        .deleteBtn:hover {
-            background: linear-gradient(145deg, #c22f52, #d85f7e);
+        .delete-btn:hover {
+            background: white;
+            border-color: #ff6b6b;
+            color: #d14545;
             transform: translateY(-2px);
-            box-shadow: 0 12px 22px -6px #7f1e32;
-            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 16px -12px #d14545;
         }
 
-        .viewBtn:active, .deleteBtn:active {
-            transform: translateY(2px);
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+        .delete-btn:hover i {
+            color: #d14545;
         }
 
-        /* empty / loading / error row */
         td[colspan] {
             text-align: center;
-            padding: 2rem;
-            color: rgba(255, 255, 255, 0.7);
-            background: rgba(255,255,255,0.02);
-            border-radius: 2rem;
+            padding: 2.5rem;
+            color: #777;
+            background: white;
+            border-radius: 22px;
         }
 
-        /* subtle row hover */
-        tr:hover td {
-            background: rgba(70, 80, 140, 0.25);
-            transition: background 0.2s;
+        @media (max-width: 900px) {
+            .dashboard-wrapper {
+                flex-wrap: wrap;
+            }
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #e3e3e3;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 1rem;
+                padding: 1.5rem;
+            }
+            .side-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            .sidebar-footer {
+                margin-top: 0;
+                border-top: none;
+                padding-top: 0;
+            }
+            .logout-btn {
+                width: auto;
+                padding: 0.8rem 1.8rem;
+            }
         }
 
-        /* additional polish for icons */
-        .fa-chevron-circle-right, .fa-trash-alt {
-            filter: drop-shadow(0 2px 4px #00000050);
-        }
-
-        /* responsive adjustments */
         @media (max-width: 700px) {
-            .premium-container { padding: 1.8rem 1.2rem; }
-            .topbar { flex-direction: column; align-items: start; }
+            .main-content {
+                padding: 1.5rem;
+            }
+            .page-header {
+                flex-direction: column;
+                align-items: start;
+            }
         }
+
+        button:focus-visible {
+            outline: 3px solid #8a52ff;
+            outline-offset: 3px;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f3f6fb; border-radius: 12px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(145deg, #4c74ff, #8a52ff); border-radius: 12px; }
     </style>
 </head>
 <body>
-    <div class="premium-container">
-        <!-- original class "topbar" unchanged, back button preserved -->
-        <div class="topbar">
-            <button onclick="window.history.back()">
+<div class="dashboard-wrapper">
+    <!-- LEFT SIDEBAR (vertical) -->
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">
+                <i class="fas fa-crown"></i>
+            </div>
+            <span class="brand-text">Nexus</span>
+        </div>
+        <div class="side-nav">
+            <button class="side-nav-btn" onclick="window.location.href='dashboard.html'"><i class="fas fa-home"></i><span>Dashboard</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='students.html'"><i class="fas fa-user-graduate"></i><span>Students</span></button>
+            <button class="side-nav-btn active" onclick="window.location.href='teachers.html'"><i class="fas fa-chalkboard-user"></i><span>Teachers</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='materials.html'"><i class="fas fa-book-open"></i><span>Materials</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='user-management.html'"><i class="fas fa-users-cog"></i><span>Manage Users</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='projects.html'"><i class="fas fa-code-branch"></i><span>Projects</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='quizzes.html'"><i class="fas fa-puzzle-piece"></i><span>Quizzes</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='stats.html'"><i class="fas fa-chart-line"></i><span>System Stats</span></button>
+        </div>
+        <div class="sidebar-footer">
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i><span>Logout</span><i class="fas fa-arrow-right" style="font-size:0.8rem; opacity:0;"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT (right) -->
+    <div class="main-content">
+        <!-- top area (simple header) -->
+        <div class="page-header">
+            <div class="header-left">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <h2>Teacher Management</h2>
+            </div>
+            <button class="btn-outline" onclick="window.history.back()">
                 <i class="fas fa-arrow-left"></i> Dashboard
             </button>
-            <h2>
-                <i class="fas fa-chalkboard-teacher"></i> Teacher Management
-            </h2>
         </div>
 
-        <!-- Table wrapper adds glass effect, but original table remains -->
-        <div class="table-wrapper">
+        <!-- card containing the table -->
+        <div class="table-card">
             <table>
                 <thead>
                     <tr>
@@ -258,144 +467,144 @@
                 </tbody>
             </table>
         </div>
-
-        <!-- subtle glow line (purely visual) -->
-        <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; opacity: 0.5; gap: 1.5rem; font-size: 0.8rem;">
-            <!-- <span><i class="fas fa-shield-alt"></i> secure admin</span>
-            <span><i class="fas fa-database"></i> live sync</span> -->
-        </div>
     </div>
+</div>
 
-    <!-- JAVASCRIPT SECTION — 100% UNTOUCHED, EXACTLY AS PROVIDED -->
-    <script>
-        const API = "http://localhost:8080";
-        const token = localStorage.getItem("token");
+<!-- JAVASCRIPT SECTION — 100% UNTOUCHED, EXACTLY AS PROVIDED -->
+<script>
+    const API = "http://localhost:8080";
+    const token = localStorage.getItem("token");
 
 
-        window.onload = () => {
+    window.onload = () => {
 
-            if(!token){
+        if(!token){
 
-                alert("Login required");
-                location.href="../login.html";
-                return;
+            alert("Login required");
+            location.href="../login.html";
+            return;
+
+        }
+
+        loadTeachers();
+
+    };
+
+
+
+    async function loadTeachers(){
+
+        try{
+
+            const res = await fetch(`${API}/admin/teachers`,{
+
+                headers:{
+                    "Authorization":"Bearer "+token
+                }
+
+            });
+
+            if(!res.ok){
+
+                throw new Error("Failed to load teachers");
 
             }
+
+            const teachers = await res.json();
+
+            const table = document.getElementById("teacherTable");
+
+            table.innerHTML="";
+
+
+            teachers.forEach(t=>{
+
+                table.innerHTML += `
+
+                    <tr>
+
+                        <td>${t.id}</td>
+
+                        <td>${t.fullName || "N/A"}</td>
+
+                        <td>${t.department || "N/A"}</td>
+
+                        <td>${t.designation || "N/A"}</td>
+
+                        <td>${t.email || "N/A"}</td>
+
+                        <td>${t.experienceYears || 0} yrs</td>
+
+                        <td>
+
+                            
+                            <button class="action-btn delete-btn" onclick="deleteTeacher(${t.id})">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            });
+
+        }catch(err){
+
+            document.getElementById("teacherTable").innerHTML =
+
+                `<tr><td colspan="7" style="color:#d14545"><i class="fas fa-exclamation-triangle"></i> Error loading teachers</td></tr>`;
+
+        }
+
+    }
+
+
+
+    function viewTeacher(id){
+
+        location.href = `../teacher/teacher-profile.html?id=${id}`;
+
+    }
+
+
+
+    async function deleteTeacher(id){
+
+        if(!confirm("Are you sure you want to delete this teacher?")){
+            return;
+        }
+
+        try{
+
+            await fetch(`${API}/admin/teacher/${id}`,{
+
+                method:"DELETE",
+
+                headers:{
+                    "Authorization":"Bearer "+token
+                }
+
+            });
+
+            alert("Teacher deleted");
 
             loadTeachers();
 
-        };
+        }catch(err){
 
-
-
-        async function loadTeachers(){
-
-            try{
-
-                const res = await fetch(`${API}/admin/teachers`,{
-
-                    headers:{
-                        "Authorization":"Bearer "+token
-                    }
-
-                });
-
-                if(!res.ok){
-
-                    throw new Error("Failed to load teachers");
-
-                }
-
-                const teachers = await res.json();
-
-                const table = document.getElementById("teacherTable");
-
-                table.innerHTML="";
-
-
-                teachers.forEach(t=>{
-
-                    table.innerHTML += `
-
-                        <tr>
-
-                            <td>${t.id}</td>
-
-                            <td>${t.fullName || "N/A"}</td>
-
-                            <td>${t.department || "N/A"}</td>
-
-                            <td>${t.designation || "N/A"}</td>
-
-                            <td>${t.email || "N/A"}</td>
-
-                            <td>${t.experienceYears || 0} yrs</td>
-
-                            <td>
-
-                                
-
-                                <button class="deleteBtn" onclick="deleteTeacher(${t.id})">
-                                    <i class="fas fa-trash-alt"></i> Delete
-                                </button>
-
-                            </td>
-
-                        </tr>
-
-                    `;
-
-                });
-
-            }catch(err){
-
-                document.getElementById("teacherTable").innerHTML =
-
-                    `<tr><td colspan="7" style="color:#ffa8b5"><i class="fas fa-exclamation-triangle"></i> Error loading teachers</td></tr>`;
-
-            }
+            alert("Error deleting teacher");
 
         }
 
+    }
 
-
-        function viewTeacher(id){
-
-            location.href = `../teacher/teacher-profile.html?id=${id}`;
-
-        }
-
-
-
-        async function deleteTeacher(id){
-
-            if(!confirm("Are you sure you want to delete this teacher?")){
-                return;
-            }
-
-            try{
-
-                await fetch(`${API}/admin/teacher/${id}`,{
-
-                    method:"DELETE",
-
-                    headers:{
-                        "Authorization":"Bearer "+token
-                    }
-
-                });
-
-                alert("Teacher deleted");
-
-                loadTeachers();
-
-            }catch(err){
-
-                alert("Error deleting teacher");
-
-            }
-
-        }
-    </script>
+    // logout helper
+    function logout() {
+        localStorage.clear();
+        window.location.href = "../login.html";
+    }
+</script>
 </body>
 </html>

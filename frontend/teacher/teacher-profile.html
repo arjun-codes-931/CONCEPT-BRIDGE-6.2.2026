@@ -500,49 +500,7 @@
         document.getElementById("profileInfo").innerHTML = html;
     }
     
-    // function editName(currentName) {
-    //     document.getElementById("fullNameInput").value = currentName;
-    //     document.getElementById("editForm").style.display = 'block';
-    //     document.getElementById("fullNameInput").focus();
-    // }
     
-    // function cancelEdit() {
-    //     document.getElementById("editForm").style.display = 'none';
-    // }
-    
-    // document.getElementById("nameForm").onsubmit = async (e) => {
-    //     e.preventDefault();
-        
-    //     const newName = document.getElementById("fullNameInput").value.trim();
-    //     if (!newName) {
-    //         alert("Name cannot be empty");
-    //         return;
-    //     }
-        
-    //     try {
-    //         const res = await fetch(`${API}/teacher/profile/name`, {
-    //             method: 'PUT',
-    //             headers: {
-    //                 'Authorization': 'Bearer ' + token,
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             body: JSON.stringify({ fullName: newName })
-    //         });
-            
-    //         const result = await res.json();
-            
-    //         if (res.ok) {
-    //             alert(result.message || "Name updated successfully");
-    //             document.getElementById("editForm").style.display = 'none';
-    //             await loadProfile(); // Reload profile
-    //         } else {
-    //             alert(result.error || "Failed to update name");
-    //         }
-            
-    //     } catch (err) {
-    //         alert("Error: " + err.message);
-    //     }
-    // };
     </script>
 </body>
 </html>

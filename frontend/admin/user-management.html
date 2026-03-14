@@ -211,7 +211,8 @@
         }
 
         .form-field input,
-        .form-field textarea {
+        .form-field textarea,
+        .form-field select {
             background: #f3f6fb;
             border: 1px solid #e3e3e3;
             border-radius: 18px;
@@ -228,8 +229,18 @@
             resize: vertical;
         }
 
+        .form-field select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234c74ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 18px center;
+            background-size: 16px;
+        }
+
         .form-field input:focus,
-        .form-field textarea:focus {
+        .form-field textarea:focus,
+        .form-field select:focus {
             outline: none;
             border-color: #8a52ff;
             box-shadow: 0 0 0 4px rgba(138, 82, 255, 0.1);
@@ -290,6 +301,23 @@
             margin-left: 2px;
         }
 
+        /* error message styling */
+        .error-message {
+            color: #ff6b6b;
+            font-size: 0.8rem;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .form-field.error input,
+        .form-field.error select {
+            border-color: #ff6b6b;
+        }
+
+        .form-field.error .error-message {
+            display: block;
+        }
+
         /* responsive */
         @media (max-width: 750px) {
             .admin-container {
@@ -346,50 +374,73 @@
                 <div class="form-field">
                     <label><i class="fas fa-user"></i> Username <i class="fas fa-asterisk" style="color:#ff6b6b; font-size:0.6rem;"></i></label>
                     <input id="s_username" placeholder="e.g., john_doe">
+                    <div class="error-message" id="s_username_error"></div>
                 </div>
                 <div class="form-field">
-                    <label><i class="fas fa-user-tie"></i> Full Name</label>
+                    <label><i class="fas fa-user-tie"></i> Full Name <i class="fas fa-asterisk" style="color:#ff6b6b; font-size:0.6rem;"></i></label>
                     <input id="fullName" placeholder="e.g., Alisa">
+                    <div class="error-message" id="fullName_error"></div>
                 </div>
                 <div class="form-field">
                     <label><i class="fas fa-lock"></i> Password <i class="fas fa-asterisk" style="color:#ff6b6b; font-size:0.6rem;"></i></label>
                     <input id="s_password" type="password" placeholder="••••••••">
+                    <div class="error-message" id="s_password_error"></div>
                 </div>
                 <div class="form-field">
                     <label><i class="fas fa-id-card"></i> Roll Number</label>
                     <input id="rollNumber" placeholder="e.g., 2024CS101">
                 </div>
                 <div class="form-field">
-                    <label><i class="fas fa-id-card"></i> Register Number</label>
+                    <label><i class="fas fa-id-card"></i> Register Number <i class="fas fa-asterisk" style="color:#ff6b6b; font-size:0.6rem;"></i></label>
                     <input id="registerNumber" placeholder="e.g., 4123001">
+                    <div class="error-message" id="registerNumber_error"></div>
                 </div>
                 <div class="form-field">
-                    <label><i class="fas fa-code-branch"></i> Branch</label>
-                    <input id="branch" placeholder="e.g., CSE">
+                    <label><i class="fas fa-code-branch"></i> Branch <i class="fas fa-asterisk" style="color:#ff6b6b; font-size:0.6rem;"></i></label>
+                    <select id="branch">
+                        <option value="">Select Branch</option>
+                        <option value="MCA">MCA</option>
+                        <option value="MBA">MBA</option>
+                        <option value="CSE">CSE</option>
+                    </select>
+                    <div class="error-message" id="branch_error"></div>
                 </div>
                 <div class="form-field">
-                    <label><i class="fas fa-layer-group"></i> Semester</label>
-                    <input id="semester" placeholder="e.g., 3">
+                    <label><i class="fas fa-layer-group"></i> Semester <i class="fas fa-asterisk" style="color:#ff6b6b; font-size:0.6rem;"></i></label>
+                    <select id="semester">
+                        <option value="">Select Semester</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                    <div class="error-message" id="semester_error"></div>
                 </div>
                 <div class="form-field">
-                    <label><i class="fas fa-calendar"></i> Batch</label>
-                    <input id="batch" placeholder="e.g., 2024-2028">
+                    <label><i class="fas fa-calendar"></i> Batch <i class="fas fa-asterisk" style="color:#ff6b6b; font-size:0.6rem;"></i></label>
+                    <input id="batch" value="2026-2029" readonly>
                 </div>
                 <div class="form-field">
-                    <label><i class="fas fa-columns"></i> Section</label>
-                    <input id="section" placeholder="e.g., A">
+                    <label><i class="fas fa-columns"></i> Section <i class="fas fa-asterisk" style="color:#ff6b6b; font-size:0.6rem;"></i></label>
+                    <select id="section">
+                        <option value="">Select Section</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                    </select>
+                    <div class="error-message" id="section_error"></div>
                 </div>
                 <div class="form-field">
-                    <label><i class="fas fa-calendar-alt"></i> Admission Year</label>
-                    <input id="admissionYear" placeholder="e.g., 2024">
+                    <label><i class="fas fa-calendar-alt"></i> Admission Year <i class="fas fa-asterisk" style="color:#ff6b6b; font-size:0.6rem;"></i></label>
+                    <input id="admissionYear" value="2026" readonly>
                 </div>
                 <div class="form-field">
-                    <label><i class="fas fa-university"></i> College Name</label>
+                    <label><i class="fas fa-university"></i> College Name <i class="fas fa-asterisk" style="color:#ff6b6b; font-size:0.6rem;"></i></label>
                     <input id="collegeName" placeholder="e.g., Engineering College">
+                    <div class="error-message" id="collegeName_error"></div>
                 </div>
                 <div class="form-field full-width">
-                    <label><i class="fas fa-university"></i> University</label>
+                    <label><i class="fas fa-university"></i> University <i class="fas fa-asterisk" style="color:#ff6b6b; font-size:0.6rem;"></i></label>
                     <input id="university" placeholder="e.g., Anna University">
+                    <div class="error-message" id="university_error"></div>
                 </div>
             </div>
             <button class="btn-primary" onclick="createStudent()"><i class="fas fa-user-plus"></i> Create Student</button>
@@ -403,32 +454,39 @@
                 <div class="form-field">
                     <label><i class="fas fa-user"></i> Username <i class="fas fa-asterisk" style="color:#ff6b6b; font-size:0.6rem;"></i></label>
                     <input id="t_username" placeholder="e.g., prof_smith">
+                    <div class="error-message" id="t_username_error"></div>
                 </div>
                 <div class="form-field">
                     <label><i class="fas fa-lock"></i> Password <i class="fas fa-asterisk" style="color:#ff6b6b; font-size:0.6rem;"></i></label>
                     <input id="t_password" type="password" placeholder="••••••••">
+                    <div class="error-message" id="t_password_error"></div>
                 </div>
                 <div class="form-field">
                     <label><i class="fas fa-user-tie"></i> Full Name <i class="fas fa-asterisk" style="color:#ff6b6b; font-size:0.6rem;"></i></label>
-                    <input id="fullName" placeholder="e.g., John Smith">
+                    <input id="fullName_teacher" placeholder="e.g., John Smith">
+                    <div class="error-message" id="fullName_teacher_error"></div>
                 </div>
                 <div class="form-field">
                     <label><i class="fas fa-id-badge"></i> Employee ID <i class="fas fa-asterisk" style="color:#ff6b6b; font-size:0.6rem;"></i></label>
                     <input id="employeeId" placeholder="e.g., TCH001">
+                    <div class="error-message" id="employeeId_error"></div>
                 </div>
                 <div class="form-field">
                     <label><i class="fas fa-building"></i> Department <i class="fas fa-asterisk" style="color:#ff6b6b; font-size:0.6rem;"></i></label>
                     <input id="department" placeholder="e.g., Computer Science">
+                    <div class="error-message" id="department_error"></div>
                 </div>
                 
                 <!-- Additional fields -->
                 <div class="form-field">
                     <label><i class="fas fa-envelope"></i> Email</label>
                     <input id="email" type="email" placeholder="e.g., teacher@college.edu">
+                    <div class="error-message" id="email_error"></div>
                 </div>
                 <div class="form-field">
                     <label><i class="fas fa-phone"></i> Phone</label>
-                    <input id="phone" placeholder="e.g., +1234567890">
+                    <input id="phone" placeholder="e.g., 1234567890">
+                    <div class="error-message" id="phone_error"></div>
                 </div>
                 <div class="form-field">
                     <label><i class="fas fa-briefcase"></i> Designation</label>
@@ -451,7 +509,7 @@
         </div>
     </div>
 
-    <!-- ORIGINAL JAVASCRIPT – COMPLETELY UNMODIFIED (preserved exactly) -->
+    <!-- JAVASCRIPT WITH VALIDATION -->
     <script>
         const API = "http://localhost:8080/admin";
 
@@ -489,8 +547,239 @@
             document.getElementById('tabStudentBtn').classList.remove('active');
         }
 
+        // ===== VALIDATION HELPER FUNCTIONS =====
+        
+        function clearErrors() {
+            // Clear all error messages and error classes
+            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+            document.querySelectorAll('.form-field').forEach(el => el.classList.remove('error'));
+        }
+
+        function showFieldError(fieldId, message) {
+            const errorElement = document.getElementById(fieldId + '_error');
+            if (errorElement) {
+                errorElement.textContent = message;
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.closest('.form-field').classList.add('error');
+                }
+            }
+        }
+
+        function sanitizeInput(value) {
+            return value ? value.toString().trim() : '';
+        }
+
+        function validateUsername(username, fieldId, fieldName = 'Username') {
+            const trimmed = sanitizeInput(username);
+            
+            if (!trimmed) {
+                showFieldError(fieldId, fieldName + ' cannot be empty');
+                return false;
+            }
+            
+            if (trimmed.length < 4) {
+                showFieldError(fieldId, fieldName + ' must be at least 4 characters long');
+                return false;
+            }
+            
+            if (trimmed.length > 20) {
+                showFieldError(fieldId, fieldName + ' cannot exceed 20 characters');
+                return false;
+            }
+            
+            if (trimmed.includes(' ')) {
+                showFieldError(fieldId, fieldName + ' cannot contain spaces');
+                return false;
+            }
+            
+            const usernameRegex = /^[a-zA-Z0-9_]+$/;
+            if (!usernameRegex.test(trimmed)) {
+                showFieldError(fieldId, fieldName + ' can only contain letters, numbers, and underscores');
+                return false;
+            }
+            
+            return true;
+        }
+
+        function validatePassword(password, fieldId, fieldName = 'Password') {
+            const trimmed = sanitizeInput(password);
+            
+            if (!trimmed) {
+                showFieldError(fieldId, fieldName + ' cannot be empty');
+                return false;
+            }
+            
+            if (trimmed.length < 8) {
+                showFieldError(fieldId, fieldName + ' must be at least 8 characters long');
+                return false;
+            }
+            
+            if (trimmed.length > 32) {
+                showFieldError(fieldId, fieldName + ' cannot exceed 32 characters');
+                return false;
+            }
+            
+            if (trimmed.includes(' ')) {
+                showFieldError(fieldId, fieldName + ' cannot contain spaces');
+                return false;
+            }
+            
+            const hasUppercase = /[A-Z]/.test(trimmed);
+            const hasLowercase = /[a-z]/.test(trimmed);
+            const hasNumber = /[0-9]/.test(trimmed);
+            const hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(trimmed);
+            
+            if (!hasUppercase) {
+                showFieldError(fieldId, fieldName + ' must contain at least one uppercase letter');
+                return false;
+            }
+            
+            if (!hasLowercase) {
+                showFieldError(fieldId, fieldName + ' must contain at least one lowercase letter');
+                return false;
+            }
+            
+            if (!hasNumber) {
+                showFieldError(fieldId, fieldName + ' must contain at least one number');
+                return false;
+            }
+            
+            if (!hasSpecial) {
+                showFieldError(fieldId, fieldName + ' must contain at least one special character');
+                return false;
+            }
+            
+            return true;
+        }
+
+        function validateFullName(name, fieldId, fieldName = 'Full Name') {
+            const trimmed = sanitizeInput(name);
+            
+            if (!trimmed) {
+                showFieldError(fieldId, fieldName + ' cannot be empty');
+                return false;
+            }
+            
+            if (trimmed.length < 2) {
+                showFieldError(fieldId, fieldName + ' must be at least 2 characters long');
+                return false;
+            }
+            
+            const nameRegex = /^[a-zA-Z\s]+$/;
+            if (!nameRegex.test(trimmed)) {
+                showFieldError(fieldId, fieldName + ' can only contain letters and spaces');
+                return false;
+            }
+            
+            return true;
+        }
+
+        function validateRegisterNumber(regNumber, fieldId) {
+            const trimmed = sanitizeInput(regNumber);
+            
+            if (!trimmed) {
+                showFieldError(fieldId, 'Register Number cannot be empty');
+                return false;
+            }
+            
+            // Check if it's a number and has more than 5 digits
+            const digitsOnly = trimmed.replace(/\D/g, '');
+            if (digitsOnly.length <= 5) {
+                showFieldError(fieldId, 'Register Number must be more than 5 digits');
+                return false;
+            }
+            
+            return true;
+        }
+
+        function validateSelect(selectValue, fieldId, fieldName) {
+            if (!selectValue) {
+                showFieldError(fieldId, fieldName + ' must be selected');
+                return false;
+            }
+            return true;
+        }
+
+        function validateNoNumbers(text, fieldId, fieldName) {
+            const trimmed = sanitizeInput(text);
+            
+            if (!trimmed) {
+                showFieldError(fieldId, fieldName + ' cannot be empty');
+                return false;
+            }
+            
+            // Check for any numbers
+            if (/\d/.test(trimmed)) {
+                showFieldError(fieldId, fieldName + ' cannot contain numbers');
+                return false;
+            }
+            
+            return true;
+        }
+
+        function validateEmail(email, fieldId) {
+            const trimmed = sanitizeInput(email);
+            
+            if (!trimmed) {
+                return true; // Email is optional
+            }
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(trimmed)) {
+                showFieldError(fieldId, 'Email must be a valid email address');
+                return false;
+            }
+            
+            return true;
+        }
+
+        function validatePhone(phone, fieldId) {
+            const trimmed = sanitizeInput(phone);
+            
+            if (!trimmed) {
+                return true; // Phone is optional
+            }
+            
+            const digitsOnly = trimmed.replace(/\D/g, '');
+            
+            if (digitsOnly.length !== 10) {
+                showFieldError(fieldId, 'Phone number must be exactly 10 digits');
+                return false;
+            }
+            
+            if (digitsOnly.length !== trimmed.length) {
+                showFieldError(fieldId, 'Phone number can only contain numbers');
+                return false;
+            }
+            
+            return true;
+        }
+
+        function escapeHtml(text) {
+            if (!text) return text;
+            return text.toString()
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function sanitizeData(data) {
+            for (let key in data) {
+                if (typeof data[key] === 'string') {
+                    data[key] = escapeHtml(sanitizeInput(data[key]));
+                }
+            }
+            return data;
+        }
+
         // Create Student
         async function createStudent() {
+            // Clear previous errors
+            clearErrors();
+            
             const token = getToken();
             if (!token) {
                 alert('No token found. Please login again.');
@@ -501,32 +790,69 @@
             // Get form values
             const username = document.getElementById('s_username').value;
             const password = document.getElementById('s_password').value;
+            const fullName = document.getElementById('fullName').value;
+            const registerNumber = document.getElementById('registerNumber').value;
+            const branch = document.getElementById('branch').value;
+            const semester = document.getElementById('semester').value;
+            const section = document.getElementById('section').value;
+            const collegeName = document.getElementById('collegeName').value;
+            const university = document.getElementById('university').value;
             
-            if (!username || !password) {
-                alert('Username and password are required');
+            // Validate all fields
+            let isValid = true;
+            
+            // Username validation
+            if (!validateUsername(username, 's_username')) isValid = false;
+            
+            // Password validation
+            if (!validatePassword(password, 's_password')) isValid = false;
+            
+            // Full Name validation
+            if (!validateFullName(fullName, 'fullName')) isValid = false;
+            
+            // Register Number validation
+            if (!validateRegisterNumber(registerNumber, 'registerNumber')) isValid = false;
+            
+            // Branch validation
+            if (!validateSelect(branch, 'branch', 'Branch')) isValid = false;
+            
+            // Semester validation
+            if (!validateSelect(semester, 'semester', 'Semester')) isValid = false;
+            
+            // Section validation
+            if (!validateSelect(section, 'section', 'Section')) isValid = false;
+            
+            // College Name validation (no numbers)
+            if (!validateNoNumbers(collegeName, 'collegeName', 'College Name')) isValid = false;
+            
+            // University validation (no numbers)
+            if (!validateNoNumbers(university, 'university', 'University')) isValid = false;
+            
+            if (!isValid) {
                 return;
             }
 
             // Create the student object
             const studentData = {
                 user: {
-                    username: username,
-                    password: password,
+                    username: sanitizeInput(username),
+                    password: password, // Don't sanitize password before sending
                     role: "STUDENT"
                 },
-                fullName:document.getElementById('fullName').value,
-                rollNumber: document.getElementById('rollNumber').value,
-                registerNumber: document.getElementById('registerNumber').value,
-                branch: document.getElementById('branch').value,
-                semester: document.getElementById('semester').value ? parseInt(document.getElementById('semester').value) : 0,
-                batch: document.getElementById('batch').value,
-                section: document.getElementById('section').value,
-                admissionYear: document.getElementById('admissionYear').value ? parseInt(document.getElementById('admissionYear').value) : 0,
-                collegeName: document.getElementById('collegeName').value,
-                university: document.getElementById('university').value
+                fullName: sanitizeInput(fullName),
+                rollNumber: sanitizeInput(document.getElementById('rollNumber').value),
+                registerNumber: sanitizeInput(registerNumber),
+                branch: branch,
+                semester: parseInt(semester),
+                batch: "2026-2029",
+                section: section,
+                admissionYear: 2026,
+                collegeName: sanitizeInput(collegeName),
+                university: sanitizeInput(university)
             };
 
-            console.log('Sending student data:', JSON.stringify(studentData, null, 2));
+            // Sanitize data to prevent XSS
+            sanitizeData(studentData);
 
             try {
                 const response = await fetch(API + '/create-student', {
@@ -539,8 +865,6 @@
                 });
 
                 const responseText = await response.text();
-                console.log('Response status:', response.status);
-                console.log('Response text:', responseText);
 
                 if (response.status === 401 || response.status === 403) {
                     alert('Authentication failed. Token may be expired. Please login again.');
@@ -554,13 +878,12 @@
                     // Clear form
                     document.getElementById('s_username').value = '';
                     document.getElementById('s_password').value = '';
+                    document.getElementById('fullName').value = '';
                     document.getElementById('rollNumber').value = '';
                     document.getElementById('registerNumber').value = '';
                     document.getElementById('branch').value = '';
                     document.getElementById('semester').value = '';
-                    document.getElementById('batch').value = '';
                     document.getElementById('section').value = '';
-                    document.getElementById('admissionYear').value = '';
                     document.getElementById('collegeName').value = '';
                     document.getElementById('university').value = '';
                 } else {
@@ -574,6 +897,9 @@
 
         // Create Teacher with all fields
         async function createTeacher() {
+            // Clear previous errors
+            clearErrors();
+            
             const token = getToken();
             if (!token) {
                 alert('No token found. Please login again.');
@@ -584,34 +910,56 @@
             // Get form values
             const username = document.getElementById('t_username').value;
             const password = document.getElementById('t_password').value;
-            const fullName = document.getElementById('fullName').value;
+            const fullName = document.getElementById('fullName_teacher').value;
             const employeeId = document.getElementById('employeeId').value;
             const department = document.getElementById('department').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
             
-            if (!username || !password || !fullName || !employeeId || !department) {
-                alert('Username, Password, Full Name, Employee ID, and Department are required');
+            // Validate all fields
+            let isValid = true;
+            
+            if (!validateUsername(username, 't_username')) isValid = false;
+            if (!validatePassword(password, 't_password')) isValid = false;
+            if (!validateFullName(fullName, 'fullName_teacher')) isValid = false;
+            
+            if (!employeeId) {
+                showFieldError('employeeId', 'Employee ID cannot be empty');
+                isValid = false;
+            }
+            
+            if (!department) {
+                showFieldError('department', 'Department cannot be empty');
+                isValid = false;
+            }
+            
+            if (!validateEmail(email, 'email')) isValid = false;
+            if (!validatePhone(phone, 'phone')) isValid = false;
+            
+            if (!isValid) {
                 return;
             }
 
-            // Create the teacher object with all fields
+            // Create the teacher object
             const teacherData = {
                 user: {
-                    username: username,
+                    username: sanitizeInput(username),
                     password: password,
                     role: "TEACHER"
                 },
-                fullName: fullName,
-                employeeId: employeeId,
-                department: department,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                designation: document.getElementById('designation').value,
-                qualification: document.getElementById('qualification').value,
+                fullName: sanitizeInput(fullName),
+                employeeId: sanitizeInput(employeeId),
+                department: sanitizeInput(department),
+                email: sanitizeInput(email),
+                phone: sanitizeInput(phone),
+                designation: sanitizeInput(document.getElementById('designation').value),
+                qualification: sanitizeInput(document.getElementById('qualification').value),
                 experienceYears: document.getElementById('experienceYears').value ? parseInt(document.getElementById('experienceYears').value) : null,
-                bio: document.getElementById('bio').value
+                bio: sanitizeInput(document.getElementById('bio').value)
             };
 
-            console.log('Sending teacher data:', JSON.stringify(teacherData, null, 2));
+            // Sanitize data to prevent XSS
+            sanitizeData(teacherData);
 
             try {
                 const response = await fetch(API + '/create-teacher', {
@@ -624,8 +972,6 @@
                 });
 
                 const responseText = await response.text();
-                console.log('Response status:', response.status);
-                console.log('Response text:', responseText);
 
                 if (response.status === 401 || response.status === 403) {
                     alert('Authentication failed. Token may be expired. Please login again.');
@@ -639,7 +985,7 @@
                     // Clear form
                     document.getElementById('t_username').value = '';
                     document.getElementById('t_password').value = '';
-                    document.getElementById('fullName').value = '';
+                    document.getElementById('fullName_teacher').value = '';
                     document.getElementById('employeeId').value = '';
                     document.getElementById('department').value = '';
                     document.getElementById('email').value = '';

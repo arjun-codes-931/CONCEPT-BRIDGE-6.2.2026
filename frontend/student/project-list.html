@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>My Projects · Nebula Labs</title>
+    <title>My Projects</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Google Font: Inter -->
@@ -19,294 +19,379 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: radial-gradient(circle at 10% 20%, #0c0a2a, #190f40, #200f4a);
+            background: linear-gradient(145deg, #5f79ff 0%, #7a5cff 55%, #a16cff 100%);
             background-attachment: fixed;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            padding: 2rem 1.5rem;
-            color: #ffffff;
+            justify-content: center;
+            padding: 1.5rem;
+            margin: 0;
+            color: #1e1e2f;
             line-height: 1.5;
         }
 
-        .projects-glass-card {
-            max-width: 1100px;
+        /* LAYOUT: left sidebar + main content */
+        .app-wrapper {
+            display: flex;
+            max-width: 1400px;
             width: 100%;
-            margin: 0 auto;
-            background: rgba(15, 18, 45, 0.55);
-            backdrop-filter: blur(16px) saturate(200%);
-            -webkit-backdrop-filter: blur(16px) saturate(200%);
-            border-radius: 3rem;
-            padding: 2.5rem 2.5rem;
-            box-shadow: 0 40px 70px -20px #030014, 0 0 0 1px rgba(160, 130, 255, 0.2) inset, 0 0 60px rgba(100, 60, 230, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            transition: box-shadow 0.3s ease;
+            gap: 1.8rem;
+            align-items: stretch;
         }
 
-        .projects-glass-card:hover {
-            box-shadow: 0 50px 80px -18px #1a0740, 0 0 0 1px rgba(200, 160, 255, 0.3) inset;
+        /* ---------- LEFT SIDEBAR (vertical menu) ---------- */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-radius: 24px;
+            padding: 2rem 1.2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2), 0 0 0 1px #e3e3e3 inset;
+            border: 1px solid #e3e3e3;
+            display: flex;
+            flex-direction: column;
         }
 
+        .sidebar-header {
+            padding: 0 0.5rem 1.8rem 0.5rem;
+            border-bottom: 1px solid #e3e3e3;
+            margin-bottom: 1.8rem;
+        }
+
+        .sidebar-header h3 {
+            font-weight: 600;
+            font-size: 1.4rem;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .sidebar-header h3 i {
+            font-size: 1.8rem;
+            color: #4c74ff;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            flex: 1;
+        }
+
+        .sidebar-nav-item {
+            padding: 1rem 1.2rem;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #777;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            cursor: pointer;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+        }
+
+        .sidebar-nav-item i {
+            width: 1.8rem;
+            color: #777;
+            font-size: 1.25rem;
+            transition: color 0.2s;
+        }
+
+        .sidebar-nav-item:hover {
+            background: #f3f6fb;
+            border-color: #e3e3e3;
+            color: #1e293b;
+        }
+
+        .sidebar-nav-item:hover i {
+            color: #4c74ff;
+        }
+
+        .sidebar-nav-item.active {
+            background: linear-gradient(135deg, #4c74ff10, #8a52ff10);
+            border-left: 4px solid #4c74ff;
+            background: #f0f4ff;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .sidebar-nav-item.active i {
+            color: #4c74ff;
+        }
+
+        .sidebar-footer {
+            padding: 1.5rem 0.8rem 0.2rem;
+            border-top: 1px solid #e3e3e3;
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+            color: #777;
+        }
+
+        /* ---------- MAIN CONTENT (white card) ---------- */
+        .main-content {
+            flex: 1;
+            background: white;
+            border-radius: 28px;
+            padding: 2.2rem 2.5rem;
+            box-shadow: 0 30px 60px -15px rgba(58, 48, 94, 0.3), 0 0 0 1px #e3e3e3 inset;
+            border: 1px solid #e3e3e3;
+        }
+
+        /* header area */
         .projects-header {
             display: flex;
             align-items: center;
             flex-wrap: wrap;
             gap: 1rem 1.5rem;
-            margin-bottom: 2.2rem;
+            margin-bottom: 2rem;
         }
 
-        button[onclick="window.history.back()"] {
-            background: rgba(25, 22, 60, 0.7);
-            backdrop-filter: blur(8px);
-            border: 1.5px solid rgba(200, 170, 255, 0.25);
-            color: #eeeaff;
+        /* Back button styling - using attribute selector for consistency */
+        .back-btn {
+            background: white;
+            border: 1.5px solid #e3e3e3;
+            color: #777;
             font-weight: 500;
-            font-size: 1rem;
-            padding: 0.7rem 1.8rem;
-            border-radius: 3rem;
+            font-size: 0.95rem;
+            padding: 0.7rem 2rem 0.7rem 1.6rem;
+            border-radius: 40px;
             cursor: pointer;
+            transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
-            gap: 0.7rem;
-            transition: 0.2s;
-            box-shadow: 0 12px 28px -10px #0b0820;
+            gap: 0.5rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            font-family: 'Inter', sans-serif;
         }
 
-        button[onclick="window.history.back()"] i {
-            font-size: 1rem;
-            color: #b9adff;
+        .back-btn i {
+            color: #4c74ff;
+            font-size: 0.9rem;
         }
 
-        button[onclick="window.history.back()"]:hover {
-            background: rgba(45, 35, 95, 0.8);
-            border-color: #bba6ff;
+        .back-btn:hover {
+            background: #f3f6fb;
+            border-color: #b3c0d9;
             transform: translateX(-2px);
         }
 
         h2 {
-            font-weight: 600;
-            font-size: 2.5rem;
+            font-weight: 700;
+            font-size: 2.2rem;
             letter-spacing: -0.02em;
-            background: linear-gradient(130deg, #ffffff, #dacdff);
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.8rem;
             flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         h2 i {
-            font-size: 2.5rem;
-            background: linear-gradient(145deg, #6d8eff, #c184ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            font-size: 2.2rem;
+            color: #4c74ff;
         }
 
-        button[onclick="createNewProject()"] {
-            background: linear-gradient(115deg, #2f55e0, #9f4eff, #c147ff);
-            background-size: 200% 100%;
+        .new-project-btn {
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
             border: none;
             color: white;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 0.95rem;
             padding: 0.9rem 2.2rem;
-            border-radius: 3rem;
+            border-radius: 40px;
             cursor: pointer;
-            box-shadow: 0 16px 28px -12px #4020a0, 0 0 0 1px rgba(255, 255, 255, 0.15) inset;
-            transition: all 0.25s ease;
+            box-shadow: 0 10px 18px -8px rgba(76, 116, 255, 0.4);
+            transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
             gap: 0.7rem;
-            margin-left: auto;
+            border: 1px solid rgba(255,255,255,0.15);
         }
 
-        button[onclick="createNewProject()"] i {
-            font-size: 1.1rem;
+        .new-project-btn:hover {
+            background: linear-gradient(135deg, #5f83ff, #9f63ff);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 28px -10px #4c74ff;
         }
 
-        button[onclick="createNewProject()"]:hover {
-            background-position: 100% 0;
-            box-shadow: 0 22px 35px -8px #7a41e0, 0 0 0 1px rgba(255, 210, 255, 0.4) inset;
-            transform: scale(1.02);
-        }
-
+        /* project list container */
         #projectList {
-            margin-top: 2.5rem;
+            margin-top: 1.5rem;
             display: flex;
             flex-direction: column;
-            gap: 1.8rem;
+            gap: 1.5rem;
         }
 
+        /* project cards – clean white cards with border */
         #projectList > div[style*="border:1px solid #ccc"] {
-            background: rgba(20, 22, 55, 0.7) !important;
-            backdrop-filter: blur(8px) !important;
-            border: 1px solid rgba(200, 170, 255, 0.2) !important;
-            border-radius: 2rem !important;
+            background: white !important;
+            border: 1px solid #e3e3e3 !important;
+            border-radius: 22px !important;
             padding: 1.8rem 2rem !important;
             margin: 0 !important;
-            box-shadow: 0 20px 30px -15px #050016 !important;
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 8px 18px -8px rgba(0,0,0,0.05) !important;
+            backdrop-filter: none !important;
+            transition: all 0.2s ease;
         }
 
         #projectList > div[style*="border:1px solid #ccc"]:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 28px 40px -12px #2f1780 !important;
-            border-color: rgba(220, 190, 255, 0.4) !important;
-        }
-
-        #projectList > div > div[style*="display:flex; justify-content:space-between;"] {
-            margin-bottom: 1rem !important;
-            flex-wrap: wrap;
-            gap: 0.8rem;
+            transform: translateY(-2px);
+            box-shadow: 0 16px 28px -12px rgba(76, 116, 255, 0.15) !important;
+            border-color: #b3c0d9 !important;
         }
 
         #projectList h3 {
-            font-size: 1.7rem;
-            font-weight: 600;
-            color: white;
-            margin: 0 0 0.4rem 0 !important;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e1e2f;
+            margin: 0 0 0.5rem 0 !important;
         }
 
+        /* status badges */
         #projectList span[style*="background:"] {
             font-size: 0.8rem !important;
             font-weight: 600 !important;
             padding: 0.4rem 1.2rem !important;
             border-radius: 40px !important;
-            text-transform: uppercase !important;
+            text-transform: uppercase;
             letter-spacing: 0.3px;
             display: inline-block;
-            box-shadow: 0 0 10px currentColor !important;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid #e3e3e3;
             margin-right: 0.5rem;
+            color: white !important;
+            border: none;
         }
 
         #projectList span[style*="background:gray"] {
-            background: rgba(120, 120, 140, 0.8) !important;
-            color: white !important;
+            background: #6c757d !important;
         }
         #projectList span[style*="background:blue"] {
-            background: rgba(60, 100, 230, 0.9) !important;
-            color: white !important;
+            background: #4c74ff !important;
         }
         #projectList span[style*="background:orange"] {
-            background: rgba(240, 140, 40, 0.9) !important;
-            color: white !important;
+            background: #f39c12 !important;
         }
         #projectList span[style*="background:green"] {
-            background: rgba(40, 180, 90, 0.9) !important;
-            color: white !important;
+            background: #2ecc71 !important;
         }
         #projectList span[style*="background:#eee"] {
-            background: rgba(110, 100, 150, 0.6) !important;
-            color: #f0f0ff !important;
+            background: #f3f6fb !important;
+            color: #777 !important;
+            border: 1px solid #e3e3e3;
         }
 
+        /* progress percentage */
         #projectList div[style*="font-size:20px; font-weight:bold; color:green;"] {
-            color: #b5ffb5 !important;
+            color: #4c74ff !important;
             font-size: 1.8rem !important;
-            filter: drop-shadow(0 0 6px #3eff9e);
+            font-weight: 700 !important;
         }
 
+        /* progress bar */
         #projectList div[style*="background:#eee; height:8px; border-radius:4px;"] {
-            background: rgba(255,255,255,0.1) !important;
-            height: 10px !important;
-            border-radius: 20px !important;
+            background: #f3f6fb !important;
+            height: 8px !important;
+            border-radius: 40px !important;
             overflow: hidden;
-            margin: 1.2rem 0 !important;
+            margin: 1rem 0 !important;
         }
 
         #projectList div[style*="background:green; height:100%;"] {
-            background: linear-gradient(90deg, #5effb0, #3ccf8c) !important;
-            border-radius: 20px !important;
-            box-shadow: 0 0 10px #2edc8c;
+            background: linear-gradient(90deg, #4c74ff, #8a52ff) !important;
+            border-radius: 40px !important;
         }
 
         #projectList p {
-            color: #d4d0ff !important;
+            color: #4a5b7a !important;
             font-size: 1rem;
-            margin: 1rem 0 0.8rem !important;
+            margin: 0.8rem 0 !important;
+            line-height: 1.6;
         }
 
-        #projectList div[style*="display:flex; justify-content:space-between; font-size:14px;"] {
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            color: #b3b0e0 !important;
+        /* date text */
+        #projectList div[style*="font-size:14px; color:#666;"] {
+            color: #777 !important;
         }
 
-        /* View button */
+        /* view button */
         #projectList button[onclick^="viewProjectDetails"] {
-            background: linear-gradient(115deg, #4466ee, #9a5eff) !important;
+            background: linear-gradient(135deg, #4c74ff, #8a52ff) !important;
             border: none !important;
-            border-radius: 3rem !important;
-            padding: 0.7rem 2rem !important;
+            border-radius: 40px !important;
+            padding: 0.6rem 1.8rem !important;
             font-weight: 600 !important;
-            font-size: 0.9rem !important;
-            box-shadow: 0 8px 18px -6px #342090 !important;
-            transition: 0.15s !important;
+            font-size: 0.85rem !important;
+            box-shadow: 0 8px 16px -8px #4c74ff !important;
+            transition: all 0.2s !important;
             cursor: pointer;
             color: white !important;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            margin-right: 10px;
+            margin-right: 0.5rem;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
         #projectList button[onclick^="viewProjectDetails"]:hover {
-            transform: scale(1.02);
-            box-shadow: 0 12px 24px -6px #6b3aff !important;
+            transform: translateY(-1px);
+            box-shadow: 0 12px 20px -8px #4c74ff !important;
         }
 
-        /* Delete button - NEW STYLE */
-        #projectList button[onclick^="deleteProject"] {
-            background: linear-gradient(115deg, #dc3545, #b02a37) !important;
-            border: none !important;
-            border-radius: 3rem !important;
-            padding: 0.7rem 2rem !important;
+        /* delete button */
+        #projectList button[onclick^="confirmDelete"] {
+            background: white !important;
+            border: 1px solid #e3e3e3 !important;
+            border-radius: 40px !important;
+            padding: 0.6rem 1.8rem !important;
             font-weight: 600 !important;
-            font-size: 0.9rem !important;
-            box-shadow: 0 8px 18px -6px #8b0000 !important;
-            transition: 0.15s !important;
+            font-size: 0.85rem !important;
+            box-shadow: 0 4px 10px -6px rgba(0,0,0,0.1) !important;
+            transition: all 0.2s !important;
             cursor: pointer;
-            color: white !important;
+            color: #b91c1c !important;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        #projectList button[onclick^="deleteProject"]:hover {
-            transform: scale(1.02);
-            box-shadow: 0 12px 24px -6px #a71d2a !important;
+        #projectList button[onclick^="confirmDelete"]:hover {
+            background: #fee2e2 !important;
+            border-color: #fecaca !important;
+            transform: translateY(-1px);
         }
 
-        #projectList button[onclick^="deleteProject"] i {
-            color: white;
-        }
-
-        /* Empty state */
+        /* empty state */
         #projectList p, #projectList div[style*="color: red;"] {
-            background: rgba(20, 18, 45, 0.7);
-            backdrop-filter: blur(8px);
-            border-radius: 2rem;
+            background: #f3f6fb;
+            border-radius: 22px;
             padding: 2rem;
             text-align: center;
-            color: #f0eaff;
-            border: 1px solid rgba(255,200,255,0.1);
+            color: #777;
+            border: 1px solid #e3e3e3;
         }
 
-        /* Confirmation dialog overlay */
+        /* Delete confirmation modal */
         .delete-confirm-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.5);
             backdrop-filter: blur(8px);
             display: flex;
             justify-content: center;
@@ -315,60 +400,118 @@
         }
 
         .delete-confirm-box {
-            background: rgba(20, 22, 55, 0.95);
-            border: 2px solid rgba(255, 100, 100, 0.5);
-            border-radius: 2rem;
+            background: white;
+            border: 1px solid #e3e3e3;
+            border-radius: 28px;
             padding: 2.5rem;
             max-width: 450px;
             width: 90%;
             text-align: center;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
         }
 
         .delete-confirm-box h3 {
-            color: #ff8a8a;
+            color: #b91c1c;
             font-size: 1.8rem;
             margin-bottom: 1rem;
         }
 
         .delete-confirm-box p {
-            color: #d0d0ff;
-            margin-bottom: 2rem;
-            font-size: 1.1rem;
+            color: #4a5b7a;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
         }
 
         .delete-confirm-box button {
             padding: 0.8rem 2rem;
-            margin: 0 10px;
-            border-radius: 3rem;
+            margin: 0 0.5rem;
+            border-radius: 40px;
             font-weight: 600;
             cursor: pointer;
             border: none;
+            font-family: 'Inter', sans-serif;
         }
 
         .delete-confirm-btn {
-            background: #dc3545;
+            background: linear-gradient(135deg, #dc3545, #b02a37);
             color: white;
         }
-
         .delete-cancel-btn {
-            background: #6c757d;
-            color: white;
+            background: white;
+            border: 1px solid #e3e3e3;
+            color: #777;
+        }
+
+        /* responsive */
+        @media (max-width: 900px) {
+            .app-wrapper {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                flex-wrap: wrap;
+                padding: 1.2rem;
+            }
+            .sidebar-header { width: 100%; }
+            .sidebar-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 0.3rem;
+            }
+            .sidebar-nav-item { flex: 1 0 auto; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .main-content { padding: 1.5rem; }
         }
     </style>
 </head>
 <body>
-    <!-- main glass container -->
-    <div class="projects-glass-card">
-        <!-- header section -->
-        <div class="projects-header">
-            <button onclick="window.history.back()"><i class="fas fa-arrow-left"></i> Back</button>
-            <h2><i class="fas fa-rocket"></i> My Projects</h2>
-            <button onclick="createNewProject()"><i class="fas fa-plus-circle"></i> New Project</button>
+    <div class="app-wrapper">
+        <!-- LEFT SIDEBAR (with working navigation) -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h3><i class="fas fa-graduation-cap"></i> Concept Bridge</h3>
+            </div>
+            <div class="sidebar-nav">
+                <!-- All menu items have onclick handlers to redirect -->
+                <div class="sidebar-nav-item" onclick="window.location.href='assignment-list.html'">
+                    <i class="fas fa-tasks"></i> Assignments
+                </div>
+                <div class="sidebar-nav-item" onclick="window.location.href='quiz.html'">
+                    <i class="fas fa-puzzle-piece"></i> Quizzes
+                </div>
+                <div class="sidebar-nav-item active" onclick="window.location.href='project-list.html'">
+                    <i class="fas fa-code"></i> Projects
+                </div>
+                <div class="sidebar-nav-item" onclick="window.location.href='pdf-list.html'">
+                    <i class="fas fa-file-pdf"></i> PDFs
+                </div>
+                <div class="sidebar-nav-item" onclick="window.location.href='student-profile.html'">
+                    <i class="fas fa-user-circle"></i> Profile
+                </div>
+            </div>
+            
         </div>
 
-        <!-- projectList container -->
-        <div id="projectList">Loading...</div>
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <!-- header section with fixed back button -->
+            <div class="projects-header">
+                <button onclick="window.location.href='dashboard.html'" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <h2><i class="fas fa-rocket"></i> My Projects</h2>
+                <button onclick="createNewProject()" class="new-project-btn">
+                    <i class="fas fa-plus-circle"></i> New Project
+                </button>
+            </div>
+
+            <!-- projectList container -->
+            <div id="projectList">Loading...</div>
+        </div>
     </div>
 
     <!-- Delete Confirmation Modal (hidden by default) -->
@@ -541,9 +684,9 @@
         modal.innerHTML = `
             <div class="delete-confirm-overlay">
                 <div class="delete-confirm-box">
-                    <h3><i class="fas fa-exclamation-triangle" style="color: #ff8a8a;"></i> Delete Project</h3>
+                    <h3><i class="fas fa-exclamation-triangle" style="color: #b91c1c;"></i> Delete Project</h3>
                     <p>Are you sure you want to delete "<strong>${projectTitle}</strong>"?</p>
-                    <p style="font-size: 0.9rem; color: #ffb0b0;">This action cannot be undone. All associated data will be permanently removed.</p>
+                    <p style="font-size: 0.9rem; color: #777;">This action cannot be undone. All associated data will be permanently removed.</p>
                     <div>
                         <button class="delete-confirm-btn" onclick="deleteProject(${projectId})">
                             <i class="fas fa-trash"></i> Yes, Delete
@@ -562,69 +705,68 @@
     }
     
     // DELETE PROJECT FUNCTION
-    // DELETE PROJECT FUNCTION - FIXED
-async function deleteProject(projectId) {
-    try {
-        console.log('🗑️ Deleting project:', projectId);
-        
-        // Show loading state
-        const deleteBtn = event?.target;
-        if (deleteBtn) {
-            deleteBtn.disabled = true;
-            deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
-        }
-        
-        const response = await fetch(`${API}/student/project/${projectId}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': 'Bearer ' + token,
-                'Content-Type': 'application/json'
+    async function deleteProject(projectId) {
+        try {
+            console.log('🗑️ Deleting project:', projectId);
+            
+            // Show loading state
+            const deleteBtn = event?.target;
+            if (deleteBtn) {
+                deleteBtn.disabled = true;
+                deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
             }
-        });
-        
-        console.log('📊 Response status:', response.status);
-        
-        // Check if response is OK
-        if (!response.ok) {
-            if (response.status === 403) {
-                throw new Error('Permission denied. You may not have access to delete this project.');
-            } else if (response.status === 404) {
-                throw new Error('Project not found');
+            
+            const response = await fetch(`${API}/student/project/${projectId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            console.log('📊 Response status:', response.status);
+            
+            // Check if response is OK
+            if (!response.ok) {
+                if (response.status === 403) {
+                    throw new Error('Permission denied. You may not have access to delete this project.');
+                } else if (response.status === 404) {
+                    throw new Error('Project not found');
+                } else {
+                    throw new Error(`HTTP error ${response.status}`);
+                }
+            }
+            
+            // Try to parse JSON, but handle empty response
+            let data = {};
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                data = await response.json();
             } else {
-                throw new Error(`HTTP error ${response.status}`);
+                const text = await response.text();
+                console.log('Response text:', text);
+                data = { message: text || 'Project deleted successfully' };
             }
+            
+            console.log('✅ Delete successful:', data);
+            
+            // Close modal
+            closeDeleteModal();
+            
+            // Show success message
+            alert('✅ Project deleted successfully!');
+            
+            // Reload projects list
+            if (currentProfile) {
+                await loadProjects(currentProfile);
+            }
+            
+        } catch (error) {
+            console.error('❌ Delete error:', error);
+            alert('❌ Error deleting project: ' + error.message);
+            closeDeleteModal();
         }
-        
-        // Try to parse JSON, but handle empty response
-        let data = {};
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-            data = await response.json();
-        } else {
-            const text = await response.text();
-            console.log('Response text:', text);
-            data = { message: text || 'Project deleted successfully' };
-        }
-        
-        console.log('✅ Delete successful:', data);
-        
-        // Close modal
-        closeDeleteModal();
-        
-        // Show success message
-        alert('✅ Project deleted successfully!');
-        
-        // Reload projects list
-        if (currentProfile) {
-            await loadProjects(currentProfile);
-        }
-        
-    } catch (error) {
-        console.error('❌ Delete error:', error);
-        alert('❌ Error deleting project: ' + error.message);
-        closeDeleteModal();
     }
-}
     
     function createNewProject() {
         location.href = "project-create.html";

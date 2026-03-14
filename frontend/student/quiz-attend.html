@@ -1,403 +1,643 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Attend Quiz</title>
+    <meta charset="UTF-8">
+    <title>Attend Quiz</title>
+    <!-- Google Font: Inter (modern academic) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 (icons for clean premium look) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
-body{
-    margin:0;
-    font-family:Arial, Helvetica, sans-serif;
-    background:linear-gradient(135deg,#4e73df,#1cc88a);
-    color:#333;
-}
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(145deg, #5f79ff 0%, #7a5cff 55%, #a16cff 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            margin: 0;
+            color: #1e1e2f;
+            line-height: 1.5;
+        }
 
-.container{
-    max-width:900px;
-    margin:auto;
-    background:white;
-    padding:30px;
-    margin-top:40px;
-    border-radius:10px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.2);
-}
+        /* LAYOUT: left sidebar + main content */
+        .app-wrapper {
+            display: flex;
+            max-width: 1400px;
+            width: 100%;
+            gap: 1.8rem;
+            align-items: stretch;
+        }
 
-.header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
+        /* ---------- LEFT SIDEBAR (vertical menu) ---------- */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-radius: 24px;
+            padding: 2rem 1.2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2), 0 0 0 1px #e3e3e3 inset;
+            border: 1px solid #e3e3e3;
+            display: flex;
+            flex-direction: column;
+        }
 
-.timer{
-    font-size:20px;
-    font-weight:bold;
-    color:#e74a3b;
-}
+        .sidebar-header {
+            padding: 0 0.5rem 1.8rem 0.5rem;
+            border-bottom: 1px solid #e3e3e3;
+            margin-bottom: 1.8rem;
+        }
 
-.question{
-    margin-top:25px;
-    padding:15px;
-    border:1px solid #ddd;
-    border-radius:8px;
-}
+        .sidebar-header h3 {
+            font-weight: 600;
+            font-size: 1.4rem;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
 
-.option{
-    margin:6px 0;
-}
+        .sidebar-header h3 i {
+            font-size: 1.8rem;
+            color: #4c74ff;
+        }
 
-.progress{
-    margin-top:10px;
-    font-weight:bold;
-}
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            flex: 1;
+        }
 
-button{
-    padding:10px 18px;
-    border:none;
-    border-radius:6px;
-    background:#4e73df;
-    color:white;
-    cursor:pointer;
-}
+        .sidebar-nav-item {
+            padding: 1rem 1.2rem;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #777;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            cursor: default;
+        }
 
-button:hover{
-    background:#2e59d9;
-}
+        .sidebar-nav-item i {
+            width: 1.8rem;
+            color: #777;
+            font-size: 1.25rem;
+        }
 
-.modal{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    display:none;
-    background:rgba(0,0,0,0.6);
-    justify-content:center;
-    align-items:center;
-}
+        .sidebar-nav-item:hover {
+            background: #f3f6fb;
+            border-color: #e3e3e3;
+            color: #1e293b;
+        }
 
-.modal-box{
-    background:white;
-    padding:25px;
-    border-radius:10px;
-    text-align:center;
-}
-</style>
+        .sidebar-nav-item:hover i {
+            color: #4c74ff;
+        }
 
+        .sidebar-nav-item.active {
+            background: linear-gradient(135deg, #4c74ff10, #8a52ff10);
+            border-left: 4px solid #4c74ff;
+            background: #f0f4ff;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .sidebar-nav-item.active i {
+            color: #4c74ff;
+        }
+
+        .sidebar-footer {
+            padding: 1.5rem 0.8rem 0.2rem;
+            border-top: 1px solid #e3e3e3;
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+            color: #777;
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* ---------- MAIN CONTENT (white card) ---------- */
+        .main-content {
+            flex: 1;
+            background: white;
+            border-radius: 28px;
+            padding: 2.2rem 2.5rem;
+            box-shadow: 0 30px 60px -15px rgba(58, 48, 94, 0.3), 0 0 0 1px #e3e3e3 inset;
+            border: 1px solid #e3e3e3;
+        }
+
+        /* header area */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #e3e3e3;
+        }
+
+        #quizTitle {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 0;
+        }
+
+        .timer {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #e74a3b;
+            background: #f3f6fb;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            border: 1px solid #e3e3e3;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timer i {
+            color: #e74a3b;
+            font-size: 1.2rem;
+        }
+
+        #quizInfo {
+            background: #f3f6fb;
+            border-radius: 40px;
+            padding: 0.8rem 1.5rem;
+            border: 1px solid #e3e3e3;
+            color: #777;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress {
+            font-weight: 600;
+            color: #777;
+            margin: 1rem 0 1.5rem 0;
+            background: #f3f6fb;
+            padding: 0.7rem 1.5rem;
+            border-radius: 40px;
+            border: 1px solid #e3e3e3;
+            display: inline-block;
+        }
+
+        #questionContainer {
+            margin: 1.5rem 0;
+        }
+
+        .question {
+            background: #f9fcff;
+            border: 1px solid #e3e3e3;
+            border-radius: 22px;
+            padding: 1.8rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 18px -8px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+        }
+
+        .question:hover {
+            border-color: #b3c0d9;
+        }
+
+        .question b {
+            font-size: 1.2rem;
+            color: #1e1e2f;
+            display: block;
+            margin-bottom: 1.2rem;
+        }
+
+        .option {
+            margin: 0.8rem 0;
+            padding: 0.5rem 0.5rem 0.5rem 1rem;
+            border-radius: 40px;
+            transition: background 0.1s;
+        }
+
+        .option:hover {
+            background: #f3f6fb;
+        }
+
+        .option label {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 1rem;
+            color: #4a5b7a;
+            cursor: pointer;
+        }
+
+        .option input[type="radio"] {
+            accent-color: #4c74ff;
+            width: 1.2rem;
+            height: 1.2rem;
+            margin-right: 0.5rem;
+        }
+
+        button {
+            padding: 0.9rem 2rem;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 10px -6px rgba(0,0,0,0.1);
+        }
+
+        button[onclick="confirmSubmit()"] {
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 0 10px 18px -8px #4c74ff;
+        }
+
+        button[onclick="confirmSubmit()"]:hover {
+            background: linear-gradient(135deg, #5f83ff, #9f63ff);
+            transform: translateY(-2px);
+            box-shadow: 0 18px 28px -10px #4c74ff;
+        }
+
+        /* Modal styling */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-box {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 28px;
+            text-align: center;
+            border: 1px solid #e3e3e3;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal-box h3 {
+            color: #1e1e2f;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-box p {
+            color: #777;
+            margin-bottom: 2rem;
+        }
+
+        .modal-box button {
+            margin: 0 0.5rem;
+        }
+
+        .modal-box button:first-of-type {
+            background: linear-gradient(135deg, #4c74ff, #8a52ff);
+            color: white;
+        }
+
+        .modal-box button:last-of-type {
+            background: white;
+            border: 1px solid #e3e3e3;
+            color: #777;
+        }
+
+        /* responsive */
+        @media (max-width: 900px) {
+            .app-wrapper {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                flex-wrap: wrap;
+                padding: 1.2rem;
+            }
+            .sidebar-header { width: 100%; }
+            .sidebar-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 0.3rem;
+            }
+            .sidebar-nav-item { flex: 1 0 auto; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .main-content { padding: 1.5rem; }
+            .header { flex-direction: column; align-items: flex-start; }
+            .timer { margin-top: 0.5rem; }
+        }
+    </style>
 </head>
-
 <body>
-
-<div class="container">
-
-<div class="header">
-<h2 id="quizTitle">Quiz</h2>
-<div class="timer" id="timer">00:00</div>
-</div>
-
-<p id="quizInfo"></p>
-
-<div class="progress" id="progress"></div>
-
-<div id="questionContainer"></div>
-
-<br>
-<button onclick="confirmSubmit()">Submit Quiz</button>
-
-</div>
-
-<div class="modal" id="confirmModal">
-<div class="modal-box">
-<h3>Submit Quiz?</h3>
-<p>Are you sure you want to submit?</p>
-<button onclick="submitQuiz()">Yes Submit</button>
-<button onclick="closeModal()">Cancel</button>
-</div>
-</div>
-
-<script>
-
-const API = "http://localhost:8080";
-const token = localStorage.getItem("token");
-
-const urlParams = new URLSearchParams(window.location.search);
-const quizId = urlParams.get("quizId");
-let studentId = urlParams.get("studentId") || localStorage.getItem("studentId");
-
-let attemptId = null;
-let questions = [];
-let answers = {};
-let timerInterval = null;
-let remainingSeconds = 0;
-
-console.log("QuizId:",quizId);
-console.log("StudentId:",studentId);
-
-window.onload = async () => {
-
-if(!token){
-alert("Login required");
-window.location.href="../login.html";
-return;
-}
-
-await loadQuiz();
-};
-
-async function loadQuiz(){
-
-try{
-
-console.log("Checking quiz status...");
-
-const statusRes = await fetch(`${API}/student/quiz/status/${quizId}?studentId=${studentId}`,{
-headers:{ "Authorization":"Bearer "+token }
-});
-
-const status = await statusRes.json();
-
-console.log("Status:",status);
-
-if(status.hasAttempted && status.status==="IN_PROGRESS"){
-attemptId = status.attemptId;
-console.log("Resuming attempt:",attemptId);
-await loadSavedAnswers();
-}else if(!status.hasAttempted){
-await startQuiz();
-}else{
-alert("Quiz already submitted. Score: "+status.score);
-return;
-}
-
-await loadQuizDetails();
-await loadQuestions();
-
-}catch(err){
-console.error("Error loading quiz:",err);
-alert("Failed to load quiz");
-}
-
-}
-
-async function startQuiz(){
-
-console.log("Starting new attempt...");
-
-const res = await fetch(`${API}/student/quiz/${quizId}/start?studentId=${studentId}`,{
-method:"POST",
-headers:{ "Authorization":"Bearer "+token }
-});
-
-const data = await res.json();
-attemptId = data.id;
-
-console.log("New attempt:",attemptId);
-}
-
-async function loadQuizDetails(){
-
-const res = await fetch(`${API}/student/quiz/${quizId}/details`,{
-headers:{ "Authorization":"Bearer "+token }
-});
-
-const quiz = await res.json();
-
-document.getElementById("quizTitle").innerText = quiz.title;
-document.getElementById("quizInfo").innerText =
-`${quiz.subject} | Duration: ${quiz.durationMinutes} minutes | Marks: ${quiz.totalMarks}`;
-
-remainingSeconds = quiz.durationMinutes * 60;
-
-startTimer();
-}
-
-async function loadQuestions(){
-
-const res = await fetch(`${API}/student/quiz/${quizId}/questions`,{
-headers:{ "Authorization":"Bearer "+token }
-});
-
-questions = await res.json();
-
-console.log("Questions:",questions);
-
-renderQuestions();
-updateProgress();
-}
-
-async function loadSavedAnswers(){
-
-const res = await fetch(`${API}/student/quiz/attempt/${attemptId}/answers`,{
-headers:{ "Authorization":"Bearer "+token }
-});
-
-const saved = await res.json();
-
-saved.forEach(a=>{
-answers[a.questionId] = a.selectedOption;
-});
-
-console.log("Loaded answers:",answers);
-}
-
-function renderQuestions(){
-
-const container = document.getElementById("questionContainer");
-
-container.innerHTML = questions.map((q,i)=>{
-
-const selected = answers[q.id];
-
-return `
-<div class="question">
-<b>Q${i+1}. ${q.questionText}</b>
-
-<div class="option">
-<label>
-<input type="radio" name="q${q.id}" value="A"
-${selected==="A"?"checked":""}
-onclick="saveAnswer(${q.id},'A')">
-A) ${q.optionA}
-</label>
-</div>
-
-<div class="option">
-<label>
-<input type="radio" name="q${q.id}" value="B"
-${selected==="B"?"checked":""}
-onclick="saveAnswer(${q.id},'B')">
-B) ${q.optionB}
-</label>
-</div>
-
-<div class="option">
-<label>
-<input type="radio" name="q${q.id}" value="C"
-${selected==="C"?"checked":""}
-onclick="saveAnswer(${q.id},'C')">
-C) ${q.optionC}
-</label>
-</div>
-
-<div class="option">
-<label>
-<input type="radio" name="q${q.id}" value="D"
-${selected==="D"?"checked":""}
-onclick="saveAnswer(${q.id},'D')">
-D) ${q.optionD}
-</label>
-</div>
-
-</div>
-`;
-
-}).join("");
-
-}
-
-async function saveAnswer(questionId,option){
-
-console.log("Saving answer:",questionId,option);
-
-answers[questionId] = option;
-updateProgress();
-
-try{
-
-await fetch(`${API}/student/quiz/attempt/${attemptId}/answer`,{
-method:"POST",
-headers:{
-"Content-Type":"application/json",
-"Authorization":"Bearer "+token
-},
-body:JSON.stringify({
-questionId:questionId,
-selectedOption:option
-})
-});
-
-}catch(err){
-console.error("Save answer failed:",err);
-}
-
-}
-
-function updateProgress(){
-
-const total = questions.length;
-const answered = Object.keys(answers).length;
-
-document.getElementById("progress").innerText =
-`Answered ${answered} / ${total} questions`;
-}
-
-function startTimer(){
-
-timerInterval = setInterval(()=>{
-
-remainingSeconds--;
-
-const min = Math.floor(remainingSeconds/60);
-const sec = remainingSeconds%60;
-
-document.getElementById("timer").innerText =
-`${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
-
-if(remainingSeconds<=0){
-clearInterval(timerInterval);
-alert("Time up! Submitting quiz.");
-submitQuiz();
-}
-
-},1000);
-
-}
-
-function confirmSubmit(){
-document.getElementById("confirmModal").style.display="flex";
-}
-
-function closeModal(){
-document.getElementById("confirmModal").style.display="none";
-}
-
-async function submitQuiz(){
-
-clearInterval(timerInterval);
-
-const payload = Object.entries(answers).map(([qid,opt])=>({
-questionId:parseInt(qid),
-selectedOption:opt
-}));
-
-console.log("Submitting answers:",payload);
-
-try{
-
-const res = await fetch(`${API}/student/quiz/submit/${attemptId}`,{
-method:"POST",
-headers:{
-"Content-Type":"application/json",
-"Authorization":"Bearer "+token
-},
-body:JSON.stringify(payload)
-});
-
-const result = await res.json();
-
-alert("Quiz submitted! Score: "+result.score);
-
-window.location.href="quiz.html";
-
-}catch(err){
-
-console.error("Submit failed:",err);
-alert("Failed to submit quiz");
-
-}
-
-}
-
-</script>
-
+    <div class="app-wrapper">
+        <!-- LEFT SIDEBAR (visual only) -->
+        <div class="sidebar">
+            
+            <div class="sidebar-nav">
+                <div class="sidebar-nav-item">
+                    <i class="fas fa-tasks"></i> Assignments
+                </div>
+                <div class="sidebar-nav-item active">
+                    <i class="fas fa-puzzle-piece"></i> Quizzes
+                </div>
+                <div class="sidebar-nav-item">
+                    <i class="fas fa-code"></i> Projects
+                </div>
+                <div class="sidebar-nav-item">
+                    <i class="fas fa-file-pdf"></i> PDFs
+                </div>
+                <div class="sidebar-nav-item">
+                    <i class="fas fa-user-circle"></i> Profile
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <div class="header">
+                <h2 id="quizTitle">Quiz</h2>
+                <div class="timer" id="timer">
+                    <i class="fas fa-hourglass-half"></i> <span>00:00</span>
+                </div>
+            </div>
+
+            <p id="quizInfo"></p>
+
+            <div class="progress" id="progress"></div>
+
+            <div id="questionContainer"></div>
+
+            <br>
+            <button onclick="confirmSubmit()"><i class="fas fa-check-circle"></i> Submit Quiz</button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-box">
+            <h3><i class="fas fa-question-circle" style="color:#4c74ff;"></i> Submit Quiz?</h3>
+            <p>Are you sure you want to submit?</p>
+            <button onclick="submitQuiz()"><i class="fas fa-check"></i> Yes Submit</button>
+            <button onclick="closeModal()"><i class="fas fa-times"></i> Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        const API = "http://localhost:8080";
+        const token = localStorage.getItem("token");
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const quizId = urlParams.get("quizId");
+        let studentId = urlParams.get("studentId") || localStorage.getItem("studentId");
+
+        let attemptId = null;
+        let questions = [];
+        let answers = {};
+        let timerInterval = null;
+        let remainingSeconds = 0;
+
+        console.log("QuizId:",quizId);
+        console.log("StudentId:",studentId);
+
+        window.onload = async () => {
+            if(!token){
+                alert("Login required");
+                window.location.href="../login.html";
+                return;
+            }
+            await loadQuiz();
+        };
+
+        async function loadQuiz(){
+            try{
+                console.log("Checking quiz status...");
+                const statusRes = await fetch(`${API}/student/quiz/status/${quizId}?studentId=${studentId}`,{
+                    headers:{ "Authorization":"Bearer "+token }
+                });
+                const status = await statusRes.json();
+                console.log("Status:",status);
+
+                if(status.hasAttempted && status.status==="IN_PROGRESS"){
+                    attemptId = status.attemptId;
+                    console.log("Resuming attempt:",attemptId);
+                    await loadSavedAnswers();
+                }else if(!status.hasAttempted){
+                    await startQuiz();
+                }else{
+                    alert("Quiz already submitted. Score: "+status.score);
+                    return;
+                }
+
+                await loadQuizDetails();
+                await loadQuestions();
+
+            }catch(err){
+                console.error("Error loading quiz:",err);
+                alert("Failed to load quiz");
+            }
+        }
+
+        async function startQuiz(){
+            console.log("Starting new attempt...");
+            const res = await fetch(`${API}/student/quiz/${quizId}/start?studentId=${studentId}`,{
+                method:"POST",
+                headers:{ "Authorization":"Bearer "+token }
+            });
+            const data = await res.json();
+            attemptId = data.id;
+            console.log("New attempt:",attemptId);
+        }
+
+        async function loadQuizDetails(){
+            const res = await fetch(`${API}/student/quiz/${quizId}/details`,{
+                headers:{ "Authorization":"Bearer "+token }
+            });
+            const quiz = await res.json();
+
+            document.getElementById("quizTitle").innerText = quiz.title;
+            document.getElementById("quizInfo").innerText =
+                `${quiz.subject} | Duration: ${quiz.durationMinutes} minutes | Marks: ${quiz.totalMarks}`;
+
+            remainingSeconds = quiz.durationMinutes * 60;
+            startTimer();
+        }
+
+        async function loadQuestions(){
+            const res = await fetch(`${API}/student/quiz/${quizId}/questions`,{
+                headers:{ "Authorization":"Bearer "+token }
+            });
+            questions = await res.json();
+            console.log("Questions:",questions);
+            renderQuestions();
+            updateProgress();
+        }
+
+        async function loadSavedAnswers(){
+            const res = await fetch(`${API}/student/quiz/attempt/${attemptId}/answers`,{
+                headers:{ "Authorization":"Bearer "+token }
+            });
+            const saved = await res.json();
+            saved.forEach(a=>{
+                answers[a.questionId] = a.selectedOption;
+            });
+            console.log("Loaded answers:",answers);
+        }
+
+        function renderQuestions(){
+            const container = document.getElementById("questionContainer");
+            container.innerHTML = questions.map((q,i)=>{
+                const selected = answers[q.id];
+                return `
+                <div class="question">
+                    <b>Q${i+1}. ${q.questionText}</b>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q${q.id}" value="A"
+                                ${selected==="A"?"checked":""}
+                                onclick="saveAnswer(${q.id},'A')">
+                            A) ${q.optionA}
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q${q.id}" value="B"
+                                ${selected==="B"?"checked":""}
+                                onclick="saveAnswer(${q.id},'B')">
+                            B) ${q.optionB}
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q${q.id}" value="C"
+                                ${selected==="C"?"checked":""}
+                                onclick="saveAnswer(${q.id},'C')">
+                            C) ${q.optionC}
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q${q.id}" value="D"
+                                ${selected==="D"?"checked":""}
+                                onclick="saveAnswer(${q.id},'D')">
+                            D) ${q.optionD}
+                        </label>
+                    </div>
+                </div>
+                `;
+            }).join("");
+        }
+
+        async function saveAnswer(questionId,option){
+            console.log("Saving answer:",questionId,option);
+            answers[questionId] = option;
+            updateProgress();
+            try{
+                await fetch(`${API}/student/quiz/attempt/${attemptId}/answer`,{
+                    method:"POST",
+                    headers:{
+                        "Content-Type":"application/json",
+                        "Authorization":"Bearer "+token
+                    },
+                    body:JSON.stringify({
+                        questionId:questionId,
+                        selectedOption:option
+                    })
+                });
+            }catch(err){
+                console.error("Save answer failed:",err);
+            }
+        }
+
+        function updateProgress(){
+            const total = questions.length;
+            const answered = Object.keys(answers).length;
+            document.getElementById("progress").innerText =
+                `Answered ${answered} / ${total} questions`;
+        }
+
+        function startTimer(){
+            timerInterval = setInterval(()=>{
+                remainingSeconds--;
+                const min = Math.floor(remainingSeconds/60);
+                const sec = remainingSeconds%60;
+                document.getElementById("timer").innerHTML = 
+                    `<i class="fas fa-hourglass-half"></i> <span>${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}</span>`;
+                if(remainingSeconds<=0){
+                    clearInterval(timerInterval);
+                    alert("Time up! Submitting quiz.");
+                    submitQuiz();
+                }
+            },1000);
+        }
+
+        function confirmSubmit(){
+            document.getElementById("confirmModal").style.display="flex";
+        }
+
+        function closeModal(){
+            document.getElementById("confirmModal").style.display="none";
+        }
+
+        async function submitQuiz(){
+            clearInterval(timerInterval);
+            const payload = Object.entries(answers).map(([qid,opt])=>({
+                questionId:parseInt(qid),
+                selectedOption:opt
+            }));
+            console.log("Submitting answers:",payload);
+            try{
+                const res = await fetch(`${API}/student/quiz/submit/${attemptId}`,{
+                    method:"POST",
+                    headers:{
+                        "Content-Type":"application/json",
+                        "Authorization":"Bearer "+token
+                    },
+                    body:JSON.stringify(payload)
+                });
+                const result = await res.json();
+                alert("Quiz submitted! Score: "+result.score);
+                window.location.href="quiz.html";
+            }catch(err){
+                console.error("Submit failed:",err);
+                alert("Failed to submit quiz");
+            }
+        }
+    </script>
 </body>
 </html>

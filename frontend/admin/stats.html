@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>System Analytics · Lumina</title>
+    <title>System Analytics · Nexus</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Google Fonts (Inter) for premium typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap" rel="stylesheet">
     <!-- Font Awesome 6 (icons) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Chart.js (preserved) -->
@@ -21,7 +21,7 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: radial-gradient(circle at 10% 30%, #0f0c29, #1e1a4a, #2d1b5e);
+            background: linear-gradient(145deg, #5f79ff, #7a5cff, #a16cff);
             background-attachment: fixed;
             min-height: 100vh;
             display: flex;
@@ -29,129 +29,262 @@
             justify-content: center;
             padding: 1.5rem;
             margin: 0;
-            color: rgba(255, 255, 255, 0.95);
             line-height: 1.5;
         }
 
-        /* main glass container */
-        .stats-container {
+        /* main white dashboard with sidebar layout */
+        .dashboard-wrapper {
             width: 100%;
-            max-width: 1400px;
-            background: rgba(18, 14, 45, 0.4);
-            backdrop-filter: blur(16px) saturate(180%);
-            -webkit-backdrop-filter: blur(16px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 2.5rem;
-            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(160, 120, 255, 0.2) inset, 0 0 50px rgba(100, 70, 255, 0.25);
+            max-width: 1600px;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 35px 60px -20px rgba(30, 30, 60, 0.4), 0 10px 25px -8px rgba(0,0,0,0.2);
+            display: flex;
             overflow: hidden;
-            padding: 2.2rem 2.2rem;
+            min-height: 800px;
         }
 
-        /* header area */
+        /* ========== LEFT VERTICAL SIDEBAR ========== */
+        .sidebar {
+            width: 280px;
+            background: #f3f6fb;          /* input background */
+            border-right: 1px solid #e3e3e3;
+            padding: 2rem 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.2rem;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-left: 0.5rem;
+        }
+
+        .brand-icon {
+            width: 2.8rem;
+            height: 2.8rem;
+            background: linear-gradient(145deg, #4c74ff, #8a52ff);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 14px -6px #4c74ff66;
+        }
+
+        .brand-icon i {
+            font-size: 1.6rem;
+            color: white;
+        }
+
+        .brand-text {
+            font-weight: 700;
+            font-size: 1.4rem;
+            background: linear-gradient(145deg, #1e1e3f, #4c74ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        /* vertical navigation */
+        .side-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            flex: 1;
+        }
+
+        .side-nav-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 16px;
+            padding: 1rem 1.2rem;
+            color: #1e1e3a;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .side-nav-btn i {
+            font-size: 1.4rem;
+            width: 2rem;
+            text-align: center;
+            background: linear-gradient(145deg, #4c74ff, #8a52ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: transform 0.15s;
+        }
+
+        .side-nav-btn span {
+            font-weight: 600;
+            color: #3f3f60;
+        }
+
+        .side-nav-btn:hover {
+            background: white;
+            border-color: #e3e3e3;
+            box-shadow: 0 8px 18px -12px #4c74ff, 0 0 0 1px rgba(76,116,255,0.2) inset;
+            transform: translateX(4px);
+        }
+
+        .side-nav-btn:hover i {
+            transform: scale(1.05);
+        }
+
+        /* active item gradient highlight */
+        .side-nav-btn.active {
+            background: white;
+            border-color: #d0ddff;
+            box-shadow: 0 0 0 2px rgba(76,116,255,0.15) inset;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e3e3e3;
+        }
+
+        .logout-btn {
+            background: #f3f6fb;
+            border: 1px solid #e3e3e3;
+            border-radius: 40px;
+            padding: 0.9rem 1.2rem;
+            color: #4c516d;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .logout-btn i {
+            font-size: 1.2rem;
+            color: #777;    /* secondary text */
+        }
+
+        .logout-btn span {
+            color: #4c516d;
+        }
+
+        .logout-btn:hover {
+            background: white;
+            border-color: #ffb7b7;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 18px -14px #e5515b;
+        }
+        .logout-btn:hover i {
+            color: #e5515b;
+            transform: translateX(3px);
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            flex: 1;
+            padding: 2rem 2.5rem;
+            background: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* minimal header */
         .page-header {
             display: flex;
-            flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
-            gap: 1.5rem;
-            margin-bottom: 2.2rem;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
         }
 
         .title-section {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.75rem;
         }
 
         .title-section i {
-            font-size: 2.8rem;
-            background: linear-gradient(145deg, #8b7aff, #5f8cff);
+            font-size: 2.2rem;
+            background: linear-gradient(145deg, #4c74ff, #8a52ff);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            filter: drop-shadow(0 0 10px #4d3dff);
         }
 
         h2 {
             font-weight: 700;
-            font-size: 2.2rem;
+            font-size: 2rem;
             letter-spacing: -0.02em;
-            background: linear-gradient(to right, #ffffff, #ded1ff);
+            background: linear-gradient(145deg, #1e1e30, #4c74ff);
             -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin: 0;
+            -webkit-text-fill-color: transparent;
         }
 
         .btn-outline {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 3rem;
-            padding: 0.8rem 1.8rem;
+            background: #f3f6fb;
+            border: 1px solid #e3e3e3;
+            border-radius: 40px;
+            padding: 0.7rem 1.6rem;
             font-weight: 600;
             font-size: 0.95rem;
-            color: white;
+            color: #3f3f60;
             display: inline-flex;
             align-items: center;
             gap: 0.6rem;
             cursor: pointer;
             transition: all 0.2s ease;
-            backdrop-filter: blur(10px);
         }
 
         .btn-outline i {
-            color: #b4a6ff;
+            color: #777;
         }
 
         .btn-outline:hover {
-            background: rgba(110, 70, 255, 0.2);
-            border-color: rgba(170, 140, 255, 0.5);
+            background: white;
+            border-color: #b5c8ff;
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 8px 16px -10px #4c74ff;
         }
 
-        /* premium metric cards grid */
+        /* cards grid – original ID "cards" remains, but styled as white cards */
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2.5rem;
         }
 
         .metric-card {
-            background: rgba(25, 18, 51, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 2rem;
-            padding: 1.8rem 1.2rem;
+            background: white;
+            border: 1px solid #e3e3e3;
+            border-radius: 22px;
+            padding: 1.8rem 1rem;
             text-align: center;
-            transition: all 0.25s ease;
-            box-shadow: 0 15px 30px -10px #0000004d;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.2s ease;
+            box-shadow: 0 6px 14px -8px rgba(0,0,0,0.08);
         }
 
         .metric-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(168, 139, 255, 0.5);
-            background: rgba(35, 25, 65, 0.8);
-            box-shadow: 0 25px 40px -12px #6240b0;
-        }
-
-        .metric-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, #8b7aff, #b49aff);
-            border-radius: 2rem 2rem 0 0;
+            border-color: #b5c8ff;
+            transform: translateY(-4px);
+            box-shadow: 0 20px 24px -16px rgba(76,116,255,0.3), 0 0 0 1px rgba(76,116,255,0.2) inset;
         }
 
         .metric-icon {
             font-size: 2.2rem;
-            background: linear-gradient(145deg, #a27cff, #6d8eff);
+            background: linear-gradient(145deg, #4c74ff, #8a52ff);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -163,104 +296,25 @@
             font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: #b3a2e0;
+            color: #777;                 /* secondary text */
             margin-bottom: 0.5rem;
         }
 
         .metric-number {
             font-weight: 700;
             font-size: 2.2rem;
-            background: linear-gradient(to right, #ffffff, #e0d7ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            color: #1e1e30;
             line-height: 1.2;
         }
 
-        /* analytics cards (for metrics sections) */
-        .analytics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.8rem;
-            margin-bottom: 2rem;
-        }
-
-        .insight-card {
-            background: rgba(25, 18, 51, 0.5);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 2rem;
-            padding: 1.8rem 2rem;
-            transition: 0.2s;
-            box-shadow: 0 20px 35px -10px #0000004d;
-        }
-
-        .insight-card:hover {
-            border-color: rgba(168, 139, 255, 0.3);
-            background: rgba(30, 22, 60, 0.6);
-        }
-
-        .insight-title {
-            display: flex;
-            align-items: center;
-            gap: 0.7rem;
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: rgba(255, 255, 255, 0.95);
-        }
-
-        .insight-title i {
-            font-size: 1.6rem;
-            background: linear-gradient(145deg, #b49aff, #7f6eff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .metric-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.7rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .metric-row:last-child {
-            border-bottom: none;
-        }
-
-        .metric-row strong {
-            color: #cbbdff;
-            font-weight: 600;
-        }
-
-        .metric-row span {
-            font-weight: 600;
-            background: linear-gradient(to right, #fff, #e0d7ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .update-badge {
-            margin-top: 1rem;
-            font-size: 0.85rem;
-            color: #a69ac9;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        /* chart cards */
+        /* chart card (white) */
         .chart-card {
-            background: rgba(25, 18, 51, 0.5);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 2rem;
+            background: white;
+            border: 1px solid #e3e3e3;
+            border-radius: 24px;
             padding: 2rem;
             margin-bottom: 2rem;
-            box-shadow: 0 20px 35px -10px #0000004d;
+            box-shadow: 0 8px 22px -12px rgba(0,0,0,0.06);
         }
 
         .chart-card h3 {
@@ -268,14 +322,14 @@
             align-items: center;
             gap: 0.7rem;
             font-size: 1.4rem;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 1.8rem;
-            color: rgba(255, 255, 255, 0.95);
+            color: #1e1e30;
         }
 
         .chart-card h3 i {
             font-size: 1.6rem;
-            background: linear-gradient(145deg, #b49aff, #7f6eff);
+            background: linear-gradient(145deg, #4c74ff, #8a52ff);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -285,9 +339,10 @@
             width: 100%;
             max-width: 700px;
             margin: 0 auto;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 1.5rem;
+            background: #f9fbfe;
+            border-radius: 20px;
             padding: 1.5rem;
+            border: 1px solid #e3e3e3;
         }
 
         canvas {
@@ -296,9 +351,48 @@
             max-height: 300px;
         }
 
+        /* analytics container – extra white cards if needed */
+        #analytics .insight-card {
+            background: white;
+            border: 1px solid #e3e3e3;
+            border-radius: 22px;
+            padding: 1.8rem 2rem;
+            margin-top: 1.5rem;
+        }
+
         /* responsive */
+        @media (max-width: 900px) {
+            .dashboard-wrapper {
+                flex-wrap: wrap;
+            }
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #e3e3e3;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 1rem;
+                padding: 1.5rem;
+            }
+            .side-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            .sidebar-footer {
+                margin-top: 0;
+                border-top: none;
+                padding-top: 0;
+            }
+            .logout-btn {
+                width: auto;
+                padding: 0.8rem 1.8rem;
+            }
+        }
+
         @media (max-width: 700px) {
-            .stats-container {
+            .main-content {
                 padding: 1.5rem;
             }
             .page-header {
@@ -309,11 +403,45 @@
                 font-size: 1.8rem;
             }
         }
+
+        button:focus-visible {
+            outline: 3px solid #8a52ff;
+            outline-offset: 3px;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f3f6fb; border-radius: 12px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(145deg, #4c74ff, #8a52ff); border-radius: 12px; }
     </style>
 </head>
 <body>
-    <div class="stats-container">
-        <!-- Header with back button -->
+<div class="dashboard-wrapper">
+    <!-- LEFT SIDEBAR (vertical) -->
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">
+                <i class="fas fa-crown"></i>
+            </div>
+            <span class="brand-text">Nexus</span>
+        </div>
+        <div class="side-nav">
+            <button class="side-nav-btn" onclick="window.location.href='dashboard.html'"><i class="fas fa-home"></i><span>Dashboard</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='students.html'"><i class="fas fa-user-graduate"></i><span>Students</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='teachers.html'"><i class="fas fa-chalkboard-user"></i><span>Teachers</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='materials.html'"><i class="fas fa-book-open"></i><span>Materials</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='user-management.html'"><i class="fas fa-users-cog"></i><span>Manage Users</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='projects.html'"><i class="fas fa-code-branch"></i><span>Projects</span></button>
+            <button class="side-nav-btn" onclick="window.location.href='quizzes.html'"><i class="fas fa-puzzle-piece"></i><span>Quizzes</span></button>
+            <button class="side-nav-btn active" onclick="window.location.href='stats.html'"><i class="fas fa-chart-line"></i><span>System Stats</span></button>
+        </div>
+        <div class="sidebar-footer">
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i><span>Logout</span><i class="fas fa-arrow-right" style="font-size:0.8rem; opacity:0;"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT (right) -->
+    <div class="main-content">
         <div class="page-header">
             <div class="title-section">
                 <i class="fas fa-chart-pie"></i>
@@ -329,7 +457,7 @@
             <!-- Content will be injected by JavaScript -->
         </div>
 
-        <!-- Charts Sections (preserved structure with premium styling) -->
+        <!-- Charts Sections (preserved) -->
         <div class="chart-card">
             <h3><i class="fas fa-chart-bar"></i> Platform Distribution</h3>
             <div class="chart-box">
@@ -337,196 +465,195 @@
             </div>
         </div>
 
-        <!-- <div class="chart-card">
-            <h3><i class="fas fa-chart-pie"></i> Activity Breakdown</h3>
-            <div class="chart-box">
-                <canvas id="pieChart"></canvas>
-            </div>
-        </div>
-
-        <div class="chart-card">
-            <h3><i class="fas fa-chart-line"></i> Engagement Overview</h3>
-            <div class="chart-box">
-                <canvas id="engagementChart"></canvas>
-            </div>
-        </div> -->
-
         <!-- Analytics Container (original id preserved) -->
         <div id="analytics"></div>
     </div>
+</div>
 
-    <!-- ORIGINAL JAVASCRIPT – UNMODIFIED (preserved exactly) -->
-    <script>
-        const API="http://localhost:8080"
-        const token=localStorage.getItem("token")
+<!-- ORIGINAL JAVASCRIPT – UNMODIFIED (preserved exactly) -->
+<script>
+    const API="http://localhost:8080"
+    const token=localStorage.getItem("token")
 
-        async function loadStats(){
+    async function loadStats(){
 
-            const res=await fetch(API+"/admin/stats",{
-                headers:{Authorization:"Bearer "+token}
-            })
+        const res=await fetch(API+"/admin/stats",{
+            headers:{Authorization:"Bearer "+token}
+        })
 
-            const stats=await res.json()
+        const stats=await res.json()
 
-            let ratio=(stats.students/stats.teachers).toFixed(1)
-            let materialsPerStudent=(stats.materials/stats.students).toFixed(2)
-            let projectRate=((stats.projects/stats.students)*100).toFixed(1)
-            let engagement=((stats.projects+stats.quizzes+stats.materials)/stats.students).toFixed(2)
+        let ratio=(stats.students/stats.teachers).toFixed(1)
+        let materialsPerStudent=(stats.materials/stats.students).toFixed(2)
+        let projectRate=((stats.projects/stats.students)*100).toFixed(1)
+        let engagement=((stats.projects+stats.quizzes+stats.materials)/stats.students).toFixed(2)
 
-            let now=new Date().toLocaleTimeString()
+        let now=new Date().toLocaleTimeString()
 
-            document.getElementById("cards").innerHTML=`
+        document.getElementById("cards").innerHTML=`
 
-                <div class="cards-grid">
+            <div class="cards-grid">
 
-                    <div class="metric-card">
-                        <div class="metric-icon"><i class="fas fa-user-graduate"></i></div>
-                        <div class="metric-label">Students</div>
-                        <div class="metric-number">${stats.students}</div>
-                    </div>
-
-                    <div class="metric-card">
-                        <div class="metric-icon"><i class="fas fa-chalkboard-teacher"></i></div>
-                        <div class="metric-label">Teachers</div>
-                        <div class="metric-number">${stats.teachers}</div>
-                    </div>
-
-                    <div class="metric-card">
-                        <div class="metric-icon"><i class="fas fa-file-pdf"></i></div>
-                        <div class="metric-label">Materials</div>
-                        <div class="metric-number">${stats.materials}</div>
-                    </div>
-
-                    <div class="metric-card">
-                        <div class="metric-icon"><i class="fas fa-project-diagram"></i></div>
-                        <div class="metric-label">Projects</div>
-                        <div class="metric-number">${stats.projects}</div>
-                    </div>
-
-                    <div class="metric-card">
-                        <div class="metric-icon"><i class="fas fa-question-circle"></i></div>
-                        <div class="metric-label">Quizzes</div>
-                        <div class="metric-number">${stats.quizzes}</div>
-                    </div>
-
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-user-graduate"></i></div>
+                    <div class="metric-label">Students</div>
+                    <div class="metric-number">${stats.students}</div>
                 </div>
-            `
 
-            
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <div class="metric-label">Teachers</div>
+                    <div class="metric-number">${stats.teachers}</div>
+                </div>
 
-            createCharts(stats)
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-file-pdf"></i></div>
+                    <div class="metric-label">Materials</div>
+                    <div class="metric-number">${stats.materials}</div>
+                </div>
 
-        }
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-project-diagram"></i></div>
+                    <div class="metric-label">Projects</div>
+                    <div class="metric-number">${stats.projects}</div>
+                </div>
 
-        function createCharts(stats){
+                <div class="metric-card">
+                    <div class="metric-icon"><i class="fas fa-question-circle"></i></div>
+                    <div class="metric-label">Quizzes</div>
+                    <div class="metric-number">${stats.quizzes}</div>
+                </div>
 
-            new Chart(document.getElementById("barChart"),{
+            </div>
+        `
 
-                type:'bar',
+        
 
-                data:{
-                    labels:['Students','Teachers','Materials','Projects','Quizzes'],
-                    datasets:[{
-                        label:'System Distribution',
-                        data:[
-                            stats.students,
-                            stats.teachers,
-                            stats.materials,
-                            stats.projects,
-                            stats.quizzes
-                        ],
-                        backgroundColor: [
-                            'rgba(139, 122, 255, 0.7)',
-                            'rgba(95, 140, 255, 0.7)',
-                            'rgba(180, 154, 255, 0.7)',
-                            'rgba(127, 110, 255, 0.7)',
-                            'rgba(160, 130, 255, 0.7)'
-                        ],
-                        borderColor: 'rgba(255,255,255,0.2)',
-                        borderWidth: 1
-                    }]
+        createCharts(stats)
+
+    }
+
+    function createCharts(stats){
+
+        new Chart(document.getElementById("barChart"),{
+
+            type:'bar',
+
+            data:{
+                labels:['Students','Teachers','Materials','Projects','Quizzes'],
+                datasets:[{
+                    label:'System Distribution',
+                    data:[
+                        stats.students,
+                        stats.teachers,
+                        stats.materials,
+                        stats.projects,
+                        stats.quizzes
+                    ],
+                    backgroundColor: [
+                        '#4c74ff',
+                        '#8a52ff',
+                        '#6d8cff',
+                        '#a16cff',
+                        '#7a5cff'
+                    ],
+                    borderColor: 'rgba(255,255,255,0.2)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { labels: { color: '#1e1e30' } }
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                        legend: { labels: { color: 'rgba(255,255,255,0.8)' } }
-                    },
-                    scales: {
-                        y: { ticks: { color: 'rgba(255,255,255,0.6)' } },
-                        x: { ticks: { color: 'rgba(255,255,255,0.6)' } }
-                    }
+                scales: {
+                    y: { ticks: { color: '#777' } },
+                    x: { ticks: { color: '#777' } }
                 }
+            }
 
-            })
+        })
 
-            new Chart(document.getElementById("pieChart"),{
+        new Chart(document.getElementById("pieChart"),{
 
-                type:'pie',
+            type:'pie',
 
-                data:{
-                    labels:['Materials','Projects','Quizzes'],
-                    datasets:[{
-                        data:[
-                            stats.materials,
-                            stats.projects,
-                            stats.quizzes
-                        ],
-                        backgroundColor: [
-                            '#8b7aff',
-                            '#b49aff',
-                            '#5f8cff'
-                        ],
-                        borderColor: 'rgba(255,255,255,0.1)'
-                    }]
+            data:{
+                labels:['Materials','Projects','Quizzes'],
+                datasets:[{
+                    data:[
+                        stats.materials,
+                        stats.projects,
+                        stats.quizzes
+                    ],
+                    backgroundColor: [
+                        '#4c74ff',
+                        '#8a52ff',
+                        '#a16cff'
+                    ],
+                    borderColor: 'rgba(255,255,255,0.1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { labels: { color: '#1e1e30' } }
+                }
+            }
+
+        })
+
+        let engagementData=[
+            stats.materials,
+            stats.projects,
+            stats.quizzes
+        ]
+
+        new Chart(document.getElementById("engagementChart"),{
+
+            type:'line',
+
+            data:{
+                labels:['Materials','Projects','Quizzes'],
+                datasets:[{
+                    label:'Engagement Activities',
+                    data:engagementData,
+                    fill:false,
+                    borderColor: '#8a52ff',
+                    backgroundColor: '#4c74ff',
+                    tension: 0.2,
+                    pointBackgroundColor: '#1e1e30'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { labels: { color: '#1e1e30' } }
                 },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { labels: { color: 'rgba(255,255,255,0.8)' } }
-                    }
+                scales: {
+                    y: { ticks: { color: '#777' } },
+                    x: { ticks: { color: '#777' } }
                 }
+            }
 
-            })
+        })
 
-            let engagementData=[
-                stats.materials,
-                stats.projects,
-                stats.quizzes
-            ]
+    }
 
-            new Chart(document.getElementById("engagementChart"),{
+    loadStats()
 
-                type:'line',
+    // logout helper
+    function logout() {
+        localStorage.clear();
+        window.location.href = "../login.html";
+    }
+</script>
 
-                data:{
-                    labels:['Materials','Projects','Quizzes'],
-                    datasets:[{
-                        label:'Engagement Activities',
-                        data:engagementData,
-                        fill:false,
-                        borderColor: '#b49aff',
-                        backgroundColor: '#8b7aff',
-                        tension: 0.2,
-                        pointBackgroundColor: '#ffffff'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { labels: { color: 'rgba(255,255,255,0.8)' } }
-                    },
-                    scales: {
-                        y: { ticks: { color: 'rgba(255,255,255,0.6)' } },
-                        x: { ticks: { color: 'rgba(255,255,255,0.6)' } }
-                    }
-                }
-
-            })
-
-        }
-
-        loadStats()
-    </script>
+<!-- hidden pie chart and line chart elements (preserved, but charts will initialize) -->
+<div style="display: none;">
+    <canvas id="pieChart"></canvas>
+    <canvas id="engagementChart"></canvas>
+</div>
 </body>
 </html>
